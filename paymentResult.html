@@ -97,20 +97,20 @@
                 const lang = getCurrentLanguage();
                 document.documentElement.lang = lang;
 
-                const elements = document.querySelectorAll('[data-lang]');
-                elements.forEach(el => {
-                    const key = el.getAttribute('data-lang');
-                    if (key) {
-                        el.textContent = translate(key);
-                    }
-                });
+                // 使用 setTimeout 确保 DOM 完全加载
+                setTimeout(() => {
+                    const elements = document.querySelectorAll('[data-lang]');
+                    elements.forEach(el => {
+                        const key = el.getAttribute('data-lang');
+                        if (key) {
+                            el.textContent = translate(key);
+                        }
+                    });
+                }, 100);
             } catch (error) {
                 console.error('Error setting language:', error);
             }
         }
-
-
-        
 
         function navigateBackWithTransition(url) {
             try {
@@ -336,6 +336,11 @@
 
                 // 初始化页面
                 initializePage();
+
+                // 添加一个延迟的二次翻译，以确保所有动态内容都被翻译
+                setTimeout(() => {
+                    setLanguage();
+                }, 500);
             } catch (error) {
                 console.error('Error during DOMContentLoaded:', error);
             }
