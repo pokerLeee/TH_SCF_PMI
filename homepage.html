@@ -333,10 +333,30 @@
             if (loanItem) {
                 loanItem.style.cursor = 'pointer';
                 loanItem.addEventListener('click', function() {
+                    // 确保使用页面上显示的金额而不是重新计算
+                    // 从描述文本中提取实际显示的还款金额
+                    const descriptionElement = document.querySelector('.adm-list-item-description');
+                    let extractedRepayAmount = repayAmount; // 默认值
+                    
+                    if (descriptionElement) {
+                        const descriptionText = descriptionElement.textContent;
+                        // 提取金额部分 (从฿后面提取数字)
+                        const match = descriptionText.match(/฿\s*([\d,]+\.?\d*)/);
+                        if (match && match[1]) {
+                            // 移除逗号并转换为数字
+                            extractedRepayAmount = parseFloat(match[1].replace(/,/g, ''));
+                        }
+                    }
+                    
+                    // 构建URL参数
                     const params = new URLSearchParams({
-                        repayAmount: (totalPayment + INSTALMENT_FEE).toFixed(2),
-                        dueDate: dueDate
+                        loanAmount: totalPayment.toFixed(2),
+                        repayAmount: extractedRepayAmount.toFixed(2), // 使用提取出的还款金额
+                        dueDate: dueDate,
+                        appliedTime: urlParams.get('appliedTime') || defaultFormattedDate
                     });
+                    
+                    // 跳转到还款页面
                     window.location.href = `repayPage.html?${params.toString()}`;
                 });
             }
