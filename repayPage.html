@@ -243,8 +243,9 @@
         const payButton = document.querySelector('.PayButton_payBtn__l747t');
         if (payButton) {
             payButton.addEventListener('click', function() {
-                // 跳转到支付结果页面
-                window.location.href = 'paymentResult.html?status=success&amount=' + repayAmount;
+                // 移除跳转到支付结果页面的代码
+                console.log('Pay button clicked');
+                // 可以在这里添加其他处理逻辑，但不进行页面跳转
             });
         }
     });
