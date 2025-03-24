@@ -4,20 +4,20 @@
     <title>SCF Loan Detail Page</title>
 
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="viewport"
         content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no">
-    <link rel="stylesheet" href="./css/4fa41296f441b9ff.css" data-precedence="next">
-    <link rel="stylesheet" href="./css/57009e3cabd11cec.css" data-precedence="next">
-    <link rel="stylesheet" href="./css/515e7d1e6af67b7d.css" data-precedence="next">
-    <link href="./css/25ac677f9c398dbc.css" rel="stylesheet" data-precedence="next">
-    <link href="./css/d995d26fbbce5344.css" rel="stylesheet" data-precedence="next">
-    <link rel="stylesheet" href="./css/5bedc7f7816ee268.css" data-precedence="next">
-    <link rel="stylesheet" href="./css/e90826e2f4f45792.css" data-precedence="next">
-    <link rel="stylesheet" href="./css/d03a5407f04b9e1e.css" data-precedence="next">
-    <link rel="preload" href="./css/5bedc7f7816ee268.css" as="style">
-    <link rel="preload" href="./css/d03a5407f04b9e1e.css" as="style">
-    <link rel="preload" href="./css/e90826e2f4f45792.css" as="style">
-    <script src="creditLanguage.js"></script>
+    <link rel="stylesheet" href="css/4fa41296f441b9ff.css" data-precedence="next">
+    <link rel="stylesheet" href="css/57009e3cabd11cec.css" data-precedence="next">
+    <link rel="stylesheet" href="css/515e7d1e6af67b7d.css" data-precedence="next">
+    <link href="css/25ac677f9c398dbc.css" rel="stylesheet" data-precedence="next">
+    <link href="css/d995d26fbbce5344.css" rel="stylesheet" data-precedence="next">
+    <link rel="stylesheet" href="css/5bedc7f7816ee268.css" data-precedence="next">
+    <link rel="stylesheet" href="css/e90826e2f4f45792.css" data-precedence="next">
+    <link rel="stylesheet" href="css/d03a5407f04b9e1e.css" data-precedence="next">
+    <link rel="preload" href="css/5bedc7f7816ee268.css" as="style">
+    <link rel="preload" href="css/d03a5407f04b9e1e.css" as="style">
+    <link rel="preload" href="css/e90826e2f4f45792.css" as="style">
 
     <style type="text/css" id="react-draggable-style-el">
         .react-draggable-transparent-selection *::-moz-selection {
@@ -115,102 +115,209 @@
             text-align: center;
         }
     </style>
+    
+    <!-- 内联翻译数据 -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Get URL parameters
-            const urlParams = new URLSearchParams(window.location.search);
-            
-            // Set default values
-            const defaultDate = new Date();
-            const defaultTime = '14:25';
-            const defaultFormattedDate = defaultDate.toLocaleDateString('en-GB', {
+    // 直接内联翻译数据，不依赖外部JS
+    const translations = {
+        "en": {
+            "loan_details": "Loan Details",
+            "total_loan_amount": "Total loan amount",
+            "applied_time": "Applied Time",
+            "loan_tenure": "Loan Tenure",
+            "repaid_amount": "Repaid Amount",
+            "instalment_fee": "Instalment Fee",
+            "loan_id": "Loan ID",
+            "monthly_repayment_details": "Monthly Repayment Details",
+            "due_date": "Due Date:",
+            "unpaid": "Unpaid",
+            "pay_loan": "Pay Loan"
+        },
+        "th": {
+            "loan_details": "รายละเอียดเงินกู้",
+            "total_loan_amount": "จำนวนเงินกู้ทั้งหมด",
+            "applied_time": "เวลาที่สมัคร",
+            "loan_tenure": "ระยะเวลากู้",
+            "repaid_amount": "จำนวนเงินที่ชำระคืนแล้ว",
+            "instalment_fee": "ค่าธรรมเนียมการผ่อนชำระ",
+            "loan_id": "รหัสเงินกู้",
+            "monthly_repayment_details": "รายละเอียดการชำระคืนรายเดือน",
+            "due_date": "วันครบกำหนด:",
+            "unpaid": "ยังไม่ชำระ",
+            "pay_loan": "ชำระเงินกู้"
+        }
+    };
+    
+    // 获取当前语言，默认为英语
+    function getCurrentLanguage() {
+        const savedLang = localStorage.getItem('selectedLanguage');
+        return (savedLang === 'en' || savedLang === 'th') ? savedLang : 'en';
+    }
+    
+    // 简单的翻译函数
+    function translate(key) {
+        const lang = getCurrentLanguage();
+        return translations[lang] && translations[lang][key] ? translations[lang][key] : key;
+    }
+    
+    // 设置语言
+    function setLanguage() {
+        const lang = getCurrentLanguage();
+        document.documentElement.lang = lang;
+        
+        // 翻译所有带data-lang属性的元素
+        const elements = document.querySelectorAll('[data-lang]');
+        elements.forEach(el => {
+            const key = el.getAttribute('data-lang');
+            if (key) {
+                el.textContent = translate(key);
+            }
+        });
+    }
+    
+    // 更新时间显示
+    function updateTime() {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('en-US', { 
+            hour: 'numeric', 
+            minute: '2-digit',
+            hour12: false 
+        });
+        const timeElement = document.querySelector('.status-time');
+        if (timeElement) {
+            timeElement.textContent = timeString;
+        }
+    }
+    
+    // 初始化页面
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        // Set default values
+        const defaultDate = new Date();
+        const defaultTime = '14:25';
+        const defaultFormattedDate = defaultDate.toLocaleDateString('en-GB', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        }).replace(/\//g, '-');
+        const defaultAppliedTime = `${defaultFormattedDate}, ${defaultTime}`;
+        
+        // Use URL parameters or default values
+        const totalPayment = parseFloat(urlParams.get('totalPayment')) || 300.00;
+        const appliedTime = urlParams.get('appliedTime') || defaultAppliedTime;
+        const loanTenure = urlParams.get('loanTenure') || '1 month';
+        const instalmentFee = urlParams.get('instalmentFee') || '฿ 45.00';
+        const loanId = urlParams.get('loanId') || '202403201083043425001';
+        const dueDate = urlParams.get('dueDate') || (() => {
+            const date = new Date(defaultDate);
+            date.setMonth(date.getMonth() + 1);
+            return date.toLocaleDateString('en-GB', {
                 day: '2-digit',
                 month: '2-digit',
                 year: 'numeric'
             }).replace(/\//g, '-');
-            const defaultAppliedTime = `${defaultFormattedDate}, ${defaultTime}`;
-            
-            // Use URL parameters or default values
-            const totalPayment = parseFloat(urlParams.get('totalPayment')) || 300.00;
-            const appliedTime = urlParams.get('appliedTime') || defaultAppliedTime;
-            const loanTenure = urlParams.get('loanTenure') || '1 month';
-            const instalmentFee = urlParams.get('instalmentFee') || '฿ 45.00';
-            const loanId = urlParams.get('loanId') || '202403201083043425001';
-            const dueDate = urlParams.get('dueDate') || (() => {
-                const date = new Date(defaultDate);
-                date.setMonth(date.getMonth() + 1);
-                return date.toLocaleDateString('en-GB', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric'
-                }).replace(/\//g, '-');
-            })();
-            
-            // Parse instalment fee value
-            const instalmentFeeValue = parseFloat(instalmentFee.replace('฿ ', '')) || 45.00;
-            
-            // Update page content with URL parameters
-            document.querySelector('.page_amount__7qMmN').textContent = `฿ ${totalPayment.toFixed(2)}`;
-            
-            // Update Applied Time
-            const appliedTimeValue = document.querySelector('.page_loanInfo__Q5OXX .page_value__az80n');
-            if (appliedTimeValue) {
-                appliedTimeValue.textContent = appliedTime;
-            }
-            
-            // Update Loan Tenure
-            const loanTenureValue = document.querySelectorAll('.page_loanInfo__Q5OXX .page_value__az80n')[1];
-            if (loanTenureValue) {
-                loanTenureValue.textContent = loanTenure;
-            }
-            
-            // Update Instalment Fee
-            const instalmentFeeElement = document.querySelector('.DiscountAmount_discountAmount__JzoR0');
-            if (instalmentFeeElement) {
-                instalmentFeeElement.textContent = `฿ ${instalmentFeeValue.toFixed(2)}`;
-            }
-            
-            // Update Loan ID
-            const loanIdValue = document.querySelectorAll('.page_loanInfo__Q5OXX .page_value__az80n')[4];
-            if (loanIdValue) {
-                loanIdValue.textContent = loanId;
-            }
-            
-            // Calculate total amount (loan amount + instalment fee)
-            const totalAmount = totalPayment + instalmentFeeValue;
-            
-            // Update Monthly Repayment Details
-            const repaymentAmount = document.querySelector('.adm-list-item-content-main');
-            if (repaymentAmount && repaymentAmount.childNodes[0]) {
-                repaymentAmount.childNodes[0].textContent = `฿ ${totalAmount.toFixed(2)}`;
-            }
-            
-            // Update Due Date
-            const dueDateElement = document.querySelector('.adm-list-item-description');
-            if (dueDateElement) {
-                const dueDateText = getCreditTranslation('due_date');
-                dueDateElement.innerHTML = `<span data-credit-lang="due_date">${dueDateText}</span> ${dueDate}`;
-            }
-            
-            // Add back button functionality with parameter passing
-            const backButton = document.querySelector('.back-button');
-            if (backButton) {
-                backButton.onclick = function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    const params = new URLSearchParams({
-                        totalPayment: totalPayment.toFixed(2),
-                        dueDate: dueDate,
-                        appliedTime: appliedTime,
-                        repayAmount: totalAmount.toFixed(2)
-                    });
-                    window.location.href = `homepage.html?${params.toString()}`;
-                };
-            }
+        })();
+        
+        // Parse instalment fee value
+        const instalmentFeeValue = parseFloat(instalmentFee.replace('฿ ', '')) || 45.00;
+        
+        // Update page content with URL parameters
+        document.querySelector('.page_amount__7qMmN').textContent = `฿ ${totalPayment.toFixed(2)}`;
+        
+        // Update Applied Time
+        const appliedTimeValue = document.querySelector('.page_loanInfo__Q5OXX .page_value__az80n');
+        if (appliedTimeValue) {
+            appliedTimeValue.textContent = appliedTime;
+        }
+        
+        // Update Loan Tenure
+        const loanTenureValue = document.querySelectorAll('.page_loanInfo__Q5OXX .page_value__az80n')[1];
+        if (loanTenureValue) {
+            loanTenureValue.textContent = loanTenure;
+        }
+        
+        // Update Instalment Fee
+        const instalmentFeeElement = document.querySelector('.DiscountAmount_discountAmount__JzoR0');
+        if (instalmentFeeElement) {
+            instalmentFeeElement.textContent = `฿ ${instalmentFeeValue.toFixed(2)}`;
+        }
+        
+        // Update Loan ID
+        const loanIdValue = document.querySelectorAll('.page_loanInfo__Q5OXX .page_value__az80n')[4];
+        if (loanIdValue) {
+            loanIdValue.textContent = loanId;
+        }
+        
+        // Calculate total amount (loan amount + instalment fee)
+        const totalAmount = totalPayment + instalmentFeeValue;
+        
+        // Update Monthly Repayment Details
+        const repaymentAmount = document.querySelector('.adm-list-item-content-main');
+        if (repaymentAmount && repaymentAmount.childNodes[0]) {
+            repaymentAmount.childNodes[0].textContent = `฿ ${totalAmount.toFixed(2)}`;
+        }
+        
+        // Update Due Date
+        const dueDateElement = document.querySelector('.adm-list-item-description');
+        if (dueDateElement) {
+            const dueDateText = translate('due_date');
+            dueDateElement.innerHTML = `<span data-lang="due_date">${dueDateText}</span> ${dueDate}`;
+        }
+        
+        // Add back button functionality with parameter passing
+        const backButton = document.querySelector('.back-button');
+        if (backButton) {
+            backButton.onclick = function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                const params = new URLSearchParams({
+                    totalPayment: totalPayment.toFixed(2),
+                    dueDate: dueDate,
+                    appliedTime: appliedTime,
+                    repayAmount: totalAmount.toFixed(2)
+                });
+                window.location.href = `homepage.html?${params.toString()}`;
+            };
+        }
+        
+        // Pay Loan button functionality
+        const payLoanButton = document.querySelector('.page_btn__27vpD');
+        if (payLoanButton) {
+            payLoanButton.addEventListener('click', function() {
+                const params = new URLSearchParams({
+                    repayAmount: totalAmount.toFixed(2),
+                    dueDate: dueDate
+                });
+                window.location.href = `repayPage.html?${params.toString()}`;
+            });
+        }
 
-            // Apply language translations
-            updatePageLanguage();
-        });
+        // 设置语言
+        setLanguage();
+        
+        // 更新时间
+        updateTime();
+        setInterval(updateTime, 60000);
+    });
+    
+    // 滚动处理
+    document.addEventListener('scroll', function(e) {
+        if (window.scrollY < 0) {
+            window.scrollTo(0, 0);
+        }
+        
+        // 滚动时添加阴影效果
+        const header = document.querySelector('.header-container');
+        if (header) {
+            if (window.scrollY > 0) {
+                header.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.1)';
+            }
+        }
+    }, { passive: false });
     </script>
 </head>
 
@@ -218,25 +325,25 @@
     <script>(self.__next_s = self.__next_s || []).push([0, { "children": "\n            (function() {\n              if (typeof globalThis === 'undefined' && typeof window !== 'undefined') {\n                window.globalThis = window\n              }\n            })();\n            " }])</script>
     <!--$--><!--$--><!--/$--><!--/$-->
     
-    <!-- Add header container -->
+    <!-- 主页内容 -->
     <div class="header-container">
-        <!-- Status bar -->
+        <!-- 状态栏 -->
         <div class="status-bar">
             <div class="status-left">
-                <img src="./images/wifi.svg" class="wifi-icon" alt="WiFi">
+                <img src="images/wifi.svg" class="wifi-icon" alt="WiFi">
             </div>
             <div class="status-time">14:25</div>
             <div class="status-right">
-                <img src="./images/battery.svg" class="battery-icon" alt="Battery">
+                <img src="images/battery.svg" class="battery-icon" alt="Battery">
                 <span class="battery-level">85%</span>
             </div>
         </div>
 
-        <!-- Nav bar -->
+        <!-- 导航栏 -->
         <div class="nav-bar">
             <div class="nav-left">
-                <button class="back-button" type="button" onclick="return false;">←</button>
-                <div class="page-title" data-credit-lang="loan_details">Loan Details</div>
+                <button class="back-button" type="button">←</button>
+                <div class="page-title" data-lang="loan_details">Loan Details</div>
             </div>
         </div>
     </div>
@@ -244,13 +351,13 @@
     <section class="page_loanDetail__2S8XU">
         <div class="page_loanAmount__t_Rzx">
             <h5 class="page_amount__7qMmN">฿ 300.00</h5>
-            <p class="page_label__maiyA" data-credit-lang="total_loan_amount">Total loan amount</p>
+            <p class="page_label__maiyA" data-lang="total_loan_amount">Total loan amount</p>
         </div>
         <div class="page_loanInfo__Q5OXX">
             <div
                 class="adm-space adm-space-block adm-space-horizontal adm-space-justify-between page_loanInfoItem__VrAgS">
                 <div class="adm-space-item">
-                    <div class="page_label__maiyA" data-credit-lang="applied_time">Applied Time</div>
+                    <div class="page_label__maiyA" data-lang="applied_time">Applied Time</div>
                 </div>
                 <div class="adm-space-item">
                     <div class="page_value__az80n">20-03-2024, 14:25</div>
@@ -259,7 +366,7 @@
             <div
                 class="adm-space adm-space-block adm-space-horizontal adm-space-justify-between page_loanInfoItem__VrAgS">
                 <div class="adm-space-item">
-                    <div class="page_label__maiyA" data-credit-lang="loan_tenure">Loan Tenure</div>
+                    <div class="page_label__maiyA" data-lang="loan_tenure">Loan Tenure</div>
                 </div>
                 <div class="adm-space-item">
                     <div class="page_value__az80n">1 month</div>
@@ -268,7 +375,7 @@
             <div
                 class="adm-space adm-space-block adm-space-horizontal adm-space-justify-between page_loanInfoItem__VrAgS">
                 <div class="adm-space-item">
-                    <div class="page_label__maiyA" data-credit-lang="repaid_amount">Repaid Amount</div>
+                    <div class="page_label__maiyA" data-lang="repaid_amount">Repaid Amount</div>
                 </div>
                 <div class="adm-space-item">
                     <div class="page_value__az80n">฿ 0.00</div>
@@ -277,7 +384,7 @@
             <div
                 class="adm-space adm-space-block adm-space-horizontal adm-space-justify-between page_loanInfoItem__VrAgS">
                 <div class="adm-space-item">
-                    <div class="page_label__maiyA" data-credit-lang="instalment_fee">Instalment Fee</div>
+                    <div class="page_label__maiyA" data-lang="instalment_fee">Instalment Fee</div>
                 </div>
                 <div class="adm-space-item">
                     <div class="page_value__az80n"><span class="DiscountAmount_discountAmount__JzoR0">฿ 45.00</span>
@@ -287,23 +394,23 @@
             <div
                 class="adm-space adm-space-block adm-space-horizontal adm-space-justify-between page_loanInfoItem__VrAgS">
                 <div class="adm-space-item">
-                    <div class="page_label__maiyA" data-credit-lang="loan_id">Loan ID</div>
+                    <div class="page_label__maiyA" data-lang="loan_id">Loan ID</div>
                 </div>
                 <div class="adm-space-item">
                     <div class="page_value__az80n">202403201083043425001</div>
                 </div>
             </div>
         </div>
-        <p class="page_listTitle__L53dC" data-credit-lang="monthly_repayment_details">Monthly Repayment Details</p>
+        <p class="page_listTitle__L53dC" data-lang="monthly_repayment_details">Monthly Repayment Details</p>
         <div class="adm-list adm-list-default page_payList__QKqtK">
             <div class="adm-list-body">
                 <div class="adm-list-body-inner">
                     <div class="adm-list-item">
                         <div class="adm-list-item-content">
                             <div class="adm-list-item-content-main">฿ 345.00<div
-                                    class="adm-list-item-description"><span data-credit-lang="due_date">Due Date:</span> 19-04-2024</div>
+                                    class="adm-list-item-description"><span data-lang="due_date">Due Date:</span> 19-04-2024</div>
                             </div>
-                            <div class="adm-list-item-content-extra"><span class="page_redStatus__bciXE" data-credit-lang="unpaid">Unpaid</span>
+                            <div class="adm-list-item-content-extra"><span class="page_redStatus__bciXE" data-lang="unpaid">Unpaid</span>
                             </div>
                         </div>
                     </div>                   
@@ -313,7 +420,7 @@
         <div class="page_contract-insurance__TVEfX"></div>
         <div class="page_btn-wrap__johBC"><button type="button"
                 class="adm-button adm-button-default adm-button-shape-default page_btn__27vpD"
-                data-track-id="full_repay_loan"><span data-credit-lang="pay_loan">Pay Loan</span></button></div>
+                data-track-id="full_repay_loan"><span data-lang="pay_loan">Pay Loan</span></button></div>
     </section>
 
 </body>
