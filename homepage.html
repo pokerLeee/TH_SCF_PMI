@@ -7,17 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="viewport"
         content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no">
-    
-    <script>
-        // 设置初始语言 - 放在头部优先加载
-        const savedLanguage = localStorage.getItem('selectedLanguage');
-        console.log("Initial language from localStorage:", savedLanguage);
-        if (savedLanguage && (savedLanguage === 'en' || savedLanguage === 'th')) {
-            document.documentElement.lang = savedLanguage;
-            console.log("Setting HTML lang attribute to:", savedLanguage);
-        }
-    </script>
-    <script src="creditLanguage.js"></script>
+    <!-- 使用ruammitrlanguage.js替换creditLanguage.js -->
+    <script src="ruammitrlanguage.js"></script>
     
     <link rel="stylesheet" href="css/4fa41296f441b9ff.css" data-precedence="next">
     <link rel="stylesheet" href="css/57009e3cabd11cec.css" data-precedence="next">
@@ -135,6 +126,23 @@
             top: 0;
             z-index: 100;
         }
+        
+        /* 页面过渡动画 */
+        .page-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(238, 77, 45, 0.5);
+            z-index: 9999;
+            animation: fadeIn 0.3s forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
     </style>
     
     <script>
@@ -154,6 +162,8 @@
         
         // DOM加载完成后执行的函数
         document.addEventListener('DOMContentLoaded', function() {
+            console.log("DOM loaded, initializing page...");
+            
             // 更新时间
             updateTime();
             // 每分钟更新一次时间
@@ -168,13 +178,6 @@
                 if (notificationEnabled === 'false') {
                     notificationBar.style.display = 'none';
                 }
-            }
-
-            // 确保翻译正确应用
-            if (typeof updatePageLanguage === 'function') {
-                updatePageLanguage();
-            } else {
-                console.warn('updatePageLanguage function not found');
             }
 
             // Add back button handler
@@ -234,61 +237,69 @@
             const appliedTime = urlParams.get('appliedTime') || defaultAppliedTime;
             const repayAmount = parseFloat(urlParams.get('repayAmount')) || (totalPayment + INSTALMENT_FEE);
             
-            // Update loan amount and due date in the current loans section
-            const loanAmountTitle = document.querySelector('.adm-list-item-title');
-            if (loanAmountTitle) {
-                const loanAmountSpan = loanAmountTitle.querySelector('[data-credit-lang="loan_amount"]');
-                if (loanAmountSpan && typeof getCreditTranslation === 'function') {
-                    const loanAmountText = getCreditTranslation('loan_amount');
+            try {
+                // Update loan amount and due date in the current loans section
+                const loanAmountTitle = document.querySelector('.adm-list-item-title');
+                if (loanAmountTitle) {
+                    const loanAmountText = getTranslation('loan_amount');
                     loanAmountTitle.innerHTML = `<span data-credit-lang="loan_amount">${loanAmountText}</span> ฿ ${formatCurrency(totalPayment)}`;
                 }
-            }
-            
-            const loanDueDate = document.querySelector('.adm-list-item-description');
-            if (loanDueDate) {
-                const dueOnSpan = loanDueDate.querySelector('[data-credit-lang="due_on"]');
-                if (dueOnSpan && typeof getCreditTranslation === 'function') {
-                    const dueOnText = getCreditTranslation('due_on');
+                
+                const loanDueDate = document.querySelector('.adm-list-item-description');
+                if (loanDueDate) {
+                    const dueOnText = getTranslation('due_on');
                     loanDueDate.innerHTML = `฿ ${formatCurrency(repayAmount)} <span data-credit-lang="due_on">${dueOnText}</span> ${dueDate}`;
                 }
-            }
 
-            // Add click handler for loan item
-            const loanItem = document.querySelector('.adm-list-item.adm-plain-anchor');
-            if (loanItem) {
-                loanItem.style.cursor = 'pointer';
-                loanItem.addEventListener('click', function() {
-                    const params = new URLSearchParams({
-                        repayAmount: (totalPayment + INSTALMENT_FEE).toFixed(2),
-                        dueDate: dueDate
+                // Add click handler for loan item
+                const loanItem = document.querySelector('.adm-list-item.adm-plain-anchor');
+                if (loanItem) {
+                    loanItem.style.cursor = 'pointer';
+                    loanItem.addEventListener('click', function() {
+                        const params = new URLSearchParams({
+                            repayAmount: (totalPayment + INSTALMENT_FEE).toFixed(2),
+                            dueDate: dueDate
+                        });
+                        navigateWithTransition(`repayPage.html?${params.toString()}`);
                     });
-                    window.location.href = `repayPage.html?${params.toString()}`;
-                });
-            }
+                }
 
-            // Calculate and update Available Credit Limit
-            const availableCreditLimit = TOTAL_CREDIT_LIMIT - totalPayment;
-            
-            // Update Available Credit Limit display
-            const availableAmountElement = document.querySelector('.Banner_availableAmount__X6GaB');
-            if (availableAmountElement) {
-                availableAmountElement.innerHTML = `<span class="Banner_symbol__hW40M">฿</span> ${formatCurrency(availableCreditLimit)}`;
-            }
+                // Calculate and update Available Credit Limit
+                const availableCreditLimit = TOTAL_CREDIT_LIMIT - totalPayment;
+                
+                // Update Available Credit Limit display
+                const availableAmountElement = document.querySelector('.Banner_availableAmount__X6GaB');
+                if (availableAmountElement) {
+                    availableAmountElement.innerHTML = `<span class="Banner_symbol__hW40M">฿</span> ${formatCurrency(availableCreditLimit)}`;
+                }
 
-            // Update Total Credit Limit display
-            const totalLimitElement = document.querySelector('.Banner_left__yEoOH');
-            if (totalLimitElement && typeof getCreditTranslation === 'function') {
-                const totalCreditLimitText = getCreditTranslation('total_credit_limit');
-                totalLimitElement.innerHTML = `<span data-credit-lang="total_credit_limit">${totalCreditLimitText}</span> ฿ ${formatCurrency(TOTAL_CREDIT_LIMIT)}`;
-            }
+                // Update Total Credit Limit display
+                const totalLimitElement = document.querySelector('.Banner_left__yEoOH');
+                if (totalLimitElement) {
+                    const totalCreditLimitText = getTranslation('total_credit_limit');
+                    totalLimitElement.innerHTML = `<span data-credit-lang="total_credit_limit">${totalCreditLimitText}</span> ฿ ${formatCurrency(TOTAL_CREDIT_LIMIT)}`;
+                }
 
-            console.log("Homepage initialized successfully");
+                console.log("Homepage initialized successfully");
+            } catch (error) {
+                console.error("Error during page initialization:", error);
+            }
         }
         
         // 防止顶部过度滚动
         document.addEventListener('scroll', function(e) {
             if (window.scrollY < 0) {
                 window.scrollTo(0, 0);
+            }
+            
+            // 确保header在滚动时保持在内容上方
+            const header = document.querySelector('.header-container');
+            if (header) {
+                if (window.scrollY > 0) {
+                    header.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
+                } else {
+                    header.style.boxShadow = 'none';
+                }
             }
         }, { passive: false });
     </script>
