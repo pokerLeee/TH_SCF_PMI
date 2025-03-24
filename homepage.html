@@ -8,13 +8,16 @@
     <meta name="viewport"
         content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no">
     
+    <!-- 先引入creditLanguage.js，避免变量冲突 -->
+    <script src="creditLanguage.js"></script>
+    
     <script>
-        // 设置初始语言 - 放在头部优先加载
-        const savedLanguage = localStorage.getItem('selectedLanguage');
-        console.log("Initial language from localStorage:", savedLanguage);
-        if (savedLanguage && (savedLanguage === 'en' || savedLanguage === 'th')) {
-            document.documentElement.lang = savedLanguage;
-            console.log("Setting HTML lang attribute to:", savedLanguage);
+        // 读取并使用localStorage中的语言设置，但避免重复声明变量
+        const selectedLang = localStorage.getItem('selectedLanguage');
+        console.log("Initial language from localStorage:", selectedLang);
+        if (selectedLang && (selectedLang === 'en' || selectedLang === 'th')) {
+            document.documentElement.lang = selectedLang;
+            console.log("Setting HTML lang attribute to:", selectedLang);
         } else {
             // 如果没有保存的语言，默认设置为英语
             localStorage.setItem('selectedLanguage', 'en');
@@ -22,10 +25,12 @@
             console.log("No language found in localStorage, setting default to: en");
         }
 
-        // 全局变量设置，确保与creditLanguage.js兼容
-        window.currentLanguage = savedLanguage || 'en';
+        // 确保全局currentLanguage变量正确初始化，与creditLanguage.js保持一致
+        if (typeof window.currentLanguage === 'undefined') {
+            window.currentLanguage = selectedLang || 'en';
+            console.log("Initialized window.currentLanguage to:", window.currentLanguage);
+        }
     </script>
-    <script src="creditLanguage.js"></script>
     
     <link rel="stylesheet" href="css/4fa41296f441b9ff.css" data-precedence="next">
     <link rel="stylesheet" href="css/57009e3cabd11cec.css" data-precedence="next">
