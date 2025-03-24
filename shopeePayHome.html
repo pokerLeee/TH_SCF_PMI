@@ -269,36 +269,6 @@
             }
         }, { passive: false });
 
-        // 初始化语言设置
-        document.addEventListener('DOMContentLoaded', function() {
-            // 确保所有翻译都已应用
-            if (typeof updatePageLanguage === 'function') {
-                updatePageLanguage();
-            }
-            
-            // 添加语言切换器
-            try {
-                // 检查是否已导入shopeePayLanguage.js
-                if (typeof addLanguageSwitcher === 'function') {
-                    addLanguageSwitcher();
-                } else {
-                    console.log('语言切换器函数未定义，尝试动态加载shopeePayLanguage.js');
-                    // 动态加载语言文件
-                    const script = document.createElement('script');
-                    script.src = 'js/shopeePayLanguage.js';
-                    script.onload = function() {
-                        console.log('shopeePayLanguage.js 已加载');
-                        if (typeof addLanguageSwitcher === 'function') {
-                            addLanguageSwitcher();
-                        }
-                    };
-                    document.head.appendChild(script);
-                }
-            } catch (e) {
-                console.error('添加语言切换器时出错:', e);
-            }
-        });
-
         // 控制SEasyPay广告卡片显示逻辑
         document.addEventListener('DOMContentLoaded', function() {
             // 从URL获取参数
@@ -549,43 +519,19 @@
             }
         });
         
-        // Force language update after all scripts are loaded
+        // 确保翻译正确应用
         window.addEventListener('load', function() {
             console.log("Window loaded - ensuring language is correctly applied");
             
-            // 强制显示调试信息，方便排查问题
+            // 检查语言设置
             console.log("HTML lang:", document.documentElement.lang);
             console.log("currentLanguage:", window.currentLanguage);
             console.log("localStorage:", localStorage.getItem('selectedLanguage'));
             
-            // 显示所有可翻译元素
-            setTimeout(function() {
-                console.log("=== DEBUG: TRANSLATABLE ELEMENTS ===");
-                const elements = document.querySelectorAll('[data-lang]');
-                console.log("Total elements with data-lang:", elements.length);
-                
-                // 检查每个元素的翻译状态
-                elements.forEach(el => {
-                    const key = el.getAttribute('data-lang');
-                    let translation = null;
-                    
-                    if (window.translations && window.translations[key] && window.currentLanguage) {
-                        translation = window.translations[key][window.currentLanguage];
-                    }
-                    
-                    console.log(`Element: ${el.tagName}, key: ${key}, current text: "${el.textContent}", should be: "${translation || 'MISSING'}"`);
-                });
-                
-                // 检查翻译对象
-                console.log("=== DEBUG: TRANSLATIONS OBJECT ===");
-                console.log("window.translations:", window.translations);
-                
-                // 如果发现问题，尝试手动修复
-                if (typeof window.updatePageLanguage === 'function') {
-                    console.log("Forcing final updatePageLanguage call");
-                    window.updatePageLanguage();
-                }
-            }, 500);
+            // 应用翻译
+            if (typeof window.updatePageLanguage === 'function') {
+                window.updatePageLanguage();
+            }
         });
     </script>
 </body>
