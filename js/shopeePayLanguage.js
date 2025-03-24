@@ -1,133 +1,165 @@
 // ShopeePay Home translations
-const shopeePayTranslations = {
+window.shopeePayTranslations = {
     // Header section
     'shopeepay': {
-        [LANGUAGE.ENGLISH]: 'ShopeePay',
-        [LANGUAGE.THAI]: 'ShopeePay'
+        'en': 'ShopeePay',
+        'th': 'ShopeePay'
     },
     'shopeepay_balance': {
-        [LANGUAGE.ENGLISH]: 'ShopeePay Balance',
-        [LANGUAGE.THAI]: 'ยอดเงิน ShopeePay'
+        'en': 'ShopeePay Balance',
+        'th': 'ยอดเงิน ShopeePay'
     },
     'top_up': {
-        [LANGUAGE.ENGLISH]: 'Top Up',
-        [LANGUAGE.THAI]: 'เติมเงิน'
+        'en': 'Top Up',
+        'th': 'เติมเงิน'
     },
     'transfer': {
-        [LANGUAGE.ENGLISH]: 'Transfer',
-        [LANGUAGE.THAI]: 'โอนเงิน'
+        'en': 'Transfer',
+        'th': 'โอนเงิน'
     },
     'history': {
-        [LANGUAGE.ENGLISH]: 'History',
-        [LANGUAGE.THAI]: 'ประวัติ'
+        'en': 'History',
+        'th': 'ประวัติ'
     },
 
     // Menu section
     'scan': {
-        [LANGUAGE.ENGLISH]: 'Scan',
-        [LANGUAGE.THAI]: 'สแกน'
+        'en': 'Scan',
+        'th': 'สแกน'
     },
     'bill': {
-        [LANGUAGE.ENGLISH]: 'Bill',
-        [LANGUAGE.THAI]: 'บิล'
+        'en': 'Bill',
+        'th': 'บิล'
     },
     'internet': {
-        [LANGUAGE.ENGLISH]: 'Internet',
-        [LANGUAGE.THAI]: 'อินเทอร์เน็ต'
+        'en': 'Internet',
+        'th': 'อินเทอร์เน็ต'
     },
     'insurance': {
-        [LANGUAGE.ENGLISH]: 'Insurance',
-        [LANGUAGE.THAI]: 'ประกัน'
+        'en': 'Insurance',
+        'th': 'ประกัน'
     },
     'travel': {
-        [LANGUAGE.ENGLISH]: 'Travel',
-        [LANGUAGE.THAI]: 'ท่องเที่ยว'
+        'en': 'Travel',
+        'th': 'ท่องเที่ยว'
     },
     'food': {
-        [LANGUAGE.ENGLISH]: 'Food',
-        [LANGUAGE.THAI]: 'อาหาร'
+        'en': 'Food',
+        'th': 'อาหาร'
     },
     'deals': {
-        [LANGUAGE.ENGLISH]: 'Deals',
-        [LANGUAGE.THAI]: 'ดีล'
+        'en': 'Deals',
+        'th': 'ดีล'
     },
     'more': {
-        [LANGUAGE.ENGLISH]: 'More',
-        [LANGUAGE.THAI]: 'เพิ่มเติม'
+        'en': 'More',
+        'th': 'เพิ่มเติม'
     },
 
     // Banner section
     'promotion_banner': {
-        [LANGUAGE.ENGLISH]: 'Promotion Banner',
-        [LANGUAGE.THAI]: 'แบนเนอร์โปรโมชั่น'
+        'en': 'Promotion Banner',
+        'th': 'แบนเนอร์โปรโมชั่น'
     },
 
     // Credit section
     'seller_loan_credit': {
-        [LANGUAGE.ENGLISH]: 'Seller Loan Credit',
-        [LANGUAGE.THAI]: 'วงเงินสินเชื่อผู้ขาย'
+        'en': 'Seller Loan Credit',
+        'th': 'วงเงินสินเชื่อผู้ขาย'
     },
     'view_history': {
-        [LANGUAGE.ENGLISH]: 'View History >',
-        [LANGUAGE.THAI]: 'ดูประวัติ >'
+        'en': 'View History >',
+        'th': 'ดูประวัติ >'
     },
     'seller_loan': {
-        [LANGUAGE.ENGLISH]: 'Seller Loan',
-        [LANGUAGE.THAI]: 'สินเชื่อผู้ขาย'
+        'en': 'Seller Loan',
+        'th': 'สินเชื่อผู้ขาย'
     },
     'available_credit': {
-        [LANGUAGE.ENGLISH]: 'Available Credit',
-        [LANGUAGE.THAI]: 'วงเงินที่ใช้ได้'
+        'en': 'Available Credit',
+        'th': 'วงเงินที่ใช้ได้'
     },
     'apply_for_loan': {
-        [LANGUAGE.ENGLISH]: 'Apply for Loan',
-        [LANGUAGE.THAI]: 'สมัครสินเชื่อ'
+        'en': 'Apply for Loan',
+        'th': 'สมัครสินเชื่อ'
     }
 };
+
+// Add debug function to check if translations are working
+function debugLanguage() {
+    console.log("Current Language:", currentLanguage);
+    console.log("localStorage 'selectedLanguage':", localStorage.getItem('selectedLanguage'));
+    console.log("Sample translation (shopeepay_balance):", getTranslation('shopeepay_balance'));
+    console.log("All translations:", translations);
+}
 
 // Add shopeePayTranslations to the global translations object
-Object.assign(translations, shopeePayTranslations);
+Object.assign(translations, window.shopeePayTranslations);
+console.log("ShopeePayTranslations added to global translations");
 
-// Override the setLanguage function to use selectedLanguage key
-const originalSetLanguage = setLanguage;
-setLanguage = function(lang) {
-    if (lang === LANGUAGE.ENGLISH || lang === LANGUAGE.THAI) {
-        currentLanguage = lang;
-        localStorage.setItem('selectedLanguage', lang);
-        updatePageLanguage();
-        
-        // Update active class for language buttons
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.classList.remove('active');
-        });
-        
-        const activeBtn = document.querySelector(`.lang-btn:nth-child(${lang === LANGUAGE.ENGLISH ? 1 : 2})`);
-        if (activeBtn) {
-            activeBtn.classList.add('active');
-        }
-        
-        return true;
+// Function to update language switcher UI
+function updateLanguageSwitcherUI(lang) {
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    const activeBtn = document.querySelector(lang === LANGUAGE.ENGLISH ? '.lang-btn-en' : '.lang-btn-th');
+    if (activeBtn) {
+        activeBtn.classList.add('active');
     }
-    return false;
-};
+}
 
 // Language switcher UI
 function addLanguageSwitcher() {
+    console.log("Adding language switcher");
+    
+    // Check if language switcher already exists
+    if (document.querySelector('.language-switcher')) {
+        console.log("Language switcher already exists");
+        return;
+    }
+    
     // Create language switcher container
     const switcherContainer = document.createElement('div');
     switcherContainer.className = 'language-switcher';
     
     // Create English button
     const enButton = document.createElement('button');
-    enButton.className = 'lang-btn' + (getCurrentLanguage() === LANGUAGE.ENGLISH ? ' active' : '');
+    enButton.className = 'lang-btn lang-btn-en' + (window.currentLanguage === 'en' ? ' active' : '');
     enButton.textContent = 'EN';
-    enButton.onclick = () => setLanguage(LANGUAGE.ENGLISH);
+    enButton.onclick = function() {
+        console.log("Switching to English");
+        if (typeof window.setLanguage === 'function') {
+            window.setLanguage('en');
+        } else {
+            console.error("setLanguage function not available");
+            // 备用逻辑
+            window.currentLanguage = 'en';
+            localStorage.setItem('selectedLanguage', 'en');
+            if (typeof window.updatePageLanguage === 'function') {
+                window.updatePageLanguage();
+            }
+        }
+    };
     
     // Create Thai button
     const thButton = document.createElement('button');
-    thButton.className = 'lang-btn' + (getCurrentLanguage() === LANGUAGE.THAI ? ' active' : '');
+    thButton.className = 'lang-btn lang-btn-th' + (window.currentLanguage === 'th' ? ' active' : '');
     thButton.textContent = 'ไทย';
-    thButton.onclick = () => setLanguage(LANGUAGE.THAI);
+    thButton.onclick = function() {
+        console.log("Switching to Thai");
+        if (typeof window.setLanguage === 'function') {
+            window.setLanguage('th');
+        } else {
+            console.error("setLanguage function not available");
+            // 备用逻辑
+            window.currentLanguage = 'th';
+            localStorage.setItem('selectedLanguage', 'th');
+            if (typeof window.updatePageLanguage === 'function') {
+                window.updatePageLanguage();
+            }
+        }
+    };
     
     // Append buttons to container
     switcherContainer.appendChild(enButton);
@@ -140,13 +172,42 @@ function addLanguageSwitcher() {
     }
 }
 
-// Initialize language switcher when DOM is loaded
+// Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
+    console.log("DOM loaded in shopeePayLanguage.js");
+    
+    // Add language switcher
     addLanguageSwitcher();
     
-    // Check local storage for language setting
+    // Check local storage for language setting and force update
     const savedLanguage = localStorage.getItem('selectedLanguage');
+    console.log("Initial savedLanguage:", savedLanguage);
+    
     if (savedLanguage && (savedLanguage === LANGUAGE.ENGLISH || savedLanguage === LANGUAGE.THAI)) {
-        setLanguage(savedLanguage);
+        console.log("Setting current language to:", savedLanguage);
+        
+        // 使用共享语言机制设置语言
+        if (typeof setLanguage === 'function') {
+            setLanguage(savedLanguage);
+        }
     }
+    
+    // Run debug to check language setup
+    debugLanguage();
+    
+    // 确保所有翻译都已应用
+    setTimeout(function() {
+        console.log("Delayed force update of translations");
+        // Force update all text elements with translations again
+        document.querySelectorAll('[data-lang]').forEach(element => {
+            const key = element.getAttribute('data-lang');
+            if (key && typeof getTranslation === 'function') {
+                const translation = getTranslation(key);
+                if (translation) {
+                    console.log(`Updating element with key ${key} to ${translation}`);
+                    element.textContent = translation;
+                }
+            }
+        });
+    }, 100);
 }); 

@@ -9,8 +9,10 @@
     <script>
         // Set initial language from localStorage
         const savedLanguage = localStorage.getItem('selectedLanguage');
+        console.log("Initial language from localStorage:", savedLanguage);
         if (savedLanguage && (savedLanguage === 'en' || savedLanguage === 'th')) {
             document.documentElement.lang = savedLanguage;
+            console.log("Setting HTML lang attribute to:", savedLanguage);
         }
     </script>
 </head>
@@ -136,6 +138,49 @@
     <!-- Load scripts -->
     <script src="sharedLanguage.js"></script>
     <script src="js/shopeePayLanguage.js"></script>
+    <script src="js/shopeePayLanguageBridge.js"></script>
     <script src="js/shopeePayHomeMockup.js"></script>
+    
+    <!-- Force language update after all scripts are loaded -->
+    <script>
+        window.addEventListener('load', function() {
+            console.log("Window loaded - ensuring language is correctly applied");
+            
+            // 强制显示调试信息，方便排查问题
+            console.log("HTML lang:", document.documentElement.lang);
+            console.log("currentLanguage:", window.currentLanguage);
+            console.log("localStorage:", localStorage.getItem('selectedLanguage'));
+            
+            // 显示所有可翻译元素
+            setTimeout(function() {
+                console.log("=== DEBUG: TRANSLATABLE ELEMENTS ===");
+                const elements = document.querySelectorAll('[data-lang]');
+                console.log("Total elements with data-lang:", elements.length);
+                
+                // 检查每个元素的翻译状态
+                elements.forEach(el => {
+                    const key = el.getAttribute('data-lang');
+                    let translation = null;
+                    
+                    if (window.translations && window.translations[key] && window.currentLanguage) {
+                        translation = window.translations[key][window.currentLanguage];
+                    }
+                    
+                    console.log(`Element: ${el.tagName}, key: ${key}, current text: "${el.textContent}", should be: "${translation || 'MISSING'}"`);
+                });
+                
+                // 检查翻译对象
+                console.log("=== DEBUG: TRANSLATIONS OBJECT ===");
+                console.log("window.translations:", window.translations);
+                console.log("window.shopeePayTranslations:", window.shopeePayTranslations);
+                
+                // 如果发现问题，尝试手动修复
+                if (typeof window.updatePageLanguage === 'function') {
+                    console.log("Forcing final updatePageLanguage call");
+                    window.updatePageLanguage();
+                }
+            }, 500);
+        });
+    </script>
 </body>
 </html> 

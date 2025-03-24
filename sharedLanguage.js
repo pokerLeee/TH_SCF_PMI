@@ -5,7 +5,7 @@ const LANGUAGE = {
 };
 
 // Initialize currentLanguage from localStorage or default to English
-const savedLanguage = localStorage.getItem('language');
+const savedLanguage = localStorage.getItem('selectedLanguage');
 let currentLanguage = savedLanguage && (savedLanguage === LANGUAGE.ENGLISH || savedLanguage === LANGUAGE.THAI) 
     ? savedLanguage 
     : LANGUAGE.ENGLISH;
