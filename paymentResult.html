@@ -240,7 +240,7 @@
             }
             
             loanTenure.setAttribute('data-lang', tenureKey);
-            loanTenure.textContent = getTranslation(tenureKey);
+            loanTenure.textContent = translate(tenureKey);
             loanPrinciple.textContent = `฿ ${totalPayment.toFixed(2)}`;
             
             // 计算利息
@@ -249,9 +249,17 @@
             loanInterest.textContent = `฿ ${interestAmount.toFixed(2)}`;
         }
 
-        // 隐藏倒计时显示
-        document.getElementById('countdown').style.display = 'none';
-        document.querySelector('[data-lang="seconds"]').style.display = 'none';
+        // 初始化倒计时
+        let countdown = 5;
+        const countdownElement = document.getElementById('countdown');
+        const countdownInterval = setInterval(() => {
+            countdown--;
+            countdownElement.textContent = countdown;
+            if (countdown <= 0) {
+                clearInterval(countdownInterval);
+                // navigateBackWithTransition('ruammitr.html'); // 注释掉倒计时结束时的页面跳转
+            }
+        }, 1000);
 
         // 2. 初始化事件监听器
         // 设置后退按钮事件
