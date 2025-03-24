@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SVG Test Page</title>
+    <link rel="stylesheet" href="SPPStyles.css">
     <style>
         * {
             margin: 0;
@@ -45,13 +46,38 @@
 
         .svg-container {
             width: 100%;
-            height: 300px;
+            height: 200px;
             display: flex;
             justify-content: center;
             align-items: center;
             background: #fafafa;
             border-radius: 0.5rem;
             margin: 1rem 0;
+            gap: 2rem;
+        }
+
+        .svg-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .svg-item:hover {
+            transform: scale(1.1);
+        }
+
+        .svg-item img {
+            width: 64px;
+            height: 64px;
+        }
+
+        .svg-name {
+            font-size: 0.9rem;
+            color: #666;
+            text-align: center;
         }
 
         .back-button {
@@ -69,51 +95,205 @@
         .back-button:hover {
             background-color: #45a049;
         }
+
+        .section-title {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        /* Status bar styles */
+        .status-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2rem;
+            background: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1rem;
+            font-size: 1.2rem;
+            z-index: 1000;
+        }
+
+        .status-left {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-right {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-time {
+            font-weight: 500;
+        }
+
+        /* Loading animation */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .loading-dots {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .loading-dot {
+            width: 1rem;
+            height: 1rem;
+            background: #ee4d2d;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out;
+        }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
     </style>
 </head>
 <body>
+    <div class="status-bar">
+        <div class="status-left">
+            <img src="images/wifi.svg" alt="WiFi" class="wifi-icon">
+            <img src="images/battery.svg" alt="Battery" class="battery-icon">
+        </div>
+        <div class="status-right">
+            <span class="status-time">9:41</span>
+        </div>
+    </div>
+
     <button class="back-button" onclick="window.location.href='index.html'">Back to Demo Setup</button>
     
     <div class="container">
         <h1>SVG Test Page</h1>
         
         <div class="svg-section">
-            <h2>Sample SVG 1: Animated Circle</h2>
+            <h2 class="section-title">Status Icons</h2>
             <div class="svg-container">
-                <svg width="200" height="200" viewBox="0 0 200 200">
-                    <circle cx="100" cy="100" r="50" fill="#4CAF50">
-                        <animate attributeName="r" values="50;70;50" dur="2s" repeatCount="indefinite"/>
-                    </circle>
-                </svg>
+                <div class="svg-item" onclick="toggleIcon(this, 'battery')">
+                    <img src="images/battery.svg" alt="Battery">
+                    <span class="svg-name">battery.svg</span>
+                </div>
+                <div class="svg-item" onclick="toggleIcon(this, 'battery-red')">
+                    <img src="images/battery-red.svg" alt="Battery Red">
+                    <span class="svg-name">battery-red.svg</span>
+                </div>
+                <div class="svg-item" onclick="toggleIcon(this, 'wifi')">
+                    <img src="images/wifi.svg" alt="WiFi">
+                    <span class="svg-name">wifi.svg</span>
+                </div>
+                <div class="svg-item" onclick="toggleIcon(this, 'wifi-red')">
+                    <img src="images/wifi-red.svg" alt="WiFi Red">
+                    <span class="svg-name">wifi-red.svg</span>
+                </div>
             </div>
         </div>
 
         <div class="svg-section">
-            <h2>Sample SVG 2: Interactive Rectangle</h2>
+            <h2 class="section-title">Feature Icons</h2>
             <div class="svg-container">
-                <svg width="200" height="200" viewBox="0 0 200 200">
-                    <rect x="50" y="50" width="100" height="100" fill="#2196F3">
-                        <animate attributeName="fill" values="#2196F3;#FF5722;#2196F3" dur="3s" repeatCount="indefinite"/>
-                    </rect>
-                </svg>
+                <div class="svg-item" onclick="showLoadingAnimation()">
+                    <img src="images/computer_icon.4edf6fcf.svg" alt="Computer">
+                    <span class="svg-name">computer_icon</span>
+                </div>
+                <div class="svg-item" onclick="showLoadingAnimation()">
+                    <img src="images/fast.24256a71.svg" alt="Fast">
+                    <span class="svg-name">fast</span>
+                </div>
+                <div class="svg-item" onclick="showLoadingAnimation()">
+                    <img src="images/id_check.010d6309.svg" alt="ID Check">
+                    <span class="svg-name">id_check</span>
+                </div>
+                <div class="svg-item" onclick="showLoadingAnimation()">
+                    <img src="images/rate.daa75632.svg" alt="Rate">
+                    <span class="svg-name">rate</span>
+                </div>
             </div>
         </div>
 
         <div class="svg-section">
-            <h2>Sample SVG 3: Path Animation</h2>
+            <h2 class="section-title">Navigation Icons</h2>
             <div class="svg-container">
-                <svg width="200" height="200" viewBox="0 0 200 200">
-                    <path d="M50,100 Q100,50 150,100 T250,100" stroke="#9C27B0" stroke-width="2" fill="none">
-                        <animate attributeName="d" 
-                            values="M50,100 Q100,50 150,100 T250,100;
-                                   M50,100 Q100,150 150,100 T250,100;
-                                   M50,100 Q100,50 150,100 T250,100"
-                            dur="2s" 
-                            repeatCount="indefinite"/>
-                    </path>
-                </svg>
+                <div class="svg-item" onclick="showLoadingAnimation()">
+                    <img src="images/right_arrow.dae6b315.svg" alt="Right Arrow">
+                    <span class="svg-name">right_arrow</span>
+                </div>
+                <div class="svg-item" onclick="showLoadingAnimation()">
+                    <img src="images/ic-down-off.8e58cc4d.svg" alt="Down Arrow">
+                    <span class="svg-name">ic-down-off</span>
+                </div>
+                <div class="svg-item" onclick="showLoadingAnimation()">
+                    <img src="images/edit.788d4490.svg" alt="Edit">
+                    <span class="svg-name">edit</span>
+                </div>
+                <div class="svg-item" onclick="showLoadingAnimation()">
+                    <img src="images/scan.a093f61a.svg" alt="Scan">
+                    <span class="svg-name">scan</span>
+                </div>
             </div>
         </div>
     </div>
+
+    <div class="loading-overlay">
+        <div class="loading-dots">
+            <div class="loading-dot"></div>
+            <div class="loading-dot"></div>
+            <div class="loading-dot"></div>
+        </div>
+    </div>
+
+    <script src="SPPScript.js"></script>
+    <script>
+        // Toggle between normal and red versions of icons
+        function toggleIcon(element, iconType) {
+            const img = element.querySelector('img');
+            const currentSrc = img.src;
+            const newSrc = currentSrc.includes('-red') 
+                ? currentSrc.replace('-red', '')
+                : currentSrc.replace('.svg', '-red.svg');
+            img.src = newSrc;
+        }
+
+        // Show loading animation
+        function showLoadingAnimation() {
+            const overlay = document.querySelector('.loading-overlay');
+            overlay.style.display = 'flex';
+            
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 2000);
+        }
+
+        // Update time in status bar
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', { 
+                hour: 'numeric', 
+                minute: '2-digit',
+                hour12: false 
+            });
+            document.querySelector('.status-time').textContent = timeString;
+        }
+
+        // Update time every minute
+        setInterval(updateTime, 60000);
+        updateTime();
+    </script>
 </body>
 </html> 
