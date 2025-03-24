@@ -72,7 +72,7 @@
     <link rel="stylesheet" href="./css/a.credit.promotion-web-sdk-es.22d9585f.chunk.css">
     <link rel="stylesheet" href="./css/p__landing@ID__sellerloan__index.cff65858.chunk.css">
  
-    <!-- Added status bar and nav bar styles -->
+    <!-- 状态栏和导航样式 -->
     <style>
         /* 状态栏样式 */
         .status-bar {
@@ -182,27 +182,185 @@
             word-wrap: break-word;
         }
     </style>
+    
+    <!-- 内联翻译数据 -->
+    <script>
+    // 直接内联翻译数据，不依赖外部JS
+    const translations = {
+        "en": {
+            "easypay_sellers": "SEasyPay for Sellers",
+            "get_up_to": "You Can Get Up To",
+            "free_activation": "Free activation to claim your limit first",
+            "loan_simulation": "Loan Simulation",
+            "activate_now": "Activate Now",
+            "about_easypay": "About SEasyPay for Sellers",
+            "easypay_intro": "SEasyPay for Sellers provides an entrusted payment loan to support businesses under BOT regulation",
+            "benefits": "Benefits",
+            "get_approved_minutes": "Get approved in minutes",
+            "sign_up_steps": "sign up in just 3 simple steps",
+            "collateral_free": "Collatareall-free",
+            "competitive_rates": "loan with competitive rates starting at",
+            "exclusive_discounts": "Enjoy exclusive discounts from PMI",
+            "how_it_works": "How It Works?",
+            "activate_account": "Activate your accoount for free",
+            "enter_invoice": "Enter the invoice amount upon delivery",
+            "withdraw_show": "Withdraw and show the confirmation page to delivery person",
+            "repay_withdraw": "Repay and withdraw again anytime",
+            "learn_more": "Learn More"
+        },
+        "th": {
+            "easypay_sellers": "SEasyPay สำหรับผู้ขาย",
+            "get_up_to": "คุณสามารถรับได้ถึง",
+            "free_activation": "เปิดใช้งานฟรีเพื่อรับวงเงินของคุณก่อน",
+            "loan_simulation": "จำลองเงินกู้",
+            "activate_now": "เปิดใช้งานเดี๋ยวนี้",
+            "about_easypay": "เกี่ยวกับ SEasyPay สำหรับผู้ขาย",
+            "easypay_intro": "SEasyPay สำหรับผู้ขายให้บริการสินเชื่อการชำระเงินที่ได้รับความไว้วางใจเพื่อสนับสนุนธุรกิจภายใต้กฎระเบียบของ BOT",
+            "benefits": "ประโยชน์",
+            "get_approved_minutes": "ได้รับการอนุมัติภายในไม่กี่นาที",
+            "sign_up_steps": "ลงทะเบียนเพียง 3 ขั้นตอนง่ายๆ",
+            "collateral_free": "ปราศจากหลักประกัน",
+            "competitive_rates": "เงินกู้ด้วยอัตราที่แข่งขันได้เริ่มต้นที่",
+            "exclusive_discounts": "เพลิดเพลินกับส่วนลดพิเศษจาก PMI",
+            "how_it_works": "วิธีการทำงาน?",
+            "activate_account": "เปิดใช้งานบัญชีของคุณฟรี",
+            "enter_invoice": "ป้อนจำนวนเงินในใบแจ้งหนี้เมื่อส่งมอบ",
+            "withdraw_show": "ถอนเงินและแสดงหน้ายืนยันให้กับพนักงานส่งของ",
+            "repay_withdraw": "ชำระคืนและถอนเงินได้อีกครั้งเมื่อใดก็ได้",
+            "learn_more": "เรียนรู้เพิ่มเติม"
+        }
+    };
+    
+    // 获取当前语言，默认为英语
+    function getCurrentLanguage() {
+        const savedLang = localStorage.getItem('selectedLanguage');
+        return (savedLang === 'en' || savedLang === 'th') ? savedLang : 'en';
+    }
+    
+    // 简单的翻译函数
+    function translate(key) {
+        const lang = getCurrentLanguage();
+        return translations[lang] && translations[lang][key] ? translations[lang][key] : key;
+    }
+    
+    // 设置语言
+    function setLanguage() {
+        const lang = getCurrentLanguage();
+        document.documentElement.lang = lang;
+        
+        // 翻译所有带data-lang属性的元素
+        const elements = document.querySelectorAll('[data-lang]');
+        elements.forEach(el => {
+            const key = el.getAttribute('data-lang');
+            if (key) {
+                el.textContent = translate(key);
+            }
+        });
+    }
+    
+    // 更新时间显示
+    function updateTime() {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('en-US', { 
+            hour: 'numeric', 
+            minute: '2-digit',
+            hour12: false 
+        });
+        const timeElement = document.querySelector('.status-time');
+        if (timeElement) {
+            timeElement.textContent = timeString;
+        }
+    }
+    
+    // 初始化页面
+    document.addEventListener('DOMContentLoaded', function() {
+        // 设置语言
+        setLanguage();
+        
+        // 更新时间
+        updateTime();
+        setInterval(updateTime, 60000);
+        
+        // 设置后退按钮
+        const backButton = document.querySelector('.back-button');
+        if (backButton) {
+            backButton.addEventListener('click', function() {
+                window.history.back();
+            });
+        }
+        
+        // 激活按钮点击事件
+        const activateButtons = document.querySelectorAll('.am-button');
+        activateButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // 根据流程跳转到申请页面
+                window.location.href = 'applyPage.html';
+            });
+        });
+        
+        const topButton = document.querySelector('.banner .btn');
+        const fixedButton = document.querySelector('.fixed_btn');
+        
+        // 初始状态设置
+        fixedButton.style.display = 'none';
+        
+        // 滚动监听函数
+        function checkButtonVisibility() {
+            const topButtonRect = topButton.getBoundingClientRect();
+            
+            // 如果顶部按钮不在可视区域内（完全滚动出视图）
+            if (topButtonRect.bottom <= 0) {
+                fixedButton.style.display = 'block';
+            } else {
+                fixedButton.style.display = 'none';
+            }
+        }
+        
+        // 添加滚动事件监听
+        window.addEventListener('scroll', checkButtonVisibility);
+        
+        // 初始检查
+        checkButtonVisibility();
+    });
+    
+    // 滚动处理
+    document.addEventListener('scroll', function(e) {
+        if (window.scrollY < 0) {
+            window.scrollTo(0, 0);
+        }
+        
+        // 滚动时添加阴影效果
+        const header = document.querySelector('.header-container');
+        if (header) {
+            if (window.scrollY > 0) {
+                header.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.boxShadow = 'none';
+            }
+        }
+    }, { passive: false });
+    </script>
 </head>
 
 <body>
-    <!-- Added header-container without shadow -->
+    <!-- 主页内容 -->
     <div class="header-container">
-        <!-- Status bar -->
+        <!-- 状态栏 -->
         <div class="status-bar">
             <div class="status-left">
-                <img src="./images/wifi-red.svg" class="wifi-icon" alt="WiFi">
+                <img src="images/wifi-red.svg" class="wifi-icon" alt="WiFi">
             </div>
             <div class="status-time">14:25</div>
             <div class="status-right">
-                <img src="./images/battery-red.svg" class="battery-icon" alt="Battery">
+                <img src="images/battery-red.svg" class="battery-icon" alt="Battery">
                 <span class="battery-level">85%</span>
             </div>
         </div>
 
-        <!-- Nav bar -->
+        <!-- 导航栏 -->
         <div class="nav-bar">
             <div class="nav-left">
-                <button class="back-button" onclick="window.history.back()">←</button>
+                <button class="back-button">←</button>
                 <div class="page-title" data-lang="easypay_sellers">SEasyPay for Sellers</div>
             </div>
         </div>
@@ -217,9 +375,9 @@
                         <div class="total"><span style="font-weight: normal; font-size: 0.6em;">฿</span> 1,000,000</div>
                         <p class="desc" data-lang="free_activation">Free activation to claim your limit first</p>
                         <div class="simulation"><img class="computer_icon"
-                                src="./images/computer_icon.4edf6fcf.svg" alt=""><span
+                                src="images/computer_icon.4edf6fcf.svg" alt=""><span
                                 class="simulation_name" data-lang="loan_simulation">Loan Simulation</span><img class="arrow_icon"
-                                src="./images/right_arrow.dae6b315.svg" alt=""></div>
+                                src="images/right_arrow.dae6b315.svg" alt=""></div>
                     </div><a role="button" class="am-button btn" aria-disabled="false"><span data-lang="activate_now">Activate Now</span></a>
                 </div>
                 <div class="benefits">
@@ -239,15 +397,15 @@
                         <li class="benefit_item">
                             <h5 class="benefit_item_desc"><span><span data-lang="get_approved_minutes">Get approved in minutes</span>, <span data-lang="sign_up_steps">sign up in just 3 simple steps</span></span>
                             </h5><img class="benefit_item_icon"
-                                src="./images/id_check.010d6309.svg" alt="">
+                                src="images/id_check.010d6309.svg" alt="">
                         </li>
                         <li class="benefit_item">
                             <h5 class="benefit_item_desc"><span><span data-lang="collateral_free">Collatareall-free</span> <span data-lang="competitive_rates">loan with competitive rates starting at</span> <span>0.5%</span></span></h5><img class="benefit_item_icon"
-                                src="./images/rate.daa75632.svg" alt="">
+                                src="images/rate.daa75632.svg" alt="">
                         </li>
                         <li class="benefit_item">
                             <h5 class="benefit_item_desc"><span data-lang="exclusive_discounts">Enjoy exclusive discounts from PMI</span></h5><img class="benefit_item_icon"
-                                src="./images/fast.24256a71.svg" alt="">
+                                src="images/fast.24256a71.svg" alt="">
                         </li>
                     </ul>
                     <div class="title how_it_work">
@@ -295,34 +453,5 @@
             </section>
         </div>
     </div>
-
-    <script src="sharedLanguage.js" defer></script>
-    <script defer>
-        document.addEventListener('DOMContentLoaded', function() {
-            const topButton = document.querySelector('.banner .btn');
-            const fixedButton = document.querySelector('.fixed_btn');
-            
-            // 初始状态设置
-            fixedButton.style.display = 'none';
-            
-            // 滚动监听函数
-            function checkButtonVisibility() {
-                const topButtonRect = topButton.getBoundingClientRect();
-                
-                // 如果顶部按钮不在可视区域内（完全滚动出视图）
-                if (topButtonRect.bottom <= 0) {
-                    fixedButton.style.display = 'block';
-                } else {
-                    fixedButton.style.display = 'none';
-                }
-            }
-            
-            // 添加滚动事件监听
-            window.addEventListener('scroll', checkButtonVisibility);
-            
-            // 初始检查
-            checkButtonVisibility();
-        });
-    </script>
 </body>
 </html>
