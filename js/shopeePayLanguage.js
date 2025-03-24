@@ -82,6 +82,64 @@ window.shopeePayTranslations = {
     'apply_for_loan': {
         'en': 'Apply for Loan',
         'th': 'สมัครสินเชื่อ'
+    },
+    
+    // Added translations for new layout
+    'splaylater': {
+        'en': 'SPlayLater',
+        'th': 'SPlayLater'
+    },
+    'home': {
+        'en': 'Home',
+        'th': 'หน้าแรก'
+    },
+    'notification': {
+        'en': 'Notification',
+        'th': 'การแจ้งเตือน'
+    },
+    'me': {
+        'en': 'Me',
+        'th': 'ฉัน'
+    },
+    'new': {
+        'en': 'New!',
+        'th': 'ใหม่!'
+    },
+    'topup': {
+        'en': 'Topup',
+        'th': 'เติมเงิน'
+    },
+    'scan_pay': {
+        'en': 'Scan & Pay',
+        'th': 'สแกน & จ่าย'
+    },
+    'vouchers': {
+        'en': 'Vouchers',
+        'th': 'คูปอง'
+    },
+    'zero_interest': {
+        'en': '0% interest on all installment plans for up to 1 month.',
+        'th': 'ดอกเบี้ย 0% สำหรับแผนผ่อนชำระทั้งหมดสูงสุด 1 เดือน'
+    },
+    'activate_now': {
+        'en': 'Activate Now',
+        'th': 'เปิดใช้งานเดี๋ยวนี้'
+    },
+    'seasypay': {
+        'en': 'SEasyPay',
+        'th': 'SEasyPay'
+    },
+    'pay_now': {
+        'en': 'Pay Now',
+        'th': 'ชำระตอนนี้'
+    },
+    'outstanding_amount': {
+        'en': 'Outstanding Amount:',
+        'th': 'ยอดค้างชำระ:'
+    },
+    'next_due_date': {
+        'en': 'Next Due Date:',
+        'th': 'วันครบกำหนดถัดไป:'
     }
 };
 
@@ -166,9 +224,15 @@ function addLanguageSwitcher() {
     switcherContainer.appendChild(thButton);
     
     // Add container after the header title
-    const headerTitle = document.querySelector('.header-title');
+    const headerTitle = document.querySelector('.shopeepay-text');
     if (headerTitle) {
         headerTitle.insertAdjacentElement('afterend', switcherContainer);
+    } else {
+        // 备用位置：找 header-title 类的元素
+        const backupTitle = document.querySelector('.header-title');
+        if (backupTitle) {
+            backupTitle.insertAdjacentElement('afterend', switcherContainer);
+        }
     }
 }
 

@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ShopeePay Home Mockup</title>
-    <link rel="stylesheet" href="css/shopeePayHomeMockup.css">
+    <link rel="stylesheet" href="shopeePayHome.css">
     <script>
         // Set initial language from localStorage
         const savedLanguage = localStorage.getItem('selectedLanguage');
@@ -15,123 +15,223 @@
             console.log("Setting HTML lang attribute to:", savedLanguage);
         }
     </script>
+    <style>
+        /* 确保滚动行为正确，并导航栏始终位于内容上方 */
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #ee4d2d;
+        }
+    </style>
 </head>
 <body>
-    <div class="status-bar">
-        <div class="status-left">
-            <img src="images/wifi.svg" alt="WiFi" class="wifi-icon">
-            <img src="images/battery.svg" alt="Battery" class="battery-icon">
-        </div>
-        <div class="status-right">
-            <span class="status-time">9:41</span>
-        </div>
-    </div>
-
     <div class="container">
-        <div class="header">
-            <div class="header-top">
-                <button class="back-button" onclick="window.location.href='index.html'">←</button>
-                <span class="header-title" data-lang="shopeepay">ShopeePay</span>
-                <div class="header-icons">
-                    <img src="images/scan.a093f61a.svg" alt="Scan">
-                    <img src="images/settings.svg" alt="Settings">
+        <div class="fixed-header">
+            <div class="header-bg"></div>
+            <header class="header-container">
+                <!-- Status Bar -->
+                <div class="status-bar">
+                    <div class="status-left">
+                        <img src="images/wifi.svg" class="wifi-icon" alt="WiFi">
+                    </div>
+                    <div class="status-time">9:41</div>
+                    <div class="status-right">
+                        <img src="images/battery.svg" class="battery-icon" alt="Battery">
+                        <span class="battery-level">85%</span>
+                    </div>
                 </div>
-            </div>
+
+                <!-- Nav Bar -->
+                <nav class="nav-bar">
+                    <div class="nav-logo">
+                        <img src="images/scan.a093f61a.svg" class="shopeepay-icon" alt="ShopeePay">
+                        <span class="shopeepay-text" data-lang="shopeepay">ShopeePay</span>
+                    </div>
+                    <div class="coin-balance">
+                        <img src="images/rate.daa75632.svg" class="coin-icon" alt="Coin">
+                        <span class="coin-amount">0</span>
+                        <span class="coin-arrow">></span>
+                    </div>
+                </nav>
+            </header>
+        </div>
+
+        <div class="page-content">
+            <!-- Balance Section -->
             <div class="balance-section">
-                <div class="balance-title" data-lang="shopeepay_balance">ShopeePay Balance</div>
-                <div class="balance-amount">฿5,000.00</div>
-                <div class="balance-buttons">
-                    <a href="#" class="balance-button">
-                        <div class="balance-button-icon">
-                            <img src="images/right_arrow.382cd159.svg" alt="Top Up" class="top-up-icon">
-                        </div>
-                        <span class="balance-button-text" data-lang="top_up">Top Up</span>
-                    </a>
-                    <a href="#" class="balance-button">
-                        <div class="balance-button-icon">
-                            <img src="images/right_arrow.382cd159.svg" alt="Transfer">
-                        </div>
-                        <span class="balance-button-text" data-lang="transfer">Transfer</span>
-                    </a>
-                    <a href="#" class="balance-button">
-                        <div class="balance-button-icon">
-                            <img src="images/clock.svg" alt="History">
-                        </div>
-                        <span class="balance-button-text" data-lang="history">History</span>
-                    </a>
+                <div class="balance-item">
+                    <span class="balance-title">
+                        <span class="title-wrapper">
+                            <span data-lang="shopeepay">ShopeePay</span>
+                            <img src="images/scan.a093f61a.svg" class="eye-icon" alt="View">
+                        </span>
+                    </span>
+                    <span class="balance-amount">5,000.00</span>
+                </div>
+                <div class="balance-divider"></div>
+                <div class="balance-item">
+                    <span class="balance-title" data-lang="splaylater">SPlayLater</span>
+                    <span class="balance-amount">10,000.00</span>
                 </div>
             </div>
-        </div>
-
-        <div class="menu-section">
-            <a href="#" class="menu-item">
-                <div class="menu-icon">
-                    <img src="images/scan.a093f61a.svg" alt="Scan">
+            
+            <!-- Primary Features -->
+            <div class="primary-features">
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <img src="images/right_arrow.382cd159.svg" alt="Topup">
+                    </div>
+                    <span class="feature-text" data-lang="top_up">Top Up</span>
                 </div>
-                <span class="menu-text" data-lang="scan">Scan</span>
-            </a>
-            <a href="#" class="menu-item">
-                <div class="menu-icon">
-                    <img src="images/id_check.010d6309.svg" alt="Bill">
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <img src="images/scan.a093f61a.svg" alt="Scan and Pay">
+                    </div>
+                    <span class="feature-text" data-lang="scan">Scan</span>
                 </div>
-                <span class="menu-text" data-lang="bill">Bill</span>
-            </a>
-            <a href="#" class="menu-item">
-                <div class="menu-icon">
-                    <img src="images/computer_icon.4edf6fcf.svg" alt="Internet">
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <img src="images/right_arrow.382cd159.svg" alt="Transfer">
+                    </div>
+                    <span class="feature-text" data-lang="transfer">Transfer</span>
                 </div>
-                <span class="menu-text" data-lang="internet">Internet</span>
-            </a>
-            <a href="#" class="menu-item">
-                <div class="menu-icon">
-                    <img src="images/upcoming.svg" alt="Insurance">
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <img src="images/edit.788d4490.svg" alt="Vouchers">
+                    </div>
+                    <span class="feature-text" data-lang="history">History</span>
                 </div>
-                <span class="menu-text" data-lang="insurance">Insurance</span>
-            </a>
-            <a href="#" class="menu-item">
-                <div class="menu-icon">
-                    <img src="images/fast.24256a71.svg" alt="Travel">
-                </div>
-                <span class="menu-text" data-lang="travel">Travel</span>
-            </a>
-            <a href="#" class="menu-item">
-                <div class="menu-icon">
-                    <img src="images/flexible.ccb0b3d6.svg" alt="Food">
-                </div>
-                <span class="menu-text" data-lang="food">Food</span>
-            </a>
-            <a href="#" class="menu-item">
-                <div class="menu-icon">
-                    <img src="images/rate.daa75632.svg" alt="Deals">
-                </div>
-                <span class="menu-text" data-lang="deals">Deals</span>
-            </a>
-            <a href="#" class="menu-item">
-                <div class="menu-icon">
-                    <img src="images/edit.788d4490.svg" alt="More">
-                </div>
-                <span class="menu-text" data-lang="more">More</span>
-            </a>
-        </div>
-
-        <div class="banner-section">
-            <div class="banner" data-lang="promotion_banner">Promotion Banner</div>
-        </div>
-
-        <div class="credit-section">
-            <div class="credit-header">
-                <div class="credit-title" data-lang="seller_loan_credit">Seller Loan Credit</div>
-                <a href="#" class="credit-more" data-lang="view_history">View History ></a>
             </div>
-            <div class="credit-card">
-                <div class="credit-card-header">
-                    <div class="credit-card-logo" data-lang="seller_loan">Seller Loan</div>
-                    <img src="images/card_mask_seller.svg" alt="Card">
+            
+            <main class="main-content">
+                <!-- Secondary Features -->
+                <div class="secondary-features">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <img src="images/scan.a093f61a.svg" alt="Scan">
+                        </div>
+                        <span class="feature-text" data-lang="scan">Scan</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <img src="images/id_check.010d6309.svg" alt="Bill">
+                        </div>
+                        <span class="feature-text" data-lang="bill">Bill</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <img src="images/computer_icon.4edf6fcf.svg" alt="Internet">
+                        </div>
+                        <span class="feature-text" data-lang="internet">Internet</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <img src="images/upcoming.svg" alt="Insurance">
+                        </div>
+                        <span class="feature-text" data-lang="insurance">Insurance</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <img src="images/fast.24256a71.svg" alt="Travel">
+                        </div>
+                        <span class="feature-text" data-lang="travel">Travel</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <img src="images/flexible.ccb0b3d6.svg" alt="Food">
+                        </div>
+                        <span class="feature-text" data-lang="food">Food</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <img src="images/rate.daa75632.svg" alt="Deals">
+                        </div>
+                        <span class="feature-text" data-lang="deals">Deals</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <img src="images/edit.788d4490.svg" alt="More">
+                        </div>
+                        <span class="feature-text" data-lang="more">More</span>
+                    </div>
                 </div>
-                <div class="credit-card-limit">฿10,000.00</div>
-                <div class="credit-card-status" data-lang="available_credit">Available Credit</div>
-                <button class="credit-card-button" data-lang="apply_for_loan">Apply for Loan</button>
-            </div>
+
+                <!-- SEasyPay Advertisement - 替代了原来的 banner-section -->
+                <div id="easypay-ad-container" class="easypay-ad">
+                    <div class="new-label" data-lang="new">New!</div>
+                    <div class="easypay-content">
+                        <div class="easypay-info">
+                            <div class="easypay-title" data-lang="seller_loan">Seller Loan</div>
+                            <div class="easypay-description" data-lang="promotion_banner">Promotion Banner</div>
+                            <div class="easypay-button" data-lang="apply_for_loan">Apply for Loan</div>
+                        </div>
+                        <img src="images/card_mask_seller.svg" class="easypay-image" alt="Seller Loan Promo">
+                    </div>
+                </div>
+
+                <!-- SEasyPay Active Status - 替代了原来的 credit-section -->
+                <div id="easypay-status-container" class="easypay-status">
+                    <div class="easypay-content">
+                        <div class="easypay-info">
+                            <div class="top-row">
+                                <div class="title-container">
+                                    <div id="easypay-status-title" class="easypay-title" data-lang="seller_loan_credit">Seller Loan Credit</div>
+                                </div>
+                                <div class="easypay-button pay-now-btn" data-lang="apply_for_loan">Apply for Loan</div>
+                            </div>
+                            <div class="loan-details">
+                                <div class="loan-amount">
+                                    <span class="label" data-lang="available_credit">Available Credit:</span>
+                                    <span class="value">฿ 10,000.00</span>
+                                </div>
+                                <div class="loan-due">
+                                    <span class="label" data-lang="view_history">View History:</span>
+                                    <span class="value" data-lang="view_history">View History ></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Bottom Navigation -->
+            <nav class="bottom-nav">
+                <div class="nav-item active">
+                    <div class="nav-icon">
+                        <img src="images/scan.a093f61a.svg" alt="Home">
+                    </div>
+                    <span class="nav-text" data-lang="home">Home</span>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">
+                        <img src="images/clock.svg" alt="History">
+                    </div>
+                    <span class="nav-text" data-lang="history">History</span>
+                </div>
+                <div class="nav-item scan-item">
+                    <div class="nav-icon">
+                        <img src="images/scan.a093f61a.svg" alt="Scan & Pay">
+                    </div>
+                    <span class="nav-text" data-lang="scan">Scan</span>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">
+                        <img src="images/settings.svg" alt="Notification">
+                    </div>
+                    <span class="nav-text" data-lang="notification">Notification</span>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">
+                        <img src="images/settings.svg" alt="Me">
+                    </div>
+                    <span class="nav-text" data-lang="me">Me</span>
+                </div>
+            </nav>
         </div>
     </div>
 
@@ -181,6 +281,21 @@
                 }
             }, 500);
         });
+
+        // Prevent overscrolling at the top to avoid header separation
+        document.addEventListener('scroll', function(e) {
+            if (window.scrollY < 0) {
+                window.scrollTo(0, 0);
+            }
+            
+            // Ensure header stays above content when scrolling
+            const header = document.querySelector('.fixed-header');
+            if (window.scrollY > 0) {
+                header.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.boxShadow = 'none';
+            }
+        }, { passive: false });
     </script>
 </body>
 </html> 
