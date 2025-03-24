@@ -135,7 +135,7 @@
         }
     </style>
 
-    <!-- 内联翻译数据 -->
+    <!-- 内联翻译数据和功能 -->
     <script>
     // 直接内联翻译数据，不依赖外部JS
     const translations = {
@@ -215,19 +215,19 @@
             timeElement.textContent = timeString;
         }
     }
-    
-    // 初始化页面
-    document.addEventListener('DOMContentLoaded', function() {
+
+    // 格式化货币显示
+    function formatCurrency(number) {
+        return number.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    }
+
+    // 初始化页面数据
+    function initializePageData() {
         // Get URL parameters
         const urlParams = new URLSearchParams(window.location.search);
-        
-        // Format number with thousand separators and 2 decimal places
-        const formatCurrency = (number) => {
-            return number.toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            });
-        };
         
         // Get repayment amount and due date from URL parameters or use defaults
         const repayAmount = parseFloat(urlParams.get('repayAmount')) || 345.00;
@@ -254,45 +254,26 @@
             const dueDateText = translate('due_date');
             dueDateElement.innerHTML = `<span data-lang="due_date">${dueDateText}</span> ${dueDate}`;
         }
+    }
 
-        // Add back button functionality
-        const backButton = document.querySelector('.back-button');
-        if (backButton) {
-            backButton.onclick = null; // Remove any existing onclick handler
-            backButton.addEventListener('click', function() {
-                if (document.referrer) {
-                    window.history.back();
-                } else {
-                    window.location.href = 'homepage.html';
-                }
-            }, false);
+    // 处理支付按钮点击
+    function handlePayButtonClick() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const repayAmount = parseFloat(urlParams.get('repayAmount')) || 345.00;
+        window.location.href = 'paymentResult.html?status=success&amount=' + repayAmount;
+    }
+
+    // 处理返回按钮点击
+    function handleBackButtonClick() {
+        if (document.referrer) {
+            window.history.back();
+        } else {
+            window.location.href = 'homepage.html';
         }
-        
-        // 设置语言
-        setLanguage();
-        
-        // 更新时间
-        updateTime();
-        setInterval(updateTime, 60000);
-        
-        // 设置语言切换按钮事件
-        const languageToggle = document.getElementById('language-toggle');
-        if (languageToggle) {
-            languageToggle.addEventListener('click', toggleLanguage);
-        }
-        
-        // 支付按钮点击事件
-        const payButton = document.querySelector('.PayButton_payBtn__l747t');
-        if (payButton) {
-            payButton.addEventListener('click', function() {
-                // 跳转到支付结果页面
-                window.location.href = 'paymentResult.html?status=success&amount=' + repayAmount;
-            });
-        }
-    });
-    
-    // 滚动处理
-    document.addEventListener('scroll', function(e) {
+    }
+
+    // 处理滚动事件
+    function handleScroll() {
         if (window.scrollY < 0) {
             window.scrollTo(0, 0);
         }
@@ -306,7 +287,42 @@
                 header.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.1)';
             }
         }
-    }, { passive: false });
+    }
+
+    // 页面加载完成后初始化
+    document.addEventListener('DOMContentLoaded', function() {
+        // 设置语言
+        setLanguage();
+        
+        // 更新时间
+        updateTime();
+        setInterval(updateTime, 60000);
+        
+        // 初始化页面数据
+        initializePageData();
+
+        // 添加返回按钮功能
+        const backButton = document.querySelector('.back-button');
+        if (backButton) {
+            backButton.onclick = null; // Remove any existing onclick handler
+            backButton.addEventListener('click', handleBackButtonClick, false);
+        }
+        
+        // 设置语言切换按钮事件
+        const languageToggle = document.getElementById('language-toggle');
+        if (languageToggle) {
+            languageToggle.addEventListener('click', toggleLanguage);
+        }
+        
+        // 支付按钮点击事件
+        const payButton = document.querySelector('.PayButton_payBtn__l747t');
+        if (payButton) {
+            payButton.addEventListener('click', handlePayButtonClick);
+        }
+
+        // 添加滚动事件监听
+        document.addEventListener('scroll', handleScroll, { passive: false });
+    });
     </script>
 
 </head>
