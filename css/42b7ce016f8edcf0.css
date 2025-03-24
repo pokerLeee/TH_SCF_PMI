@@ -1,0 +1,170 @@
+.PageLoading_wrapper__kPZRH {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 9900;
+    min-width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #f5f5f5
+}
+
+.PageLoading_wrapper__kPZRH .PageLoading_loadContainer__1Lcef {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    text-align: center;
+    transform: translateY(-50%);
+    z-index: 9999
+}
+
+.PageLoading_wrapper__kPZRH .PageLoading_loadContainer__1Lcef .PageLoading_loadDot__92wPh {
+    display: inline-block;
+    width: .2rem;
+    height: .2rem;
+    border-radius: 100%;
+    margin-right: .16rem;
+    background-color: #ee4d2d;
+    animation: PageLoading_bouncedelay__fZBLn .6s ease-in-out infinite;
+    animation-fill-mode: both
+}
+
+.PageLoading_wrapper__kPZRH .PageLoading_loadContainer__1Lcef .PageLoading_loadDot__92wPh:first-of-type {
+    animation-delay: -.2s
+}
+
+.PageLoading_wrapper__kPZRH .PageLoading_loadContainer__1Lcef .PageLoading_loadDot__92wPh:nth-of-type(2) {
+    animation-delay: -.1s
+}
+
+@keyframes PageLoading_bouncedelay__fZBLn {
+    0%,80%,to {
+        transform: translateY(-.12rem)
+    }
+
+    40% {
+        transform: translate(0)
+    }
+}
+
+.adm-spin-loading {
+    --color: var(--adm-color-weak);
+    --size: 0.64rem;
+    width: var(--size);
+    height: var(--size)
+}
+
+.adm-spin-loading-svg {
+    width: 100%;
+    height: 100%;
+    animation: adm-spin-loading-rotate .8s linear infinite
+}
+
+.adm-spin-loading-svg>.adm-spin-loading-fill {
+    stroke: var(--color)
+}
+
+@keyframes adm-spin-loading-rotate {
+    0% {
+        transform: rotate(0deg)
+    }
+
+    to {
+        transform: rotate(1turn)
+    }
+}
+
+.adm-mask {
+    --z-index: var(--adm-mask-z-index,1000);
+    position: fixed;
+    z-index: var(--z-index);
+    display: block
+}
+
+.adm-mask,.adm-mask-aria-button {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%
+}
+
+.adm-mask-aria-button {
+    position: absolute;
+    z-index: 0;
+    pointer-events: none
+}
+
+.adm-mask-content {
+    z-index: 1
+}
+
+.adm-auto-center {
+    display: flex;
+    justify-content: center
+}
+
+.adm-auto-center-content {
+    flex: 0 1 auto
+}
+
+.adm-toast-mask .adm-toast-wrap {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center
+}
+
+.adm-toast-mask .adm-toast-main {
+    display: inline-block;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    width: auto;
+    max-width: 4.08rem;
+    max-height: 70%;
+    overflow: auto;
+    color: #fff;
+    word-break: break-all;
+    background-color: rgba(0,0,0,.7);
+    border-radius: .16rem;
+    pointer-events: all;
+    font-size: var(--adm-font-size-7);
+    line-height: 1.5;
+    box-sizing: border-box
+}
+
+.adm-toast-mask .adm-toast-main-text {
+    padding: .24rem;
+    min-width: 0
+}
+
+.adm-toast-mask .adm-toast-main-icon {
+    padding: .7rem .24rem;
+    min-width: 3rem
+}
+
+.adm-toast-mask .adm-toast-main-icon .adm-toast-icon {
+    text-align: center;
+    margin-bottom: .16rem;
+    font-size: .72rem;
+    line-height: 1
+}
+
+.adm-toast-loading {
+    --size: 0.96rem;
+    margin: 0 auto .16rem
+}
+
+.Signin_wrapper__Yobdp {
+    min-width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center
+}

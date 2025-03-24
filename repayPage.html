@@ -1,0 +1,294 @@
+<html lang="en" style="font-size: 50px; --vc-root-font-size: 4vw;">
+
+<head>
+
+    <title>SCF Loan Repay Page</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no">
+    <link rel="stylesheet" href="./css/4fa41296f441b9ff.css" data-precedence="next">
+    <link rel="stylesheet" href="./css/57009e3cabd11cec.css" data-precedence="next">
+    <link rel="stylesheet" href="./css/515e7d1e6af67b7d.css" data-precedence="next">
+    <link href="./css/25ac677f9c398dbc.css" rel="stylesheet" data-precedence="next">
+    <link href="./css/d995d26fbbce5344.css" rel="stylesheet" data-precedence="next">
+    <link rel="stylesheet" href="./css/e90826e2f4f45792.css" data-precedence="next">
+    <link rel="stylesheet" href="./css/d03a5407f04b9e1e.css" data-precedence="next">
+    <link rel="stylesheet" href="./css/54f999f7fc79f52e.css" data-precedence="next">
+    <script src="creditLanguage.js"></script>
+
+    <style>
+        /* Combined container for status bar and nav bar */
+        .header-container {
+            background-color: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        /* 状态栏样式 */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: white;
+            color: #333;
+            padding: 0.1rem 0.3rem;
+            font-size: 0.28rem;
+            position: relative;
+        }
+        
+        .status-left, .status-right {
+            display: flex;
+            align-items: center;
+            z-index: 1;
+            width: 33.33%;
+        }
+        
+        .status-right {
+            justify-content: flex-end;
+        }
+        
+        .status-time {
+            position: absolute;
+            left: 0;
+            right: 0;
+            text-align: center;
+            z-index: 0;
+        }
+        
+        .wifi-icon, .battery-icon {
+            width: 0.36rem;
+            height: 0.36rem;
+        }
+        
+        .battery-level {
+            margin-left: 0.1rem;
+        }
+        
+        /* 导航栏样式 */
+        .nav-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.3rem 0.5rem;
+            background-color: white;
+        }
+        
+        .nav-left {
+            display: flex;
+            align-items: center;
+            position: relative;
+            width: 100%;
+        }
+        
+        .back-button {
+            font-size: 0.4rem;
+            margin-right: 0.4rem;
+            cursor: pointer;
+            border: none;
+            background: none;
+            color: #333;
+            padding: 0.2rem;
+            z-index: 2;
+            position: relative;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .back-button:active {
+            opacity: 0.7;
+        }
+        
+        .page-title {
+            font-size: 0.32rem;
+            color: #333;
+            position: absolute;
+            left: 0;
+            right: 0;
+            text-align: center;
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            // Format number with thousand separators and 2 decimal places
+            const formatCurrency = (number) => {
+                return number.toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+            };
+            
+            // Get repayment amount and due date from URL parameters or use defaults
+            const repayAmount = parseFloat(urlParams.get('repayAmount')) || 345.00;
+            const dueDate = urlParams.get('dueDate') || '20-03-2024';
+            
+            // Update repayment amount displays
+            const repayAmountDisplays = [
+                document.querySelector('.input_amount__I_fAy'),
+                document.querySelector('.PayButton_actualAmount__lifVy'),
+                document.querySelector('.RepayItem_rightItem__Nx8DA .adm-list-item-content-extra')
+            ];
+            
+            repayAmountDisplays.forEach(element => {
+                if (element) {
+                    element.textContent = element.classList.contains('input_amount__I_fAy') ? 
+                        formatCurrency(repayAmount) : 
+                        `฿ ${formatCurrency(repayAmount)}`;
+                }
+            });
+            
+            // Update due date display
+            const dueDateElement = document.querySelector('.adm-list-item-title');
+            if (dueDateElement) {
+                const dueDateText = getCreditTranslation('due_date');
+                dueDateElement.innerHTML = `<span data-credit-lang="due_date">${dueDateText}</span> ${dueDate}`;
+            }
+
+            // Add back button functionality
+            const backButton = document.querySelector('.back-button');
+            if (backButton) {
+                backButton.onclick = null; // Remove any existing onclick handler
+                backButton.addEventListener('click', function() {
+                    if (document.referrer) {
+                        window.history.back();
+                    } else {
+                        window.location.href = 'homepage.html';
+                    }
+                }, false);
+            }
+
+            // Apply language translations
+            updatePageLanguage();
+        });
+    </script>
+
+</head>
+
+<body class="" style="">
+    <!-- Add header container -->
+    <div class="header-container">
+        <!-- Status bar -->
+        <div class="status-bar">
+            <div class="status-left">
+                <img src="./images/wifi.svg" class="wifi-icon" alt="WiFi">
+            </div>
+            <div class="status-time">14:25</div>
+            <div class="status-right">
+                <img src="./images/battery.svg" class="battery-icon" alt="Battery">
+                <span class="battery-level">85%</span>
+            </div>
+        </div>
+
+        <!-- Nav bar -->
+        <div class="nav-bar">
+            <div class="nav-left">
+                <button class="back-button" type="button">←</button>
+                <div class="page-title" data-credit-lang="repayment">Repayment</div>
+            </div>
+        </div>
+    </div>
+    
+    <main class="page_repayment__wg8iZ">
+        <section class="page_scrollSec___M0T6">
+            <section class="Money_payAmount__AwAMH">
+                <div class="Money_title__BmtlZ" data-credit-lang="repay_amount">Repay Amount</div>
+                <div class="input_wrapper__vU6zZ Money_inputAmount__ErtDv" tabindex="0">
+                    <div class="input_content__XzPF_">
+                        <div class="input_currency__CoPcI">฿</div>
+                        <div class="input_amount__I_fAy">345.00</div>
+                    </div>
+                    <div class="adm-input input_inputAmount__Sks3U"><input class="adm-input-element" type="tel"
+                            value="3253045"></div>
+                </div>
+                <div class="Money_tips__03O8O"></div>
+            </section>
+            <div class="adm-list adm-list-default SelectWallet_list__rSFW9 SelectWallet_payOption__o0jTr">
+                <div class="adm-list-body">
+                    <div class="adm-list-body-inner"><a class="adm-list-item adm-plain-anchor">
+                            <div class="adm-list-item-content">
+                                <div class="adm-list-item-content-prefix"><img alt="" loading="lazy" width="18"
+                                        height="18" decoding="async" data-nimg="1"
+                                        srcset="./images/currency.ed62bdab.png 1x, ./images/currency.ed62bdab.png 2x"
+                                        src="./images/currency.ed62bdab.png" style="color: transparent;"></div>
+                                <div class="adm-list-item-content-main" data-credit-lang="payment_option">Payment Option</div>
+                                <div class="adm-list-item-content-extra" data-credit-lang="shopee_wallet">Shopee Wallet</div>
+                                <div class="adm-list-item-content-arrow"><svg width="1em" height="1em"
+                                        viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"
+                                        xmlns:xlink="http://www.w3.org/1999/xlink" class="antd-mobile-icon"
+                                        style="vertical-align: -0.125em;">
+                                        <g id="RightOutline-RightOutline" stroke="none" stroke-width="1" fill="none"
+                                            fill-rule="evenodd">
+                                            <g id="RightOutline-RightOutlined">
+                                                <rect id="RightOutline-矩形" fill="#FFFFFF" opacity="0" x="0" y="0"
+                                                    width="48" height="48"></rect>
+                                                <path
+                                                    d="M17.3947957,5.11219264 L35.5767382,22.6612572 L35.5767382,22.6612572 C36.1304785,23.2125856 36.1630514,24.0863155 35.6744571,24.6755735 L35.5767382,24.7825775 L17.3956061,42.8834676 C17.320643,42.9580998 17.2191697,43 17.1133896,43 L13.9866673,43 C13.7657534,43 13.5866673,42.8209139 13.5866673,42.6 C13.5866673,42.4936115 13.6290496,42.391606 13.7044413,42.316542 L32.3201933,23.7816937 L32.3201933,23.7816937 L13.7237117,5.6866816 C13.5653818,5.53262122 13.5619207,5.27937888 13.7159811,5.121049 C13.7912854,5.04365775 13.8946805,5 14.0026627,5 L17.1170064,5 C17.2206403,5 17.3202292,5.04022164 17.3947957,5.11219264 Z"
+                                                    id="RightOutline-right" fill="currentColor" fill-rule="nonzero">
+                                                </path>
+                                            </g>
+                                        </g>
+                                    </svg></div>
+                            </div>
+                        </a></div>
+                </div>
+            </div>
+            <div class="RepayList_repayList__Q0fSU">
+                <div class="adm-list adm-list-default RepayList_list__oHiQQ">
+                    <div class="adm-list-body">
+                        <div class="adm-list-body-inner">
+                            <div>
+                                <div class="RepayItem_mainContent__tHbD_">
+                                    <div class="RepayItem_leftItem__uHDQu"><label
+                                            class="adm-checkbox adm-checkbox-checked RepayItem_checkbox__xGY33"><input
+                                                type="checkbox" checked="">
+                                            <div class="adm-checkbox-icon"><svg viewBox="0 0 40 40">
+                                                    <path
+                                                        d="M31.5541766,15 L28.0892433,15 L28.0892434,15 C27.971052,15 27.8576674,15.044522 27.7740471,15.1239792 L18.2724722,24.1625319 L13.2248725,19.3630279 L13.2248725,19.3630279 C13.1417074,19.2834412 13.0287551,19.2384807 12.9107898,19.2380079 L9.44474455,19.2380079 L9.44474454,19.2380079 C9.19869815,19.2384085 8.99957935,19.4284738 9,19.66253 C9,19.7747587 9.04719253,19.8823283 9.13066188,19.9616418 L17.0907466,27.5338228 C17.4170809,27.8442545 17.8447695,28 18.2713393,28 L18.2980697,28 C18.7168464,27.993643 19.133396,27.8378975 19.4530492,27.5338228 L31.8693384,15.7236361 L31.8693384,15.7236361 C32.0434167,15.5582251 32.0435739,15.2898919 31.8696892,15.1242941 C31.7860402,15.0446329 31.6725052,15 31.5541421,15 L31.5541766,15 Z"
+                                                        fill="currentColor"></path>
+                                                </svg></div>
+                                        </label></div>
+                                    <div class="adm-list-item RepayItem_rightItem__Nx8DA">
+                                        <div class="adm-list-item-content">
+                                            <div class="adm-list-item-content-main">
+                                                <div class="adm-list-item-title"><span data-credit-lang="due_date">Due Date:</span> 20 Mar 2025</div>
+                                            </div>
+                                            <div class="adm-list-item-content-extra">฿ 345.00</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                          
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="PayButton_payNow__obyGg">
+            <div class="PayButton_leftArea__sio63"><label
+                    class="adm-checkbox adm-checkbox-checked PayButton_checkbox__cL_Pz"><input type="checkbox">
+                    <div class="adm-checkbox-icon"><svg viewBox="0 0 40 40">
+                            <path
+                                d="M31.5541766,15 L28.0892433,15 L28.0892434,15 C27.971052,15 27.8576674,15.044522 27.7740471,15.1239792 L18.2724722,24.1625319 L13.2248725,19.3630279 L13.2248725,19.3630279 C13.1417074,19.2834412 13.0287551,19.2384807 12.9107898,19.2380079 L9.44474455,19.2380079 L9.44474454,19.2380079 C9.19869815,19.2384085 8.99957935,19.4284738 9,19.66253 C9,19.7747587 9.04719253,19.8823283 9.13066188,19.9616418 L17.0907466,27.5338228 C17.4170809,27.8442545 17.8447695,28 18.2713393,28 L18.2980697,28 C18.7168464,27.993643 19.133396,27.8378975 19.4530492,27.5338228 L31.8693384,15.7236361 L31.8693384,15.7236361 C32.0434167,15.5582251 32.0435739,15.2898919 31.8696892,15.1242941 C31.7860402,15.0446329 31.6725052,15 31.5541421,15 L31.5541766,15 Z"
+                                fill="currentColor"></path>
+                        </svg></div>
+                    <div class="adm-checkbox-content" data-credit-lang="all">All</div>
+                </label>
+                <div class="PayButton_showAmount__7rGTP">
+                    <div class="PayButton_originalAmount__H0RVb" data-credit-lang="total_repayment">Total Repayment</div>
+                    <div class="PayButton_actualAmount__lifVy">฿ 345.00</div>
+                </div>
+            </div>
+            <div class="PayButton_rightArea__NXnM8"><button type="button"
+                    class="adm-button adm-button-primary adm-button-block adm-button-shape-default PayButton_payBtn__l747t"><span data-credit-lang="pay">Pay</span></button>
+            </div>
+        </div>
+    </main>
+
+</body>
+
+</html>

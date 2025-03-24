@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details</title>
+    <link rel="stylesheet" href="ruammitrStyles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Status bar -->
+        <div class="status-bar">
+            <div class="status-left">
+                <img src="./sppImages/wifi.svg" class="wifi-icon" alt="WiFi">
+            </div>
+            <div class="status-time">14:25</div>
+            <div class="status-right">
+                <img src="./sppImages/battery.svg" class="battery-icon" alt="Battery">
+                <span class="battery-level">85%</span>
+            </div>
+        </div>
+
+        <header class="page-header">
+            <a href="#" class="back-button"><i class="fas fa-chevron-left"></i></a>
+            <h1 data-lang="page_title">Order Details</h1>
+            <div class="header-buttons">
+                <button onclick="window.location.href='demoSetupPage.html'" class="demo-button">Demo</button>
+                <button id="language-toggle" class="language-toggle">
+                    <span class="current-lang">EN</span>
+                    <i class="fas fa-globe"></i>
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <section class="order-card">
+                <div class="order-info">
+                    <div class="order-number">
+                        <span><span data-lang="order_number">Order Number:</span> 4602</span>
+                        <span class="order-status return-status" data-lang="return_status">Waiting you to confirm receipt</span>
+                    </div>
+                    <p class="order-date"><span data-lang="order_date">Order Date:</span> <span id="currentDate"></span></p>
+                </div>
+
+                <div class="delivery-info">
+                    <h3 data-lang="store_info">Store Information</h3>
+                    <div class="info-row">
+                        <span class="info-label" data-lang="store_name">Store Name:</span>
+                        <span class="info-value" data-lang="store_name_value">Change Store Order</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label" data-lang="address">Address:</span>
+                        <span class="info-value" data-lang="address_value">Bang Phli Yai, Ratsadorn, Bangkok</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label" data-lang="phone">Phone:</span>
+                        <span class="info-value">022288558</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="products-section">
+                <h3 data-lang="total_items">Total 10 items</h3>
+                
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="./ruammitrImages/cafecan.webp" alt="Nescafe Latte">
+                    </div>
+                    <div class="product-details">
+                        <h4 data-lang="product1_name">Nescafe Latte (1 can)</h4>
+                        <p class="product-id"><span data-lang="barcode">Barcode:</span> 1019938504943</p>
+                        <div class="product-price-row">
+                            <span class="product-price"><span data-lang="price">Price:</span> ฿30.00</span>
+                            <span class="product-quantity"><span data-lang="quantity">Quantity:</span> 5</span>
+                        </div>
+                        <p class="product-total"><span data-lang="total_price">Total Price:</span> ฿150.00</p>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="./ruammitrImages/cafecan30.jpeg" alt="Nescafe Coffee Pack">
+                    </div>
+                    <div class="product-details">
+                        <h4 data-lang="product2_name">Nescafe Kopiko Black White Instant Coffee 180ml (Pack of 30)</h4>
+                        <p class="product-id"><span data-lang="barcode">Barcode:</span> 1019938528471</p>
+                        <div class="product-price-row">
+                            <span class="product-price"><span data-lang="price">Price:</span> ฿150.00</span>
+                            <span class="product-quantity"><span data-lang="quantity">Quantity:</span> 1</span>
+                        </div>
+                        <p class="product-total"><span data-lang="total_price">Total Price:</span> ฿150.00</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="shipping-section">
+                <div class="info-row">
+                    <span class="info-label" data-lang="shipping_method">Shipping Method:</span>
+                    <span class="info-value" data-lang="shipping_method_value">Wait for store pickup</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label" data-lang="shipping_date">Shipping Dates:</span>
+                    <span class="info-value" data-lang="shipping_date_value">Monday, Wednesday, Friday</span>
+                </div>
+            </section>
+
+            <section class="price-summary">
+                <div class="price-row">
+                    <span data-lang="subtotal">Subtotal before discount</span>
+                    <span>฿300.00</span>
+                </div>
+                <div class="price-row">
+                    <span data-lang="product_discount">Product discount</span>
+                    <span>฿0.00</span>
+                </div>
+                <div class="price-row total">
+                    <span data-lang="total">Total</span>
+                    <span>฿300.00</span>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div id="return-actions" class="receipt-actions">
+                <button class="confirm-button" onclick="navigateWithTransition('applicationResult.html')" data-lang="confirm_receipt">Confirm Receipt and Pay</button>
+                <button class="reject-button" data-lang="reject_receipt">Reject Receipt</button>
+            </div>
+            <div id="waiting-actions" class="receipt-actions">
+                <!-- This button should have no functionality when clicked -->
+                <button class="cancel-button" data-lang="cancel_order">Cancel Order</button>
+            </div>
+            <div id="preparing-actions" class="receipt-actions" style="display: none;">
+                <!-- No buttons for preparing status -->
+            </div>
+            <div id="shipping-actions" class="receipt-actions" style="display: none;">
+                <!-- No buttons for shipping status -->
+            </div>
+            <div id="successful-actions" class="receipt-actions" style="display: none;">
+                <button class="reorder-button" data-lang="reorder_product">สั่งซื้อสินค้าจ้า</button>
+            </div>
+        </footer>
+    </div>
+    <script src="ruammitrlanguage.js"></script>
+    <script src="ruammitrScript.js"></script>
+    <script>
+        // Set current Thai time
+        const now = new Date();
+        // Convert to Thai time (UTC+7)
+        const thaiTime = new Date(now.getTime() + (7 * 60 * 60 * 1000));
+        const formattedDate = thaiTime.toLocaleDateString('en-GB', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        }).replace(/\//g, '-');
+        document.getElementById('currentDate').textContent = formattedDate;
+
+        // Update navigation to include the current date
+        function navigateWithTransition(url) {
+            const currentDate = document.getElementById('currentDate').textContent;
+            const urlParams = new URLSearchParams(window.location.search);
+            const sellerLoanStatus = urlParams.get('sellerLoanStatus') || 'normal';
+            const WLStatus = urlParams.get('WLStatus') || '1';
+            
+            const params = new URLSearchParams({
+                appliedTime: `${currentDate}, 14:25`,
+                sellerLoanStatus: sellerLoanStatus,
+                WLStatus: WLStatus
+            });
+            
+            window.location.href = `${url}?${params.toString()}`;
+        }
+    </script>
+</body>
+</html> 

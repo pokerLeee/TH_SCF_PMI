@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Result</title>
+    <link rel="stylesheet" href="sppStyles.css">
+    <style>
+        /* Global styles and reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        html {
+            height: 100%;
+        }
+
+        body {
+            color: #333;
+            line-height: 1.6;
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .success-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px 0;
+            background: linear-gradient(180deg, #ffffff 0%, #ffffff 80%, #f5f5f5 100%);
+            width: 100%;
+            position: fixed;
+            top: 24px; /* Space for status bar */
+            left: 0;
+            z-index: 100;
+        }
+
+        .success-icon {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .success-icon object.success-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .success-icon .circle {
+            fill: none;
+            stroke: #4CAF50;
+            stroke-width: 2;
+            stroke-dasharray: 183;
+            stroke-dashoffset: 183;
+            transform-origin: center;
+            animation: drawCircle 3s infinite;
+            opacity: 1;
+        }
+
+        .success-icon .fill {
+            fill: #4CAF50;
+            fill-opacity: 0;
+            animation: fillCircle 3s infinite;
+        }
+
+        .success-icon .checkmark {
+            fill: none;
+            stroke: white;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 30;
+            stroke-dashoffset: 30;
+            animation: drawCheckmark 3s infinite;
+            opacity: 1;
+        }
+
+        @keyframes drawCircle {
+            0% { stroke-dashoffset: 183; opacity: 1; }
+            25% { stroke-dashoffset: 0; opacity: 1; }
+            90% { stroke-dashoffset: 0; opacity: 1; }
+            100% { stroke-dashoffset: 0; opacity: 0; }
+        }
+
+        @keyframes fillCircle {
+            0%, 30% { fill-opacity: 0; }
+            40% { fill-opacity: 1; }
+            90% { fill-opacity: 1; }
+            100% { fill-opacity: 0; }
+        }
+
+        @keyframes drawCheckmark {
+            0%, 40% { stroke-dashoffset: 30; opacity: 1; }
+            60% { stroke-dashoffset: 0; opacity: 1; }
+            90% { stroke-dashoffset: 0; opacity: 1; }
+            100% { stroke-dashoffset: 0; opacity: 0; }
+        }
+
+        .payment-amount {
+            font-size: 36px;
+            margin-bottom: 8px;
+        }
+
+        .payment-time {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .qr-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #ee4d2d;
+            border-radius: 4px;
+            padding: 8px 16px;
+            margin-top: 12px;
+            margin-bottom: 20px;
+            background: transparent;
+            cursor: pointer;
+            color: #ee4d2d;
+            font-size: 14px;
+        }
+
+        .qr-icon {
+            margin-right: 8px;
+            font-size: 16px;
+        }
+
+        .redirect-text {
+            color: #666;
+            font-size: 14px;
+            text-align: center;
+            margin-left: 40px;
+            margin-right: 40px;
+        }
+
+        .redirect-text span {
+            font-size: 14px;
+        }
+
+        #countdown {
+            font-size: 14px;
+            color: #666;
+            font-weight: normal;
+        }
+
+        .redirect-link {
+            color: #1E88E5;
+            font-size: 14px;
+            text-decoration: none;
+            margin-left: 4px;
+        }
+
+        .redirect-link:hover {
+            text-decoration: underline;
+        }
+
+        .merchant-card {
+            background: #fff;
+            border-radius: 4px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .merchant-card h2 {
+            font-size: 16px;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+
+
+        .order-card {
+            background: #fff;
+            border-radius: 4px;
+            padding: 16px;
+
+        }
+
+        .order-card {
+            background: #fff;
+            border-radius: 4px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .order-card h2 {
+            font-size: 16px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0;
+            cursor: pointer;
+        }
+
+        .order-card h2 span:first-child {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .order-details-content {
+            display: block;
+            margin-top: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease-out;
+            opacity: 0;
+        }
+
+        .order-details-content.show {
+            margin-top: 20px;
+            max-height: 500px; /* Adjust this value based on your content height */
+            opacity: 1;
+        }
+
+        .detail-row {
+            transform: translateY(-8px);
+            transition: transform 0.3s ease-out;
+            opacity: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .order-details-content.show .detail-row {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .order-details-content.show .detail-row:nth-child(1) { transition-delay: 0.1s; }
+        .order-details-content.show .detail-row:nth-child(3) { transition-delay: 0.15s; }
+        .order-details-content.show .detail-row:nth-child(5) { transition-delay: 0.2s; }
+        .order-details-content.show .detail-row:nth-child(7) { transition-delay: 0.25s; }
+
+        .detail-divider {
+            height: 1px;
+            background-color: #eee;
+            margin: 16px 0;
+            transform: scaleX(0.6);
+            transition: transform 0.3s ease-out;
+            opacity: 0;
+        }
+
+        .order-details-content.show .detail-divider {
+            transform: scaleX(1);
+            opacity: 1;
+        }
+
+        .order-details-content.show .detail-divider:nth-child(2) { transition-delay: 0.12s; }
+        .order-details-content.show .detail-divider:nth-child(4) { transition-delay: 0.17s; }
+        .order-details-content.show .detail-divider:nth-child(6) { transition-delay: 0.22s; }
+
+        .dropdown-icon {
+            color: #999;
+            font-size: 16px;
+            cursor: pointer;
+            transform: scale(1.2);
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown-icon.rotated {
+            transform: scale(1.2) rotate(180deg);
+        }
+
+        .merchant-icon {
+            font-size: 20px;
+            margin-right: 8px;
+            color: #666;
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+            vertical-align: middle;
+        }
+
+        .detail-label {
+            color: #666;
+            font-size: 14px;
+            display: block;
+        }
+
+        .detail-value {
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+            display: block;
+        }
+
+        .back-to-merchant {
+            width: 100%;
+            padding: 16px;
+            background-color: #ee4d2d;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .main-content {
+            padding: 0 16px;
+            margin-top: 370px; /* Increased margin to account for success section height */
+            margin-bottom: 80px; /* Space for footer */
+            padding-top: 12px; /* Add some padding at the top */
+        }
+
+        .header-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 24px; /* Explicit height for status bar */
+            z-index: 101;
+            background: #fff;
+        }
+
+        .container {
+            padding-bottom: 0; /* Remove padding as we're using margin in main-content */
+        }
+
+        .nav-bar {
+            display: flex;
+            align-items: center;
+            padding: 0.3rem 0.5rem;
+            background-color: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            position: relative;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .back-button {
+            font-size: 0.4rem;
+            margin-right: 0.4rem;
+            cursor: pointer;
+            border: none;
+            background: none;
+            color: white;
+            position: absolute;
+            left: 0.5rem;
+            z-index: 1;
+        }
+
+        .page-title {
+            font-size: 0.32rem;
+            color: white;
+            position: absolute;
+            left: 0;
+            right: 0;
+            text-align: center;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 16px;
+            background: #fff;
+            z-index: 100;
+            box-shadow: 0 -2px 6px rgba(0,0,0,0.1); /* Add shadow to separate from content */
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        .paid-amount-card {
+            background: #fff;
+            border-radius: 4px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .paid-amount-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px !important;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .paid-amount-row span {
+            font-size: 16px !important;
+            font-weight: bold;
+        }
+
+        .paid-amount-divider {
+            height: 1px;
+            background-color: #eee;
+            margin: 12px 0;
+        }
+
+        .purchase-amount-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px !important;
+            color: #999;
+        }
+
+        .purchase-amount-row span {
+            font-size: 14px !important;
+            color: #999;
+        }
+
+        .detail-divider {
+            height: 1px;
+            background-color: #eee;
+            margin: 16px 0;
+        }
+
+        /* Add extra margin to first detail row */
+        .order-card h2 + .detail-row {
+            margin-top: 8px;
+        }
+
+        .promotion-banner {
+            background: linear-gradient(135deg, #fff6f5 0%, #fff 70%);
+            border-radius: 4px;
+            padding: 20px;
+            margin-bottom: 12px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(238, 77, 45, 0.1);
+        }
+
+        .promotion-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: #ee4d2d;
+        }
+
+        .promotion-banner::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, rgba(238, 77, 45, 0.05) 0%, rgba(238, 77, 45, 0) 70%);
+            border-radius: 50%;
+        }
+
+        .promotion-title {
+            font-size: 15px;
+            line-height: 1.4;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 6px;
+            padding-right: 20px;
+        }
+
+        .promotion-date {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .promotion-link {
+            font-size: 14px;
+            color: #ee4d2d;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            font-weight: 500;
+            position: relative;
+            padding-right: 16px;
+        }
+
+        .promotion-link::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            width: 6px;
+            height: 6px;
+            border-top: 2px solid #ee4d2d;
+            border-right: 2px solid #ee4d2d;
+            transform: translateY(-50%) rotate(45deg);
+        }
+
+        .promotion-link:hover {
+            text-decoration: none;
+            opacity: 0.8;
+        }
+
+        .highlight {
+            color: #ee4d2d;
+            position: relative;
+            padding: 0 2px;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .highlight::after {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: rgba(238, 77, 45, 0.1);
+            border-radius: 3px;
+        }
+
+        /* Page Transition Animation */
+        .page-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            transform: translateX(-100%);
+            z-index: 1000;
+            animation: slideInReverse 0.3s ease-out forwards;
+        }
+
+        @keyframes slideInReverse {
+            from {
+                transform: translateX(-100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header with status bar only -->
+        <div class="header-container">
+            <!-- Status bar -->
+            <div class="status-bar">
+                <div class="status-left">
+                    <img src="./sppImages/wifi.svg" class="wifi-icon" alt="WiFi">
+                </div>
+                <div class="status-time">14:25</div>
+                <div class="status-right">
+                    <img src="./sppImages/battery.svg" class="battery-icon" alt="Battery">
+                    <span class="battery-level">85%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Section -->
+        <div class="success-section">
+            <div class="success-icon">
+                <object type="image/svg+xml" data="./sppImages/success-icon.svg" class="success-svg"></object>
+            </div>
+            <div class="payment-amount">฿ 300.00</div>
+            <div class="payment-time">20-03-2024, 14:25</div>
+            <button class="qr-button">
+                <img src="./sppImages/qrCode.svg" class="qr-icon" alt="QR Code">
+                <span data-lang="view_qr">View QR</span>
+            </button>
+            <div class="redirect-text">
+                <span data-lang="redirect_text">You will be redirect back to the merchant's website in</span> <span id="countdown">5</span> <span data-lang="seconds">seconds</span>
+                <a href="#" class="redirect-link" id="goNowLink" data-lang="go_now">Go Now</a>
+            </div>
+        </div>
+
+        <main class="main-content">
+            <!-- Merchant Card -->
+            <div class="merchant-card">
+                <h2><img src="./sppImages/philip_morris_logo.png" class="merchant-icon" alt="Philip Morris Logo">PMI Wholesaler Shop</h2>
+            </div>
+
+            <!-- Promotion Banner -->
+            <div class="promotion-banner" id="promotionBanner" style="display: none;">
+                <div class="promotion-title" data-lang="promotion_title">Enjoy <span class="highlight">0% interest</span> on all orders pay with Seller Loan</div>
+                <div class="promotion-date" data-lang="limited_offer_until">Limited offer until 31-10-2025</div>
+                <a href="landingPage.html" class="promotion-link" data-lang="more_details">More details</a>
+            </div>
+
+            <!-- Paid Amount Card -->
+            <div class="paid-amount-card">
+                <div class="paid-amount-row">
+                    <span data-lang="you_paid">You Paid</span>
+                    <span>฿ 300.00</span>
+                </div>
+                <div class="paid-amount-divider"></div>
+                <div class="purchase-amount-row">
+                    <span data-lang="purchase_amount">Purchase Amount</span>
+                    <span>฿ 300.00</span>
+                </div>
+            </div>
+
+            <!-- Order Details Card -->
+            <div class="order-card" id="orderCard">
+                <h2>
+                    <span data-lang="order_details">Order Details</span>
+                    <span class="dropdown-icon" id="orderDetailsToggle">▾</span>
+                </h2>
+                <div class="order-details-content" id="orderDetailsContent">
+                    <div class="detail-row">
+                        <span class="detail-label" data-lang="transaction_sn">Transaction SN</span>
+                        <span class="detail-value">#202403201425001</span>
+                    </div>
+                    <div class="detail-divider"></div>
+                    <div class="detail-row">
+                        <span class="detail-label" data-lang="order_sn">Order SN</span>
+                        <span class="detail-value">#202403201425</span>
+                    </div>
+                    <div class="detail-divider"></div>
+                    <div class="detail-row">
+                        <span class="detail-label" data-lang="payment_method">Payment Method</span>
+                        <span class="detail-value payment-method-value" data-lang="seller_loan">Seller Loan</span>
+                    </div>
+                    <div class="detail-divider"></div>
+                    <div class="detail-row">
+                        <span class="detail-label" data-lang="merchant_ref_id">Merchant Ref ID</span>
+                        <span class="detail-value">PMI20240320142500001</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loan Details Card -->
+            <div class="order-card" id="loanCard" style="display: none;">
+                <h2>
+                    <span data-lang="loan_details">Loan Details</span>
+                    <span class="dropdown-icon" id="loanDetailsToggle">▾</span>
+                </h2>
+                <div class="order-details-content" id="loanDetailsContent">
+                    <div class="detail-row">
+                        <span class="detail-label" data-lang="loan_id">Loan ID</span>
+                        <span class="detail-value loan-id-link" style="color: #1E88E5; cursor: pointer;">202403201083043425001</span>
+                    </div>
+                    <div class="detail-divider"></div>
+                    <div class="detail-row">
+                        <span class="detail-label" data-lang="loan_tenure">Loan Tenure</span>
+                        <span class="detail-value" id="loanTenure">1 month</span>
+                    </div>
+                    <div class="detail-divider"></div>
+                    <div class="detail-row">
+                        <span class="detail-label" data-lang="loan_principle">Loan Principle</span>
+                        <span class="detail-value" id="loanPrinciple">฿ 300.00</span>
+                    </div>
+                    <div class="detail-divider"></div>
+                    <div class="detail-row">
+                        <span class="detail-label" data-lang="loan_interest">Loan Interest</span>
+                        <span class="detail-value" id="loanInterest">฿ 45.00</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <button class="back-to-merchant" id="backToMerchant" data-lang="back_to_merchant">Back to Merchant</button>
+        </footer>
+    </div>
+
+    <script src="sharedLanguage.js" defer></script>
+    <script defer>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get payment method and loan details from URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const paymentMethod = urlParams.get('paymentMethod');
+            const loanTerm = urlParams.get('loanTerm') || '3'; // Default to 1-month (value="3")
+            const totalPayment = parseFloat(urlParams.get('totalPayment')) || 300.00;
+            const appliedTime = urlParams.get('appliedTime');
+
+            // Update payment time display
+            if (appliedTime) {
+                document.querySelector('.payment-time').textContent = appliedTime;
+            }
+
+            // Show promotion banner only if payment method is shopeepay and WLStatus is 1
+            const promotionBanner = document.getElementById('promotionBanner');
+            const WLStatus = urlParams.get('WLStatus') || '0';
+            if (paymentMethod === 'shopeepay' && WLStatus === '1') {
+                promotionBanner.style.display = 'block';
+            }
+
+            // Handle loan card visibility and details
+            const loanCard = document.getElementById('loanCard');
+            const paymentMethodValue = document.querySelector('.payment-method-value');
+            
+            // Show loan card if payment method is spaylate or not specified
+            if (paymentMethod === 'spaylate' || !paymentMethod) {
+                loanCard.style.display = 'block';
+                
+                // Update loan details based on term
+                const loanTenure = document.getElementById('loanTenure');
+                const loanPrinciple = document.getElementById('loanPrinciple');
+                const loanInterest = document.getElementById('loanInterest');
+                
+                // Set loan tenure based on term
+                let tenureKey;
+                let days;
+                switch(loanTerm) {
+                    case '1':
+                        tenureKey = '7_days';
+                        days = 7;
+                        break;
+                    case '2':
+                        tenureKey = '14_days';
+                        days = 14;
+                        break;
+                    default:
+                        tenureKey = '1_month';
+                        days = 30;
+                }
+                
+                loanTenure.setAttribute('data-lang', tenureKey);
+                loanTenure.textContent = getTranslation(tenureKey);
+                loanPrinciple.textContent = `฿ ${totalPayment.toFixed(2)}`;
+                
+                // Calculate interest (0.5% per day)
+                const interestRate = 0.005;
+                const interestAmount = totalPayment * interestRate * days;
+                loanInterest.textContent = `฿ ${interestAmount.toFixed(2)}`;
+            }
+
+            // Function to handle page transition
+            function navigateBackWithTransition(url) {
+                // Create transition overlay
+                const overlay = document.createElement('div');
+                overlay.className = 'page-transition';
+                document.body.appendChild(overlay);
+
+                // Navigate after animation
+                setTimeout(() => {
+                    window.location.href = url;
+                }, 300); // Match this with the CSS animation duration
+            }
+
+            document.getElementById('backToMerchant').addEventListener('click', function () {
+                navigateBackWithTransition('ruammitr.html');
+            });
+
+            // Add toggle functionality for Order Details
+            const orderDetailsH2 = document.querySelector('#orderCard h2');
+            const orderDetailsContent = document.getElementById('orderDetailsContent');
+            const orderDetailsIcon = document.getElementById('orderDetailsToggle');
+            
+            if (orderDetailsH2 && orderDetailsContent && orderDetailsIcon) {
+                orderDetailsH2.addEventListener('click', function() {
+                    orderDetailsContent.classList.toggle('show');
+                    orderDetailsIcon.classList.toggle('rotated');
+                });
+            }
+
+            // Add toggle functionality for Loan Details
+            const loanDetailsH2 = document.querySelector('#loanCard h2');
+            const loanDetailsContent = document.getElementById('loanDetailsContent');
+            const loanDetailsIcon = document.getElementById('loanDetailsToggle');
+            
+            if (loanDetailsH2 && loanDetailsContent && loanDetailsIcon) {
+                loanDetailsH2.addEventListener('click', function() {
+                    loanDetailsContent.classList.toggle('show');
+                    loanDetailsIcon.classList.toggle('rotated');
+                });
+            }
+
+            // Set the redirect URL
+            const merchantUrl = 'ruammitr.html';
+            const goNowLink = document.getElementById('goNowLink');
+            goNowLink.href = '#'; // Prevent default link behavior
+            
+            // Add click event to "Go Now" link
+            goNowLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                navigateBackWithTransition(merchantUrl);
+            });
+
+            // Remove countdown display
+            document.getElementById('countdown').style.display = 'none';
+            document.querySelector('[data-lang="seconds"]').style.display = 'none';
+
+            // Add click handler for loan ID
+            const loanIdLink = document.querySelector('.loan-id-link');
+            if (loanIdLink) {
+                loanIdLink.addEventListener('click', function() {
+                    const loanData = {
+                        appliedTime: document.querySelector('.payment-time').textContent,
+                        loanTenure: document.getElementById('loanTenure').textContent,
+                        loanId: this.textContent,
+                        totalPayment: totalPayment,
+                        instalmentFee: document.getElementById('loanInterest').textContent
+                    };
+                    
+                    // Calculate due date (Applied Time + Loan duration)
+                    const [datePart] = loanData.appliedTime.split(',');
+                    const [day, month, year] = datePart.trim().split('-').map(Number);
+                    const appliedDate = new Date(year, month - 1, day);
+                    let dueDate = new Date(appliedDate);
+                    
+                    switch(loanTerm) {
+                        case '1':
+                            dueDate.setDate(appliedDate.getDate() + 7);
+                            break;
+                        case '2':
+                            dueDate.setDate(appliedDate.getDate() + 14);
+                            break;
+                        default:
+                            dueDate.setMonth(appliedDate.getMonth() + 1);
+                    }
+                    
+                    // Format due date as DD-MM-YYYY
+                    const dueDateStr = dueDate.toLocaleDateString('en-GB', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric'
+                    }).replace(/\//g, '-');
+                    
+                    // Create URL with query parameters
+                    const queryParams = new URLSearchParams({
+                        appliedTime: loanData.appliedTime,
+                        loanTenure: loanData.loanTenure,
+                        loanId: loanData.loanId,
+                        totalPayment: loanData.totalPayment,
+                        instalmentFee: loanData.instalmentFee,
+                        dueDate: dueDateStr
+                    });
+                    
+                    // Direct navigation without transition
+                    window.location.href = `loanDetailPage.html?${queryParams.toString()}`;
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

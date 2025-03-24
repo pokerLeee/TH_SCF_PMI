@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+    <style>
+        .circle {
+            fill: none;
+            stroke: #4CAF50;
+            stroke-width: 2;
+            stroke-dasharray: 183;
+            stroke-dashoffset: 183;
+            transform-origin: center;
+            animation: drawCircle 4.5s infinite;
+            opacity: 1;
+        }
+
+        .fill {
+            fill: #4CAF50;
+            fill-opacity: 0;
+            animation: fillCircle 4.5s infinite;
+        }
+
+        .checkmark {
+            fill: none;
+            stroke: white;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 30;
+            stroke-dashoffset: 30;
+            animation: drawCheckmark 4.5s infinite;
+            opacity: 1;
+        }
+
+        @keyframes drawCircle {
+            0% { stroke-dashoffset: 183; opacity: 1; }
+            25% { stroke-dashoffset: 0; opacity: 1; }
+            90% { stroke-dashoffset: 0; opacity: 1; }
+            100% { stroke-dashoffset: 0; opacity: 0; }
+        }
+
+        @keyframes fillCircle {
+            0%, 30% { fill-opacity: 0; }
+            40% { fill-opacity: 1; }
+            90% { fill-opacity: 1; }
+            100% { fill-opacity: 0; }
+        }
+
+        @keyframes drawCheckmark {
+            0%, 40% { stroke-dashoffset: 30; opacity: 1; }
+            60% { stroke-dashoffset: 0; opacity: 1; }
+            90% { stroke-dashoffset: 0; opacity: 1; }
+            100% { stroke-dashoffset: 0; opacity: 0; }
+        }
+    </style>
+    <circle class="fill" cx="25" cy="25" r="23"/>
+    <circle class="circle" cx="25" cy="25" r="23"/>
+    <polyline class="checkmark" points="16,25 22,32 34,18"/>
+</svg> 

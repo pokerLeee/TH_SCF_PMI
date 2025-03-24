@@ -1,0 +1,327 @@
+</script>
+</body>
+
+</html><!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Status</title>
+    <link rel="stylesheet" href="ruammitrStyles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Slider styles */
+        .status-slider-container {
+            margin: 30px 0 20px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .status-slider-title {
+            margin-bottom: 15px;
+            font-weight: 500;
+            font-size: 1rem;
+            color: #333;
+        }
+
+        .status-slider {
+            width: 100%;
+            -webkit-appearance: none;
+            height: 10px;
+            border-radius: 5px;
+            background: #e0e0e0;
+            outline: none;
+            margin-bottom: 20px;
+        }
+
+        .status-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .status-slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .status-slider-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .status-slider-label {
+            font-size: 0.7rem;
+            color: var(--dark-gray);
+            text-align: center;
+            width: 20%;
+        }
+
+        .status-slider-label.active {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .status-slider-marks {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin-bottom: 5px;
+        }
+
+        .status-slider-mark {
+            width: 8px;
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 50%;
+        }
+
+        .status-slider-mark.active {
+            background-color: var(--primary-color);
+        }
+
+        /* Custom mark colors */
+        .status-slider-mark[data-status="waiting_confirmation_status"] {
+            background-color: var(--waiting-color);
+        }
+
+        .status-slider-mark[data-status="preparing_order_status"] {
+            background-color: var(--preparing-color);
+        }
+
+        .status-slider-mark[data-status="shipping_status"] {
+            background-color: var(--shipping-color);
+        }
+
+        .status-slider-mark[data-status="waiting_acception_status"] {
+            background-color: var(--return-color);
+        }
+
+        .status-slider-mark[data-status="order_successful_status"] {
+            background-color: var(--order-successful-color);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Status bar -->
+        <div class="status-bar">
+            <div class="status-left">
+                <img src="./sppImages/wifi.svg" class="wifi-icon" alt="WiFi">
+            </div>
+            <div class="status-time">14:25</div>
+            <div class="status-right">
+                <img src="./sppImages/battery.svg" class="battery-icon" alt="Battery">
+                <span class="battery-level">85%</span>
+            </div>
+        </div>
+        <header class="page-header">
+            <a href="ruammitr.html" class="back-button"><i class="fas fa-chevron-left"></i></a>
+            <h1 data-lang="status_page_title">Order Status</h1>
+            <button id="language-toggle" class="language-toggle">
+                <span class="current-lang">EN</span>
+                <i class="fas fa-globe"></i>
+            </button>
+        </header>
+
+        <main class="status-page">
+            <!-- Status slider -->
+            <div class="status-slider-container">
+                <div class="status-slider-title" data-lang="slide_to_change">Slide to change status</div>
+
+                <div class="status-slider-labels">
+                    <div class="status-slider-label" data-status="waiting_confirmation_status">Wait Wholesaler</div>
+                    <div class="status-slider-label" data-status="preparing_order_status">Preparing</div>
+                    <div class="status-slider-label" data-status="shipping_status">Shipping</div>
+                    <div class="status-slider-label" data-status="waiting_acception_status">Wait Confirm</div>
+                    <div class="status-slider-label" data-status="order_successful_status">Success</div>
+                </div>
+
+                <div class="status-slider-marks">
+                    <div class="status-slider-mark" data-status="waiting_confirmation_status"></div>
+                    <div class="status-slider-mark" data-status="preparing_order_status"></div>
+                    <div class="status-slider-mark" data-status="shipping_status"></div>
+                    <div class="status-slider-mark" data-status="waiting_acception_status"></div>
+                    <div class="status-slider-mark" data-status="order_successful_status"></div>
+                </div>
+
+                <input type="range" min="0" max="4" value="4" class="status-slider" id="statusSlider">
+            </div>
+
+            <div class="status-option" data-status="waiting_confirmation_status" data-status-class="waiting-status">
+                <div class="status-indicator" style="background-color: var(--waiting-color);"></div>
+                <div class="status-text" data-lang="waiting_confirmation_status">Waiting wholesaler to confirm order
+                </div>
+                <div class="status-action"><i class="fas fa-chevron-right"></i></div>
+            </div>
+
+            <div class="status-option" data-status="preparing_order_status" data-status-class="preparing-status">
+                <div class="status-indicator" style="background-color: var(--preparing-color);"></div>
+                <div class="status-text" data-lang="preparing_order_status">Preparing your order</div>
+                <div class="status-action"><i class="fas fa-chevron-right"></i></div>
+            </div>
+
+            <div class="status-option" data-status="shipping_status" data-status-class="shipping-status">
+                <div class="status-indicator" style="background-color: var(--shipping-color);"></div>
+                <div class="status-text" data-lang="shipping_status">Shipping in progress</div>
+                <div class="status-action"><i class="fas fa-chevron-right"></i></div>
+            </div>
+
+            <div class="status-option" data-status="waiting_acception_status" data-status-class="return-status">
+                <div class="status-indicator" style="background-color: var(--return-color);"></div>
+                <div class="status-text" data-lang="waiting_acception_status">Waiting you to confirm receipt</div>
+                <div class="status-action"><i class="fas fa-chevron-right"></i></div>
+            </div>
+
+            <div class="status-option" data-status="order_successful_status" data-status-class="successful-status">
+                <div class="status-indicator" style="background-color: var(--order-successful-bg);"></div>
+                <div class="status-text" data-lang="order_successful_status">Order Successful</div>
+                <div class="status-action"><i class="fas fa-chevron-right"></i></div>
+            </div>
+
+        </main>
+    </div>
+    <script src="ruammitrlanguage.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize the language
+            updatePageLanguage();
+
+            // Set up language toggle button
+            const languageToggle = document.getElementById('language-toggle');
+            const currentLangSpan = document.querySelector('.current-lang');
+
+            if (languageToggle) {
+                languageToggle.addEventListener('click', () => {
+                    // Toggle between English and Thai
+                    const newLang = getCurrentLanguage() === LANGUAGE.ENGLISH ? LANGUAGE.THAI : LANGUAGE.ENGLISH;
+                    setLanguage(newLang);
+
+                    // Update the language display in the button
+                    if (currentLangSpan) {
+                        currentLangSpan.textContent = newLang === LANGUAGE.ENGLISH ? 'EN' : 'TH';
+                    }
+                });
+            }
+
+            // Status slider functionality
+            const statusSlider = document.getElementById('statusSlider');
+            const statusLabels = document.querySelectorAll('.status-slider-label');
+            const statusMarks = document.querySelectorAll('.status-slider-mark');
+            const statusOptions = document.querySelectorAll('.status-option');
+
+            // Map of slider values to status data (in new order)
+            const sliderStatusMap = [
+                { value: 0, status: 'waiting_confirmation_status', statusClass: 'waiting-status' },
+                { value: 1, status: 'preparing_order_status', statusClass: 'preparing-status' },
+                { value: 2, status: 'shipping_status', statusClass: 'shipping-status' },
+                { value: 3, status: 'waiting_acception_status', statusClass: 'return-status' },
+                { value: 4, status: 'order_successful_status', statusClass: 'successful-status' }
+            ];
+
+            // Get current status from localStorage or use default
+            const currentStatus = localStorage.getItem('ruammitrDemoOrderStatus') || 'order_successful_status';
+
+            // Initialize slider position based on current status
+            let initialSliderValue = 4; // Default to order_successful_status position
+            for (let i = 0; i < sliderStatusMap.length; i++) {
+                if (sliderStatusMap[i].status === currentStatus) {
+                    initialSliderValue = i;
+                    break;
+                }
+            }
+
+            statusSlider.value = initialSliderValue;
+            updateSliderUI(initialSliderValue);
+
+            // Update slider UI (marks and labels)
+            function updateSliderUI(value) {
+                // Update labels
+                statusLabels.forEach((label, index) => {
+                    if (index === parseInt(value)) {
+                        label.classList.add('active');
+                    } else {
+                        label.classList.remove('active');
+                    }
+                });
+
+                // Update marks - changed to not add active to marks as each has its own color
+                statusMarks.forEach((mark, index) => {
+                    // We now just highlight the active one differently (e.g., make it larger)
+                    if (index === parseInt(value)) {
+                        mark.style.transform = 'scale(1.3)';
+                        mark.style.boxShadow = '0 0 3px rgba(0,0,0,0.3)';
+                    } else {
+                        mark.style.transform = 'scale(1)';
+                        mark.style.boxShadow = 'none';
+                    }
+                });
+
+                // Update status option highlighting
+                statusOptions.forEach(option => {
+                    option.style.borderLeft = 'none';
+                    const optionStatus = option.getAttribute('data-status');
+                    if (optionStatus === sliderStatusMap[value].status) {
+                        option.style.borderLeft = '4px solid var(--primary-color)';
+                        // Scroll to make the selected option visible
+                        option.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }
+                });
+            }
+
+            // Slider change event
+            statusSlider.addEventListener('input', function () {
+                updateSliderUI(this.value);
+
+                // Update localStorage with selected status
+                const selectedMapItem = sliderStatusMap[this.value];
+                localStorage.setItem('ruammitrDemoOrderStatus', selectedMapItem.status);
+                localStorage.setItem('ruammitrDemoOrderStatusClass', selectedMapItem.statusClass);
+            });
+
+            // Status option click handlers
+            statusOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    const status = option.getAttribute('data-status');
+                    const statusClass = option.getAttribute('data-status-class');
+
+                    // Save the selected status in localStorage with the specific key
+                    localStorage.setItem('ruammitrDemoOrderStatus', status);
+                    localStorage.setItem('ruammitrDemoOrderStatusClass', statusClass);
+
+                    // Update slider to match selected status
+                    for (let i = 0; i < sliderStatusMap.length; i++) {
+                        if (sliderStatusMap[i].status === status) {
+                            statusSlider.value = i;
+                            updateSliderUI(i);
+                            break;
+                        }
+                    }
+
+                    // Highlight the selected option
+                    statusOptions.forEach(opt => {
+                        opt.style.borderLeft = 'none';
+                    });
+                    option.style.borderLeft = '4px solid var(--primary-color)';
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
+        

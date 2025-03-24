@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Setup</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f6f6f6;
+            padding: 1.6rem;
+            font-size: 1.2rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 32rem;
+            padding: 1.6rem;
+            background: white;
+            border-radius: 0.8rem;
+            box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 1.4rem;
+            color: #333;
+            margin-bottom: 1.6rem;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .flow-section {
+            margin-bottom: 1.6rem;
+        }
+
+        .flow-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .flow-title {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 0.8rem;
+            padding-bottom: 0.4rem;
+            border-bottom: 0.1rem solid #eee;
+            font-weight: 500;
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .demo-button {
+            padding: 0.8rem;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 0.6rem;
+            background-color: #fff;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.1);
+            border: 0.1rem solid #eee;
+        }
+
+        .demo-button:hover {
+            transform: translateY(-0.1rem);
+            box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.15);
+        }
+
+        .demo-button:active {
+            transform: translateY(0);
+            box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.1);
+        }
+
+        .demo-button.normal {
+            border-color: #4CAF50;
+            color: #4CAF50;
+        }
+
+        .demo-button.first-use {
+            border-color: #9E9E9E;
+            color: #9E9E9E;
+        }
+
+        .demo-button.limit {
+            border-color: #ee4d2d;
+            color: #ee4d2d;
+        }
+
+        /* Setup section styles */
+        .setup-section {
+            margin-bottom: 0;
+            padding: 1rem 1.2rem;
+            background-color: #fafafa;
+            border-radius: 0.6rem;
+            border: 0.1rem solid #eee;
+        }
+
+        .setup-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.6rem 0;
+        }
+
+        .setup-label {
+            font-size: 1.1rem;
+            color: #666;
+            font-weight: 500;
+        }
+
+        /* Toggle switch styles */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 3rem;
+            height: 1.6rem;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .3s;
+            border-radius: 2rem;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 1.2rem;
+            width: 1.2rem;
+            left: 0.2rem;
+            bottom: 0.2rem;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #4CAF50;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(1.4rem);
+        }
+
+        /* Language toggle styles */
+        .header-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            width: 100%;
+        }
+
+        header {
+            background-color: white;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 1.6rem;
+        }
+
+        .language-toggle {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            font-size: 1rem;
+            color: #666;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.4rem;
+        }
+
+        .language-toggle:hover {
+            color: #4CAF50;
+        }
+
+        .page-title {
+            font-size: 1.4rem;
+            color: #333;
+            font-weight: 600;
+            text-align: center;
+            margin: 0;
+        }
+
+        @media (max-width: 380px) {
+            .container {
+                padding: 1.2rem 1rem;
+            }
+
+            h1 {
+                font-size: 1.3rem;
+                margin-bottom: 1.2rem;
+            }
+
+            .page-title {
+                font-size: 1.3rem;
+            }
+
+            .flow-title {
+                font-size: 1rem;
+            }
+
+            .demo-button {
+                padding: 0.8rem;
+                font-size: 1rem;
+            }
+
+            .setup-label {
+                font-size: 1rem;
+            }
+            
+            header {
+                padding-bottom: 0.8rem;
+                margin-bottom: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-container">
+                <h1 class="page-title" data-lang="demo_setup_title">Select Demo Mode</h1>
+                <button id="language-toggle" class="language-toggle">
+                    <span class="current-lang">EN</span>
+                    <i class="fas fa-globe"></i>
+                </button>
+            </div>
+        </header>
+       
+        <div class="flow-section">
+            <h2 class="flow-title" data-lang="happy_flow_title">Happy Flow</h2>
+            <div class="button-container">
+                <button class="demo-button normal" onclick="startDemo('normal')" data-lang="activated_user">Activated user</button>
+                <button class="demo-button first-use" onclick="startDemo('inactive')" data-lang="new_whitelisted_user">New whitelisted user</button>
+            </div>
+        </div>
+
+        <div class="flow-section">
+            <h2 class="flow-title" data-lang="exception_flow_title">Exception Flow</h2>
+            <div class="button-container">
+                <button class="demo-button limit" onclick="startDemo('notWhitelisted')" data-lang="not_whitelisted_user">Not whitelisted user</button>
+                <button class="demo-button limit" onclick="startDemo('limitNotEnough')" data-lang="limit_not_enough">Limit Not Enough</button>
+                <button class="demo-button limit" onclick="startDemo('overdue')" data-lang="overdue">Overdue</button>
+            </div>
+        </div>
+        <div class="flow-section">
+            <h2 class="flow-title" data-lang="spp_homepage_title">SPP Homepage</h2>
+            <div class="button-container">
+                <button class="demo-button normal" onclick="openShopeePayHome('normal')" data-lang="activated_user_spp">Activated user</button>
+                <button class="demo-button first-use" onclick="openShopeePayHome('inactive')" data-lang="new_whitelisted_user_spp">New whitelisted user</button>
+                <button class="demo-button limit" onclick="openShopeePayHome('notWhitelisted')" data-lang="not_whitelisted_user_spp">Not whitelisted user</button>
+            </div>
+        </div>
+
+        <div class="setup-section">
+            <h2 class="flow-title" data-lang="demo_setup_options">Demo setup</h2>
+            <div class="setup-item">
+                <span class="setup-label" data-lang="order_ready_option">Ruammitr Order Ready to Pay</span>
+                <label class="switch">
+                    <input type="checkbox" id="orderReadyToggle" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="ruammitrlanguage.js"></script>
+    <script>
+        function startDemo(status) {
+            const isOrderReady = document.getElementById('orderReadyToggle').checked;
+            const initialOrderStatus = isOrderReady ? 'waiting_acception_status' : 'waiting_confirmation_status';
+            
+            // Store the initial order status in localStorage
+            localStorage.setItem('ruammitrDemoOrderStatus', initialOrderStatus);
+            localStorage.setItem('ruammitrDemoOrderStatusClass', isOrderReady ? 'return-status' : 'waiting-status');
+            
+            // Set WLStatus based on the demo type
+            const WLStatus = status === 'notWhitelisted' ? '0' : '1';
+            
+            // If status is notWhitelisted, use inactive as sellerLoanStatus
+            const sellerLoanStatus = status === 'notWhitelisted' ? 'inactive' : status;
+            
+            // Navigate to ruammitr.html with the seller loan status and WLStatus
+            window.location.href = `ruammitr.html?sellerLoanStatus=${sellerLoanStatus}&WLStatus=${WLStatus}`;
+        }
+        
+        function openShopeePayHome(status) {
+            // 使用与startDemo相同的参数逻辑
+            const WLStatus = status === 'notWhitelisted' ? '0' : '1';
+            const sellerLoanStatus = status === 'notWhitelisted' ? 'inactive' : status;
+            
+            // 导航到shopeePayHome.html并传递参数
+            window.location.href = `shopeePayHome.html?sellerLoanStatus=${sellerLoanStatus}&WLStatus=${WLStatus}`;
+        }
+
+        // Load the toggle state from localStorage or default to true
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggle = document.getElementById('orderReadyToggle');
+            const savedState = localStorage.getItem('orderReadyState');
+            toggle.checked = savedState === null ? true : savedState === 'true';
+
+            // Save toggle state changes
+            toggle.addEventListener('change', function() {
+                localStorage.setItem('orderReadyState', this.checked);
+            });
+            
+            // Initialize the language
+            updatePageLanguage();
+
+            // Set up language toggle button
+            const languageToggle = document.getElementById('language-toggle');
+            const currentLangSpan = document.querySelector('.current-lang');
+
+            if (languageToggle) {
+                languageToggle.addEventListener('click', () => {
+                    // Toggle between English and Thai
+                    const newLang = getCurrentLanguage() === LANGUAGE.ENGLISH ? LANGUAGE.THAI : LANGUAGE.ENGLISH;
+                    setLanguage(newLang);
+
+                    // Update the language display in the button
+                    if (currentLangSpan) {
+                        currentLangSpan.textContent = newLang === LANGUAGE.ENGLISH ? 'EN' : 'TH';
+                    }
+                });
+            }
+            
+            // Set the initial language display in the button
+            if (currentLangSpan) {
+                currentLangSpan.textContent = getCurrentLanguage() === LANGUAGE.ENGLISH ? 'EN' : 'TH';
+            }
+        });
+    </script>
+</body>
+</html> 

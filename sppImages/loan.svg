@@ -1,0 +1,13 @@
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 钱袋 -->
+  <path d="M55 30H25C22.2386 30 20 32.2386 20 35V55C20 57.7614 22.2386 60 25 60H55C57.7614 60 60 57.7614 60 55V35C60 32.2386 57.7614 30 55 30Z" fill="#FFE4DC"/>
+  <!-- 钱袋顶部 -->
+  <path d="M55 30H25V35C25 37.7614 27.2386 40 30 40H50C52.7614 40 55 37.7614 55 35V30Z" fill="#FFCEBF"/>
+  <!-- 钱币符号 -->
+  <circle cx="40" cy="45" r="10" fill="#ee4d2d"/>
+  <path d="M40 39V51" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <path d="M44 42H37C36.4477 42 36 42.4477 36 43V43C36 43.5523 36.4477 44 37 44H43C43.5523 44 44 44.4477 44 45V45C44 45.5523 43.5523 46 43 46H36" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <!-- 上升箭头 -->
+  <path d="M65 25L70 30L75 25" stroke="#ee4d2d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M70 30L70 20" stroke="#ee4d2d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg> 

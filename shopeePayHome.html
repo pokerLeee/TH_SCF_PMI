@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopeePay Home</title>
+    <link rel="stylesheet" href="shopeePayHome.css">
+    <script src="sharedLanguage.js"></script>
+    <style>
+        /* 确保滚动行为正确，并导航栏始终位于内容上方 */
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #ee4d2d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="fixed-header">
+            <div class="header-bg"></div>
+            <header class="header-container">
+                <!-- Status Bar -->
+                <div class="status-bar">
+                    <div class="status-left">
+                        <img src="./sppImages/wifi.svg" class="wifi-icon" alt="WiFi">
+                    </div>
+                    <div class="status-time">14:25</div>
+                    <div class="status-right">
+                        <img src="./sppImages/battery.svg" class="battery-icon" alt="Battery">
+                        <span class="battery-level">85%</span>
+                    </div>
+                </div>
+
+                <!-- Nav Bar -->
+                <nav class="nav-bar">
+                    <div class="nav-logo">
+                        <img src="./sppImages/shopeePay.svg" class="shopeepay-icon" alt="ShopeePay">
+                        <span class="shopeepay-text" data-lang="shopeepay">ShopeePay</span>
+                    </div>
+                    <div class="coin-balance">
+                        <img src="./sppImages/coin.svg" class="coin-icon" alt="Coin">
+                        <span class="coin-amount">0</span>
+                        <span class="coin-arrow">></span>
+                    </div>
+                </nav>
+            </header>
+        </div>
+
+        <div class="page-content">
+            <!-- Balance Section -->
+            <div class="balance-section">
+                <div class="balance-item">
+                    <span class="balance-title">
+                        <span class="title-wrapper">
+                            <span data-lang="shopeepay">ShopeePay</span>
+                            <img src="./sppImages/eye.svg" class="eye-icon" alt="View">
+                        </span>
+                    </span>
+                    <span class="balance-amount">1,000.00</span>
+                </div>
+                <div class="balance-divider"></div>
+                <div class="balance-item">
+                    <span class="balance-title" data-lang="splaylater">SPlayLater</span>
+                    <span class="balance-amount">5,000.00</span>
+                </div>
+            </div>
+            
+            <!-- Primary Features -->
+            <div class="primary-features">
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <img src="./sppImages/topup.svg" alt="Topup">
+                    </div>
+                    <span class="feature-text" data-lang="topup">Topup</span>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <img src="./sppImages/scan.svg" alt="Scan and Pay">
+                    </div>
+                    <span class="feature-text" data-lang="scan_pay">Scan & Pay</span>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <img src="./sppImages/transfer.svg" alt="Transfer">
+                    </div>
+                    <span class="feature-text" data-lang="transfer">Transfer</span>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <img src="./sppImages/vouchers.svg" alt="Vouchers">
+                    </div>
+                    <span class="feature-text" data-lang="vouchers">Vouchers</span>
+                </div>
+            </div>
+            
+            <main class="main-content">
+                <!-- Secondary Features -->
+                <div class="secondary-features">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <img src="./sppImages/local-service.svg" alt="Local Service">
+                        </div>
+                        <span class="feature-text" data-lang="local_service">Local Service</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <img src="./sppImages/shopee.svg" alt="Shopee">
+                        </div>
+                        <span class="feature-text" data-lang="shopee">Shopee</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <img src="./sppImages/food.svg" alt="Food">
+                        </div>
+                        <span class="feature-text" data-lang="food">Food</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <img src="./sppImages/spaylater.svg" alt="SPlayLater">
+                        </div>
+                        <span class="feature-text" data-lang="splaylater">SPlayLater</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <img src="./sppImages/seasycash.svg" alt="SEasyCash">
+                        </div>
+                        <span class="feature-text" data-lang="seasycash">SEasyCash</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <img src="./sppImages/insurance.svg" alt="Insurance">
+                        </div>
+                        <span class="feature-text" data-lang="insurance">Insurance</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <img src="./sppImages/seasypay.svg" alt="SEasyPay">
+                        </div>
+                        <span class="feature-text" data-lang="seasypay">SEasyPay</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <img src="./sppImages/more.svg" alt="More">
+                        </div>
+                        <span class="feature-text" data-lang="more">More</span>
+                    </div>
+                </div>
+
+                <!-- SEasyPay Advertisement -->
+                <div id="easypay-ad-container" class="easypay-ad" style="display: none;">
+                    <div class="new-label" data-lang="new">New!</div>
+                    <div class="easypay-content">
+                        <div class="easypay-info">
+                            <div class="easypay-title" data-lang="seasypay">SEasyPay</div>
+                            <div class="easypay-description" data-lang="zero_interest">0% interest on all installment plans for up to 1 month.</div>
+                            <div class="easypay-button" data-lang="activate_now">Active Now</div>
+                        </div>
+                        <img src="./sppImages/seasypay-promo.svg" class="easypay-image" alt="SEasyPay Promo">
+                    </div>
+                </div>
+
+                <!-- SEasyPay Active Status -->
+                <div id="easypay-status-container" class="easypay-status" style="display: none;">
+                    <div class="easypay-content">
+                        <div class="easypay-info">
+                            <div class="top-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <!-- 为SEasyPay标题添加唯一ID，便于JavaScript更直接地控制 -->
+                                <div class="title-container" style="display: flex; align-items: center;">
+                                    <div id="easypay-status-title" class="easypay-title" style="color: #333 !important; font-weight: 600; margin-right: 8px; display: inline-block;" data-lang="seasypay">SEasyPay</div>
+                                    <!-- 将Overdue标签紧贴标题，调整边距和垂直对齐 -->
+                                    <div id="overdue-label" class="overdue-label" style="display: none; color: white; font-size: 0.42rem; font-weight: bold; background-color: #ff3b30; padding: 0.15rem 0.3rem; border-radius: 0.15rem; vertical-align: middle; letter-spacing: 0.03rem; text-transform: uppercase; box-shadow: 0 2px 4px rgba(255, 0, 0, 0.2);" data-lang="overdue">Overdue</div>
+                                </div>
+                                <div class="easypay-button pay-now-btn" style="align-self: center; margin-top: 0; display: flex; align-items: center; height: 28px;" data-lang="pay_now">Pay Now</div>
+                            </div>
+                            <div class="loan-details">
+                                <div class="loan-amount">
+                                    <span class="label" data-lang="outstanding_amount">Outstanding Amount:</span>
+                                    <span class="value">฿ 345.00</span>
+                                </div>
+                                <div class="loan-due">
+                                    <span class="label" data-lang="next_due_date">Next Due Date:</span>
+                                    <span class="value">17-07-2024</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Bottom Navigation -->
+            <nav class="bottom-nav">
+                <div class="nav-item active">
+                    <div class="nav-icon">
+                        <img src="./sppImages/home-active.svg" alt="Home">
+                    </div>
+                    <span class="nav-text" data-lang="home">Home</span>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">
+                        <img src="./sppImages/history.svg" alt="History">
+                    </div>
+                    <span class="nav-text" data-lang="history">History</span>
+                </div>
+                <div class="nav-item scan-item">
+                    <div class="nav-icon">
+                        <img src="./sppImages/scan-special.svg" alt="Scan & Pay">
+                    </div>
+                    <span class="nav-text" data-lang="scan_pay">Scan & Pay</span>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">
+                        <img src="./sppImages/notification.svg" alt="Notification">
+                    </div>
+                    <span class="nav-text" data-lang="notification">Notification</span>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">
+                        <img src="./sppImages/me.svg" alt="Me">
+                    </div>
+                    <span class="nav-text" data-lang="me">Me</span>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <script>
+        // Prevent overscrolling at the top to avoid header separation
+        document.addEventListener('scroll', function(e) {
+            if (window.scrollY < 0) {
+                window.scrollTo(0, 0);
+            }
+            
+            // Ensure header stays above content when scrolling
+            const header = document.querySelector('.fixed-header');
+            if (window.scrollY > 0) {
+                header.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.boxShadow = 'none';
+            }
+        }, { passive: false });
+
+        // 初始化语言设置
+        document.addEventListener('DOMContentLoaded', function() {
+            // 确保所有翻译都已应用
+            updatePageLanguage();
+        });
+
+        // 控制SEasyPay广告卡片显示逻辑
+        document.addEventListener('DOMContentLoaded', function() {
+            // 从URL获取参数
+            const urlParams = new URLSearchParams(window.location.search);
+            // 如果没有参数，默认使用active和1
+            const sellerLoanStatus = urlParams.get('sellerLoanStatus') || 'active';
+            const WLStatus = urlParams.get('WLStatus') || '1';
+            
+            console.log("Current status:", sellerLoanStatus, WLStatus);
+            
+            // 获取广告卡片和状态卡片元素
+            const easypayAdContainer = document.getElementById('easypay-ad-container');
+            const easypayStatusContainer = document.getElementById('easypay-status-container');
+            
+            // 计算泰国时间的今天和7天后日期
+            const calculateThaiDate = () => {
+                // 创建一个日期对象，使用泰国时区(UTC+7)
+                const now = new Date();
+                const thaiTimeOffset = 7 * 60; // 泰国时区偏移量（分钟）
+                const localTimeOffset = now.getTimezoneOffset(); // 本地时区偏移量（分钟）
+                const totalOffsetMinutes = thaiTimeOffset + localTimeOffset;
+                
+                // 调整到泰国时间
+                const thaiNow = new Date(now.getTime() + totalOffsetMinutes * 60 * 1000);
+                
+                // 计算7天后的日期
+                const dueDate = new Date(thaiNow);
+                dueDate.setDate(thaiNow.getDate() + 7);
+                
+                // 格式化为dd-mm-yyyy格式
+                const formatDate = (date) => {
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const year = date.getFullYear();
+                    return `${day}-${month}-${year}`;
+                };
+                
+                return {
+                    today: formatDate(thaiNow),
+                    dueDate: formatDate(dueDate)
+                };
+            };
+            
+            // 显示泰国时间的状态卡片，包括当前日期和7天后的到期日
+            const updateDates = () => {
+                const dates = calculateThaiDate();
+                const dueDateElement = document.querySelector('.loan-due .value');
+                if (dueDateElement) {
+                    dueDateElement.textContent = dates.dueDate;
+                }
+                
+                // 可以在控制台查看计算结果
+                console.log('泰国当前日期:', dates.today);
+                console.log('泰国7天后日期:', dates.dueDate);
+            };
+            
+            // 根据参数控制显示
+            if (sellerLoanStatus === 'inactive' && WLStatus === '1') {
+                // 显示广告
+                easypayAdContainer.style.display = 'block';
+                easypayStatusContainer.style.display = 'none';
+                
+                // 添加点击事件 - 跳转到landingPage
+                easypayAdContainer.style.cursor = 'pointer';
+                easypayAdContainer.addEventListener('click', function() {
+                    window.location.href = 'landingPage.html';
+                });
+                
+                // Active Now按钮点击事件 - 阻止事件冒泡，仍跳转到landingPage
+                const activeNowBtn = easypayAdContainer.querySelector('.easypay-button');
+                if (activeNowBtn) {
+                    activeNowBtn.addEventListener('click', function(event) {
+                        event.stopPropagation();
+                        window.location.href = 'landingPage.html';
+                    });
+                }
+            } else if (sellerLoanStatus === 'normal' && WLStatus === '1') {
+                // 显示状态
+                easypayAdContainer.style.display = 'none';
+                easypayStatusContainer.style.display = 'block';
+                
+                // 确保标题为黑色
+                const titleElement = document.getElementById('easypay-status-title');
+                if (titleElement) {
+                    titleElement.style.cssText = 'color: #333 !important; font-weight: 600; margin-right: 8px; display: inline-block;';
+                    console.log('Title color set to BLACK');
+                }
+                
+                // 确保逾期标签隐藏
+                const overdueLabel = document.getElementById('overdue-label');
+                if (overdueLabel) {
+                    overdueLabel.style.display = 'none';
+                }
+                
+                // 更新到期日期
+                updateDates();
+                
+                // 添加点击事件处理器
+                const statusContainer = document.getElementById('easypay-status-container');
+                statusContainer.style.cursor = 'pointer'; // 改变鼠标样式，提示可点击
+                
+                // 卡片点击跳转到homePage
+                statusContainer.addEventListener('click', function() {
+                    window.location.href = 'homePage.html';
+                });
+                
+                // Pay Now按钮跳转到repayPage并传递参数
+                const payNowBtn = document.querySelector('.pay-now-btn');
+                payNowBtn.addEventListener('click', function(event) {
+                    event.stopPropagation(); // 阻止事件冒泡到卡片
+                    
+                    // 获取Outstanding Amount值（移除฿符号和空格）
+                    const amountElement = document.querySelector('.loan-amount .value');
+                    const amountValue = amountElement.textContent.replace('฿', '').trim();
+                    
+                    // 获取Due Date值
+                    const dueDateElement = document.querySelector('.loan-due .value');
+                    const dueDateValue = dueDateElement.textContent;
+                    
+                    // 获取当前泰国日期作为appliedTime
+                    const dates = calculateThaiDate();
+                    const appliedTime = dates.today;
+                    
+                    // totalPayment固定值
+                    const totalPayment = '300.00';
+                    
+                    // 构建URL并跳转到repayPage
+                    const repayPageUrl = `repayPage.html?totalPayment=${totalPayment}&dueDate=${dueDateValue}&appliedTime=${appliedTime}&repayAmount=${amountValue}`;
+                    window.location.href = repayPageUrl;
+                });
+            } else if (sellerLoanStatus === 'overdue' && WLStatus === '1') {
+                // 显示带有逾期警示的状态卡片
+                easypayAdContainer.style.display = 'none';
+                easypayStatusContainer.style.display = 'block';
+                
+                // 确保标题为红色
+                const titleElement = document.getElementById('easypay-status-title');
+                if (titleElement) {
+                    // 使用更强烈的颜色和重要标记
+                    titleElement.style.cssText = 'color: #FF0000 !important; font-weight: 700; margin-right: 8px; display: inline-block;';
+                    console.log('Title color set to RED');
+                }
+                
+                // 显示逾期标签
+                const overdueLabel = document.getElementById('overdue-label');
+                if (overdueLabel) {
+                    overdueLabel.style.display = 'inline-block';
+                    console.log('Overdue label displayed');
+                }
+                
+                console.log('Overdue status styling applied');
+                
+                // 更新到期日期
+                updateDates();
+                
+                // 添加点击事件处理器
+                const statusContainer = document.getElementById('easypay-status-container');
+                statusContainer.style.cursor = 'pointer';
+                
+                // 卡片点击跳转到homePage
+                statusContainer.addEventListener('click', function() {
+                    window.location.href = 'homePage.html';
+                });
+                
+                // Pay Now按钮颜色更改为红色以突出紧急性
+                const payNowBtn = document.querySelector('.pay-now-btn');
+                if (payNowBtn) {
+                    payNowBtn.style.backgroundColor = '#ff3b30';
+                    
+                    // Pay Now按钮跳转到repayPage并传递参数
+                    payNowBtn.addEventListener('click', function(event) {
+                        event.stopPropagation(); // 阻止事件冒泡到卡片
+                        
+                        // 获取Outstanding Amount值（移除฿符号和空格）
+                        const amountElement = document.querySelector('.loan-amount .value');
+                        const amountValue = amountElement.textContent.replace('฿', '').trim();
+                        
+                        // 获取Due Date值
+                        const dueDateElement = document.querySelector('.loan-due .value');
+                        const dueDateValue = dueDateElement.textContent;
+                        
+                        // 获取当前泰国日期作为appliedTime
+                        const dates = calculateThaiDate();
+                        const appliedTime = dates.today;
+                        
+                        // totalPayment固定值
+                        const totalPayment = '300.00';
+                        
+                        // 构建URL并跳转到repayPage，添加逾期标志
+                        const repayPageUrl = `repayPage.html?totalPayment=${totalPayment}&dueDate=${dueDateValue}&appliedTime=${appliedTime}&repayAmount=${amountValue}&status=overdue`;
+                        window.location.href = repayPageUrl;
+                    });
+                }
+            } else if (sellerLoanStatus === 'inactive' && WLStatus === '0') {
+                // 隐藏卡片
+                easypayAdContainer.style.display = 'none';
+                easypayStatusContainer.style.display = 'none';
+                
+                // 将SEasyPay功能项替换为Electricity Bill
+                const secondarySeasyPayItem = document.querySelector('.secondary-features .feature-item:nth-child(7)');
+                if (secondarySeasyPayItem) {
+                    // 修改图标和文字
+                    const iconImg = secondarySeasyPayItem.querySelector('.feature-icon img');
+                    const featureText = secondarySeasyPayItem.querySelector('.feature-text');
+                    
+                    if (iconImg && featureText) {
+                        iconImg.src = './sppImages/electricity.svg';
+                        iconImg.alt = 'Electricity Bill';
+                        featureText.textContent = 'Electricity Bill';
+                        featureText.setAttribute('data-lang', 'electricity_bill');
+                        
+                        // 设置默认鼠标样式（非指针）
+                        secondarySeasyPayItem.style.cursor = 'default';
+                        
+                        // 确保没有任何点击事件（通过克隆替换来移除事件监听器）
+                        secondarySeasyPayItem.replaceWith(secondarySeasyPayItem.cloneNode(true));
+                        console.log('Electricity Bill item replaced, with no click action');
+                    }
+                }
+            } else {
+                // 都不显示
+                easypayAdContainer.style.display = 'none';
+                easypayStatusContainer.style.display = 'none';
+            }
+            
+            // 根据不同条件为SEasyPay图标添加不同的点击事件
+            const secondarySeasyPayItem = document.querySelector('.secondary-features .feature-item:nth-child(7)');
+            if (secondarySeasyPayItem) {
+                // 确保不是电费图标的情况下添加点击事件
+                if (!(sellerLoanStatus === 'inactive' && WLStatus === '0')) {
+                    secondarySeasyPayItem.style.cursor = 'pointer'; // 改变鼠标样式，提示可点击
+                    
+                    // 根据条件设置不同的跳转页面
+                    if (sellerLoanStatus === 'inactive' && WLStatus === '1') {
+                        // 跳转到landingPage
+                        secondarySeasyPayItem.addEventListener('click', function() {
+                            window.location.href = 'landingPage.html';
+                            console.log('SEasyPay icon clicked, redirecting to landingPage.html');
+                        });
+                    } else {
+                        // 其他情况跳转到homePage
+                        secondarySeasyPayItem.addEventListener('click', function() {
+                            window.location.href = 'homePage.html';
+                            console.log('SEasyPay icon clicked, redirecting to homePage.html');
+                        });
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html> 

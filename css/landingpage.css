@@ -1,0 +1,280 @@
+.anticon {
+  display: inline-block;
+  color: inherit;
+  font-style: normal;
+  line-height: 0;
+  text-align: center;
+  text-transform: none;
+  vertical-align: -0.125em;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.anticon > * {
+  line-height: 1;
+}
+
+.anticon svg {
+  display: inline-block;
+}
+
+.anticon::before {
+  display: none;
+}
+
+.anticon .anticon-icon {
+  display: block;
+}
+
+.anticon[tabindex] {
+  cursor: pointer;
+}
+
+.anticon-spin::before,
+.anticon-spin {
+  display: inline-block;
+  -webkit-animation: loadingCircle 1s infinite linear;
+  animation: loadingCircle 1s infinite linear;
+}
+
+@-webkit-keyframes loadingCircle {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes loadingCircle {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+.loading-bg {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  left: 0;
+  top: 0;
+  background-color: white;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+/* 添加其他从landingpage.html中提取的CSS样式 */
+/* 这里只展示了部分样式，实际应该包含所有从landingpage.html中提取的样式 */
+
+/* 标题样式 */
+.title {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+}
+
+.title .title_text {
+  font-style: italic;
+  font-weight: 500;
+  font-size: .36rem;
+  line-height: .42rem;
+  text-align: center;
+  color: rgba(0,0,0,.87);
+}
+
+.title .left_line, .title .right_line {
+  width: .8rem;
+  height: 1px;
+  -webkit-transform: scaleY(.5);
+  transform: scaleY(.5);
+}
+
+.title .left_line {
+  background: -webkit-linear-gradient(left,rgba(238,77,45,0),#ee4d2d);
+  background: linear-gradient(90deg,rgba(238,77,45,0),#ee4d2d);
+  margin-right: .24rem;
+}
+
+.title .right_line {
+  background: -webkit-linear-gradient(left,#ee4d2d,rgba(238,77,45,0));
+  background: linear-gradient(90deg,#ee4d2d,rgba(238,77,45,0));
+  margin-left: .24rem;
+}
+
+/* 福利列表样式 */
+.benefit_title {
+  margin-top: .72rem;
+}
+
+.benefit_list {
+  margin-top: .32rem;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+.benefit_list .benefit_item {
+  margin-top: .16rem;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-align-items: center;
+  align-items: center;
+  padding: 0 .32rem;
+  width: 7.02rem;
+  height: 1.12rem;
+  border-radius: .08rem;
+}
+
+.benefit_list .benefit_item_desc {
+  font-weight: 400;
+  font-size: .28rem;
+  line-height: .32rem;
+  display: -webkit-flex;
+  display: flex;
+  color: rgba(0,0,0,.87);
+}
+
+.benefit_list .benefit_item_desc span span {
+  font-weight: 700;
+}
+
+.benefit_list .benefit_item_icon {
+  margin-right: .16rem;
+  width: .8rem;
+  height: .8rem;
+}
+
+/* 工作流程样式 */
+.how_it_work {
+  margin-top: .72rem;
+}
+
+.how_it_work_list {
+  margin-top: .04rem;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  -webkit-justify-content: center;
+  justify-content: center;
+}
+
+.how_it_work_list .how_it_work_item {
+  display: -webkit-flex;
+  display: flex;
+  margin-top: .4rem;
+  margin-left: .56rem;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+.how_it_work_list .how_it_work_item_no {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  align-items: center;
+  width: .52rem;
+  height: .52rem;
+  background: rgba(238,77,45,.3);
+  border-radius: 50%;
+  font-weight: 500;
+  font-size: .28rem;
+  line-height: .32rem;
+  text-align: center;
+  color: #fff;
+}
+
+.how_it_work_list .how_it_work_item_no .inner {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  align-items: center;
+  width: .4rem;
+  height: .4rem;
+  border-radius: 50%;
+  background: -webkit-linear-gradient(top,#ee4d2d,#ff7337);
+  background: linear-gradient(180deg,#ee4d2d,#ff7337);
+}
+
+.how_it_work_list .how_it_work_item_desc {
+  margin-left: .32rem;
+  font-weight: 500;
+  font-size: .28rem;
+  line-height: .32rem;
+  color: rgba(0,0,0,.87);
+}
+
+/* 按钮样式 */
+.find_btn {
+  margin: .72rem auto 0;
+  width: 7.02rem;
+  height: .88rem;
+  background: #fff;
+  border: 1px solid #ee4d2d;
+  border-radius: .08rem;
+  font-weight: 500;
+  font-size: .32rem;
+  line-height: .88rem;
+  text-align: center;
+  color: #ee4d2d;
+}
+
+.fixed_btn {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1.12rem;
+  background: #ee4d2d;
+  font-weight: 500;
+  font-size: .36rem;
+  line-height: 1.12rem;
+  text-align: center;
+  color: #fff;
+  z-index: 999;
+}
+
+/* 机构信息样式 */
+.agency {
+  margin: .72rem auto .72rem;
+  width: 7.02rem;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+.agency .pt_logo {
+  width: 2.4rem;
+  height: .8rem;
+}
+
+.agency span {
+  margin-top: .16rem;
+  font-weight: 400;
+  font-size: .24rem;
+  line-height: .28rem;
+  text-align: center;
+  color: rgba(0,0,0,.38);
+} 

@@ -1,0 +1,8 @@
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 白色圆形边框 -->
+  <circle cx="24" cy="24" r="24" fill="white"/>
+  <!-- 橙色圆形背景 -->
+  <circle cx="24" cy="24" r="20" fill="#ee4d2d"/>
+  <!-- 白色扫描框线条 -->
+  <path d="M14 18V14H18M30 14H34V18M34 30V34H30M18 34H14V30M18 22H30M18 26H30" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg> 
