@@ -6,355 +6,358 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payment Result</title>
     <link rel="stylesheet" href="sppStyles.css">
-    
+
     <!-- 内联翻译数据和功能 -->
     <script>
-    // 1. 基础配置和工具函数
-    const translations = {
-        "en": {
-            "payment_result": "Payment Result",
-            "view_qr": "View QR",
-            "redirect_text": "You will be redirect back to the merchant's website in",
-            "seconds": "seconds",
-            "go_now": "Go Now",
-            "you_paid": "You Paid",
-            "purchase_amount": "Purchase Amount",
-            "order_details": "Order Details",
-            "transaction_sn": "Transaction SN",
-            "order_sn": "Order SN",
-            "payment_method": "Payment Method",
-            "merchant_ref_id": "Merchant Ref ID",
-            "back_to_merchant": "Back to Merchant",
-            "seller_loan": "Seller Loan",
-            "promotion_title": "Enjoy 0% interest on all orders pay with Seller Loan",
-            "limited_offer_until": "Limited offer until 31-10-2025",
-            "more_details": "More details",
-            "loan_details": "Loan Details",
-            "loan_id": "Loan ID",
-            "loan_tenure": "Loan Tenure",
-            "loan_principle": "Loan Principle",
-            "loan_interest": "Loan Interest",
-            "7_days": "7 days",
-            "14_days": "14 days",
-            "1_month": "1 month"
-        },
-        "th": {
-            "payment_result": "ผลการชำระเงิน",
-            "view_qr": "ดู QR",
-            "redirect_text": "คุณจะถูกนำกลับไปยังเว็บไซต์ร้านค้าใน",
-            "seconds": "วินาที",
-            "go_now": "ไปตอนนี้",
-            "you_paid": "คุณชำระแล้ว",
-            "purchase_amount": "ยอดซื้อ",
-            "order_details": "รายละเอียดคำสั่งซื้อ",
-            "transaction_sn": "หมายเลขธุรกรรม",
-            "order_sn": "หมายเลขคำสั่งซื้อ",
-            "payment_method": "วิธีการชำระเงิน",
-            "merchant_ref_id": "รหัสอ้างอิงร้านค้า",
-            "back_to_merchant": "กลับไปที่ร้านค้า",
-            "seller_loan": "สินเชื่อผู้ขาย",
-            "promotion_title": "รับดอกเบี้ย 0% สำหรับทุกคำสั่งซื้อที่ชำระด้วยสินเชื่อผู้ขาย",
-            "limited_offer_until": "ข้อเสนอพิเศษถึง 31-10-2025",
-            "more_details": "รายละเอียดเพิ่มเติม",
-            "loan_details": "รายละเอียดเงินกู้",
-            "loan_id": "รหัสเงินกู้",
-            "loan_tenure": "ระยะเวลากู้",
-            "loan_principle": "เงินต้น",
-            "loan_interest": "ดอกเบี้ย",
-            "7_days": "7 วัน",
-            "14_days": "14 วัน",
-            "1_month": "1 เดือน"
-        }
-    };
-    
-    // 工具函数
-    function getCurrentLanguage() {
-        const savedLang = localStorage.getItem('selectedLanguage');
-        return (savedLang === 'en' || savedLang === 'th') ? savedLang : 'en';
-    }
-    
-    function translate(key) {
-        const lang = getCurrentLanguage();
-        return translations[lang] && translations[lang][key] ? translations[lang][key] : key;
-    }
-    
-    function updateTime() {
-        const now = new Date();
-        const timeString = now.toLocaleTimeString('en-US', { 
-            hour: 'numeric', 
-            minute: '2-digit',
-            hour12: false 
-        });
-        const timeElement = document.querySelector('.status-time');
-        if (timeElement) {
-            timeElement.textContent = timeString;
-        }
-    }
+        // 1. 基础配置和工具函数
+        const translations = {
+            "en": {
+                "payment_result": "Payment Result",
+                "view_qr": "View QR",
+                "redirect_text": "You will be redirect back to the merchant's website in",
+                "seconds": "seconds",
+                "go_now": "Go Now",
+                "you_paid": "You Paid",
+                "purchase_amount": "Purchase Amount",
+                "order_details": "Order Details",
+                "transaction_sn": "Transaction SN",
+                "order_sn": "Order SN",
+                "payment_method": "Payment Method",
+                "merchant_ref_id": "Merchant Ref ID",
+                "back_to_merchant": "Back to Merchant",
+                "seller_loan": "Seller Loan",
+                "promotion_title": "Enjoy 0% interest on all orders pay with Seller Loan",
+                "limited_offer_until": "Limited offer until 31-10-2025",
+                "more_details": "More details",
+                "loan_details": "Loan Details",
+                "loan_id": "Loan ID",
+                "loan_tenure": "Loan Tenure",
+                "loan_principle": "Loan Principle",
+                "loan_interest": "Loan Interest",
+                "7_days": "7 days",
+                "14_days": "14 days",
+                "1_month": "1 month"
+            },
+            "th": {
+                "payment_result": "ผลการชำระเงิน",
+                "view_qr": "ดู QR",
+                "redirect_text": "คุณจะถูกนำกลับไปยังเว็บไซต์ร้านค้าใน",
+                "seconds": "วินาที",
+                "go_now": "ไปตอนนี้",
+                "you_paid": "คุณชำระแล้ว",
+                "purchase_amount": "ยอดซื้อ",
+                "order_details": "รายละเอียดคำสั่งซื้อ",
+                "transaction_sn": "หมายเลขธุรกรรม",
+                "order_sn": "หมายเลขคำสั่งซื้อ",
+                "payment_method": "วิธีการชำระเงิน",
+                "merchant_ref_id": "รหัสอ้างอิงร้านค้า",
+                "back_to_merchant": "กลับไปที่ร้านค้า",
+                "seller_loan": "สินเชื่อผู้ขาย",
+                "promotion_title": "รับดอกเบี้ย 0% สำหรับทุกคำสั่งซื้อที่ชำระด้วยสินเชื่อผู้ขาย",
+                "limited_offer_until": "ข้อเสนอพิเศษถึง 31-10-2025",
+                "more_details": "รายละเอียดเพิ่มเติม",
+                "loan_details": "รายละเอียดเงินกู้",
+                "loan_id": "รหัสเงินกู้",
+                "loan_tenure": "ระยะเวลากู้",
+                "loan_principle": "เงินต้น",
+                "loan_interest": "ดอกเบี้ย",
+                "7_days": "7 วัน",
+                "14_days": "14 วัน",
+                "1_month": "1 เดือน"
+            }
+        };
 
-    // 2. 页面功能函数
-    function setLanguage() {
-        try {
+        // 工具函数
+        function getCurrentLanguage() {
+            const savedLang = localStorage.getItem('selectedLanguage');
+            return (savedLang === 'en' || savedLang === 'th') ? savedLang : 'en';
+        }
+
+        function translate(key) {
             const lang = getCurrentLanguage();
-            document.documentElement.lang = lang;
-            
-            const elements = document.querySelectorAll('[data-lang]');
-            elements.forEach(el => {
-                const key = el.getAttribute('data-lang');
-                if (key) {
-                    el.textContent = translate(key);
-                }
+            return translations[lang] && translations[lang][key] ? translations[lang][key] : key;
+        }
+
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', {
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: false
             });
-        } catch (error) {
-            console.error('Error setting language:', error);
+            const timeElement = document.querySelector('.status-time');
+            if (timeElement) {
+                timeElement.textContent = timeString;
+            }
         }
-    }
 
-    function navigateBackWithTransition(url) {
-        try {
-            const overlay = document.createElement('div');
-            overlay.className = 'page-transition';
-            document.body.appendChild(overlay);
+        // 2. 页面功能函数
+        function setLanguage() {
+            try {
+                const lang = getCurrentLanguage();
+                document.documentElement.lang = lang;
 
-            setTimeout(() => {
-                window.location.href = url;
-            }, 300);
-        } catch (error) {
-            console.error('Error during navigation:', error);
-            window.location.href = url; // Fallback to direct navigation
-        }
-    }
-
-    function handleOrderDetailsToggle() {
-        try {
-            const orderDetailsContent = document.getElementById('orderDetailsContent');
-            const orderDetailsIcon = document.getElementById('orderDetailsToggle');
-            
-            if (orderDetailsContent && orderDetailsIcon) {
-                orderDetailsContent.classList.toggle('show');
-                orderDetailsIcon.classList.toggle('rotated');
-            }
-        } catch (error) {
-            console.error('Error toggling order details:', error);
-        }
-    }
-
-    function handleLoanDetailsToggle() {
-        try {
-            const loanDetailsContent = document.getElementById('loanDetailsContent');
-            const loanDetailsIcon = document.getElementById('loanDetailsToggle');
-            
-            if (loanDetailsContent && loanDetailsIcon) {
-                loanDetailsContent.classList.toggle('show');
-                loanDetailsIcon.classList.toggle('rotated');
-            }
-        } catch (error) {
-            console.error('Error toggling loan details:', error);
-        }
-    }
-
-    function handleLoanIdClick(loanId, totalPayment, loanTerm) {
-        try {
-            const appliedTime = document.querySelector('.payment-time').textContent;
-            const [datePart] = appliedTime.split(',');
-            const [day, month, year] = datePart.trim().split('-').map(Number);
-            const appliedDate = new Date(year, month - 1, day);
-            let dueDate = new Date(appliedDate);
-            
-            switch(loanTerm) {
-                case '1':
-                    dueDate.setDate(appliedDate.getDate() + 7);
-                    break;
-                case '2':
-                    dueDate.setDate(appliedDate.getDate() + 14);
-                    break;
-                default:
-                    dueDate.setMonth(appliedDate.getMonth() + 1);
-            }
-            
-            const dueDateStr = dueDate.toLocaleDateString('en-GB', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric'
-            }).replace(/\//g, '-');
-            
-            const interestRate = 0.005;
-            const days = loanTerm === '1' ? 7 : (loanTerm === '2' ? 14 : 30);
-            const interestAmount = totalPayment * interestRate * days;
-            
-            const queryParams = new URLSearchParams({
-                appliedTime: appliedTime,
-                loanTenure: document.getElementById('loanTenure').textContent,
-                loanId: loanId,
-                totalPayment: totalPayment,
-                instalmentFee: interestAmount.toFixed(2),
-                dueDate: dueDateStr
-            });
-            
-            window.location.href = `loanDetailPage.html?${queryParams.toString()}`;
-        } catch (error) {
-            console.error('Error handling loan ID click:', error);
-        }
-    }
-
-    // 3. 页面初始化函数
-    function initializePage() {
-        try {
-            // 初始化页面数据和显示
-            const urlParams = new URLSearchParams(window.location.search);
-            const paymentMethod = urlParams.get('paymentMethod');
-            const loanTerm = urlParams.get('loanTerm') || '3';
-            const totalPayment = parseFloat(urlParams.get('totalPayment')) || 300.00;
-            const appliedTime = urlParams.get('appliedTime');
-
-            // 更新支付时间显示
-            if (appliedTime) {
-                const timeElement = document.querySelector('.payment-time');
-                if (timeElement) {
-                    timeElement.textContent = appliedTime;
-                }
-            }
-
-            // 处理促销banner显示
-            const promotionBanner = document.getElementById('promotionBanner');
-            const WLStatus = urlParams.get('WLStatus') || '0';
-            if (promotionBanner && paymentMethod === 'shopeepay' && WLStatus === '1') {
-                promotionBanner.style.display = 'block';
-            }
-
-            // 处理贷款卡片显示和详情
-            const loanCard = document.getElementById('loanCard');
-            if (loanCard && (paymentMethod === 'spaylate' || !paymentMethod)) {
-                loanCard.style.display = 'block';
-                
-                const loanTenure = document.getElementById('loanTenure');
-                const loanPrinciple = document.getElementById('loanPrinciple');
-                const loanInterest = document.getElementById('loanInterest');
-                
-                if (loanTenure && loanPrinciple && loanInterest) {
-                    let tenureKey;
-                    let days;
-                    switch(loanTerm) {
-                        case '1':
-                            tenureKey = '7_days';
-                            days = 7;
-                            break;
-                        case '2':
-                            tenureKey = '14_days';
-                            days = 14;
-                            break;
-                        default:
-                            tenureKey = '1_month';
-                            days = 30;
-                    }
-                    
-                    loanTenure.setAttribute('data-lang', tenureKey);
-                    loanTenure.textContent = translate(tenureKey);
-                    loanPrinciple.textContent = `฿ ${totalPayment.toFixed(2)}`;
-                    
-                    const interestRate = 0.005;
-                    const interestAmount = totalPayment * interestRate * days;
-                    loanInterest.textContent = `฿ ${interestAmount.toFixed(2)}`;
-                }
-            }
-
-            // 初始化倒计时
-            let countdown = 5;
-            const countdownElement = document.getElementById('countdown');
-            if (countdownElement) {
-                const countdownInterval = setInterval(() => {
-                    countdown--;
-                    countdownElement.textContent = countdown;
-                    if (countdown <= 0) {
-                        clearInterval(countdownInterval);
-                    }
-                }, 1000);
-            }
-
-            // 初始化事件监听器
-            initializeEventListeners(totalPayment, loanTerm);
-        } catch (error) {
-            console.error('Error initializing page:', error);
-        }
-    }
-
-    function initializeEventListeners(totalPayment, loanTerm) {
-        try {
-            // 设置后退按钮事件
-            const backButton = document.getElementById('backToMerchant');
-            if (backButton) {
-                backButton.addEventListener('click', function () {
-                    navigateBackWithTransition('ruammitr.html');
-                });
-            }
-
-            // 设置订单详情切换事件
-            const orderDetailsH2 = document.querySelector('#orderCard h2');
-            if (orderDetailsH2) {
-                orderDetailsH2.addEventListener('click', handleOrderDetailsToggle);
-            }
-
-            // 设置贷款详情切换事件
-            const loanDetailsH2 = document.querySelector('#loanCard h2');
-            if (loanDetailsH2) {
-                loanDetailsH2.addEventListener('click', handleLoanDetailsToggle);
-            }
-
-            // 设置立即跳转链接事件
-            const goNowLink = document.getElementById('goNowLink');
-            if (goNowLink) {
-                goNowLink.href = '#';
-                goNowLink.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    navigateBackWithTransition('ruammitr.html');
-                });
-            }
-
-            // 设置贷款ID点击事件
-            const loanIdLink = document.querySelector('.loan-id-link');
-            if (loanIdLink) {
-                loanIdLink.addEventListener('click', function() {
-                    handleLoanIdClick(this.textContent, totalPayment, loanTerm);
-                });
-            }
-        } catch (error) {
-            console.error('Error initializing event listeners:', error);
-        }
-    }
-
-    // 4. 页面加载完成后的初始化
-    document.addEventListener('DOMContentLoaded', function() {
-        try {
-            
-            // 设置语言
-
-            setLanguage();
-            
-            // 更新时间
-            updateTime();
-            setInterval(updateTime, 60000);
-            
-            // 监听DOM变化，为动态添加的元素应用翻译
-            /*
-            const observer = new MutationObserver((mutations) => {
-                mutations.forEach((mutation) => {
-                    if (mutation.addedNodes.length) {
-                        setLanguage();
+                const elements = document.querySelectorAll('[data-lang]');
+                elements.forEach(el => {
+                    const key = el.getAttribute('data-lang');
+                    if (key) {
+                        el.textContent = translate(key);
                     }
                 });
-            });
-            
-            observer.observe(document.body, {
-                childList: true,
-                subtree: true
-            });
-            */
-
-            // 初始化页面
-            initializePage();
-        } catch (error) {
-            console.error('Error during DOMContentLoaded:', error);
+            } catch (error) {
+                console.error('Error setting language:', error);
+            }
         }
-    });
+
+        function navigateBackWithTransition(url) {
+            try {
+                const overlay = document.createElement('div');
+                overlay.className = 'page-transition';
+                document.body.appendChild(overlay);
+
+                setTimeout(() => {
+                    window.location.href = url;
+                }, 300);
+            } catch (error) {
+                console.error('Error during navigation:', error);
+                window.location.href = url; // Fallback to direct navigation
+            }
+        }
+
+        function handleOrderDetailsToggle() {
+            try {
+                const orderDetailsContent = document.getElementById('orderDetailsContent');
+                const orderDetailsIcon = document.getElementById('orderDetailsToggle');
+
+                if (orderDetailsContent && orderDetailsIcon) {
+                    orderDetailsContent.classList.toggle('show');
+                    orderDetailsIcon.classList.toggle('rotated');
+                }
+            } catch (error) {
+                console.error('Error toggling order details:', error);
+            }
+        }
+
+        function handleLoanDetailsToggle() {
+            try {
+                const loanDetailsContent = document.getElementById('loanDetailsContent');
+                const loanDetailsIcon = document.getElementById('loanDetailsToggle');
+
+                if (loanDetailsContent && loanDetailsIcon) {
+                    loanDetailsContent.classList.toggle('show');
+                    loanDetailsIcon.classList.toggle('rotated');
+                }
+            } catch (error) {
+                console.error('Error toggling loan details:', error);
+            }
+        }
+
+        function handleLoanIdClick(loanId, totalPayment, loanTerm) {
+            try {
+                const appliedTime = document.querySelector('.payment-time').textContent;
+                const [datePart] = appliedTime.split(',');
+                const [day, month, year] = datePart.trim().split('-').map(Number);
+                const appliedDate = new Date(year, month - 1, day);
+                let dueDate = new Date(appliedDate);
+
+                switch (loanTerm) {
+                    case '1':
+                        dueDate.setDate(appliedDate.getDate() + 7);
+                        break;
+                    case '2':
+                        dueDate.setDate(appliedDate.getDate() + 14);
+                        break;
+                    default:
+                        dueDate.setMonth(appliedDate.getMonth() + 1);
+                }
+
+                const dueDateStr = dueDate.toLocaleDateString('en-GB', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                }).replace(/\//g, '-');
+
+                const interestRate = 0.005;
+                const days = loanTerm === '1' ? 7 : (loanTerm === '2' ? 14 : 30);
+                const interestAmount = totalPayment * interestRate * days;
+
+                const queryParams = new URLSearchParams({
+                    appliedTime: appliedTime,
+                    loanTenure: document.getElementById('loanTenure').textContent,
+                    loanId: loanId,
+                    totalPayment: totalPayment,
+                    instalmentFee: interestAmount.toFixed(2),
+                    dueDate: dueDateStr
+                });
+
+                window.location.href = `loanDetailPage.html?${queryParams.toString()}`;
+            } catch (error) {
+                console.error('Error handling loan ID click:', error);
+            }
+        }
+
+        // 3. 页面初始化函数
+        function initializePage() {
+            try {
+                // 初始化页面数据和显示
+                const urlParams = new URLSearchParams(window.location.search);
+                const paymentMethod = urlParams.get('paymentMethod');
+                const loanTerm = urlParams.get('loanTerm') || '3';
+                const totalPayment = parseFloat(urlParams.get('totalPayment')) || 300.00;
+                const appliedTime = urlParams.get('appliedTime');
+
+                // 更新支付时间显示
+                if (appliedTime) {
+                    const timeElement = document.querySelector('.payment-time');
+                    if (timeElement) {
+                        timeElement.textContent = appliedTime;
+                    }
+                }
+
+                // 处理促销banner显示
+                const promotionBanner = document.getElementById('promotionBanner');
+                const WLStatus = urlParams.get('WLStatus') || '0';
+                if (promotionBanner && paymentMethod === 'shopeepay' && WLStatus === '1') {
+                    promotionBanner.style.display = 'block';
+                }
+
+                // 处理贷款卡片显示和详情
+                const loanCard = document.getElementById('loanCard');
+                if (loanCard && (paymentMethod === 'spaylate' || !paymentMethod)) {
+                    loanCard.style.display = 'block';
+
+                    const loanTenure = document.getElementById('loanTenure');
+                    const loanPrinciple = document.getElementById('loanPrinciple');
+                    const loanInterest = document.getElementById('loanInterest');
+
+                    if (loanTenure && loanPrinciple && loanInterest) {
+                        let tenureKey;
+                        let days;
+                        switch (loanTerm) {
+                            case '1':
+                                tenureKey = '7_days';
+                                days = 7;
+                                break;
+                            case '2':
+                                tenureKey = '14_days';
+                                days = 14;
+                                break;
+                            default:
+                                tenureKey = '1_month';
+                                days = 30;
+                        }
+
+                        loanTenure.setAttribute('data-lang', tenureKey);
+                        loanTenure.textContent = translate(tenureKey);
+                        loanPrinciple.textContent = `฿ ${totalPayment.toFixed(2)}`;
+
+                        const interestRate = 0.005;
+                        const interestAmount = totalPayment * interestRate * days;
+                        loanInterest.textContent = `฿ ${interestAmount.toFixed(2)}`;
+                    }
+                }
+
+                // 初始化倒计时
+                let countdown = 5;
+                const countdownElement = document.getElementById('countdown');
+                if (countdownElement) {
+                    const countdownInterval = setInterval(() => {
+                        countdown--;
+                        countdownElement.textContent = countdown;
+                        if (countdown <= 0) {
+                            clearInterval(countdownInterval);
+                        }
+                    }, 1000);
+                }
+
+                // 初始化事件监听器
+                initializeEventListeners(totalPayment, loanTerm);
+            } catch (error) {
+                console.error('Error initializing page:', error);
+            }
+        }
+
+        function initializeEventListeners(totalPayment, loanTerm) {
+            try {
+                // 设置后退按钮事件
+                const backButton = document.getElementById('backToMerchant');
+                if (backButton) {
+                    backButton.addEventListener('click', function () {
+                        navigateBackWithTransition('ruammitr.html');
+                    });
+                }
+
+                // 设置订单详情切换事件
+                const orderDetailsH2 = document.querySelector('#orderCard h2');
+                if (orderDetailsH2) {
+                    orderDetailsH2.addEventListener('click', handleOrderDetailsToggle);
+                }
+
+                // 设置贷款详情切换事件
+                const loanDetailsH2 = document.querySelector('#loanCard h2');
+                if (loanDetailsH2) {
+                    loanDetailsH2.addEventListener('click', handleLoanDetailsToggle);
+                }
+
+                // 设置立即跳转链接事件
+                const goNowLink = document.getElementById('goNowLink');
+                if (goNowLink) {
+                    goNowLink.href = '#';
+                    goNowLink.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        navigateBackWithTransition('ruammitr.html');
+                    });
+                }
+
+                // 设置贷款ID点击事件
+                const loanIdLink = document.querySelector('.loan-id-link');
+                if (loanIdLink) {
+                    loanIdLink.addEventListener('click', function () {
+                        handleLoanIdClick(this.textContent, totalPayment, loanTerm);
+                    });
+                }
+            } catch (error) {
+                console.error('Error initializing event listeners:', error);
+            }
+        }
+
+        // 4. 页面加载完成后的初始化
+        document.addEventListener('DOMContentLoaded', function () {
+            try {
+
+                // 设置语言
+
+                setLanguage();
+
+                // 更新时间
+                updateTime();
+                setInterval(updateTime, 60000);
+
+
+                // 监听DOM变化，为动态添加的元素应用翻译
+                const observer = new MutationObserver((mutations) => {
+                    mutations.forEach((mutation) => {
+                        if (mutation.addedNodes.length) {
+                            // 当有新元素添加到DOM时，重新应用翻译
+                            setLanguage();
+                        }
+                    });
+                });
+
+                // 开始观察document.body及其所有子元素的变化
+                observer.observe(document.body, {
+                    childList: true,
+                    subtree: true
+                });
+
+
+
+                // 初始化页面
+                initializePage();
+            } catch (error) {
+                console.error('Error during DOMContentLoaded:', error);
+            }
+        });
     </script>
     <style>
         /* Global styles and reset */
@@ -385,7 +388,8 @@
             background: linear-gradient(180deg, #ffffff 0%, #ffffff 80%, #f5f5f5 100%);
             width: 100%;
             position: fixed;
-            top: 24px; /* Space for status bar */
+            top: 24px;
+            /* Space for status bar */
             left: 0;
             z-index: 100;
         }
@@ -432,24 +436,69 @@
         }
 
         @keyframes drawCircle {
-            0% { stroke-dashoffset: 183; opacity: 1; }
-            25% { stroke-dashoffset: 0; opacity: 1; }
-            90% { stroke-dashoffset: 0; opacity: 1; }
-            100% { stroke-dashoffset: 0; opacity: 0; }
+            0% {
+                stroke-dashoffset: 183;
+                opacity: 1;
+            }
+
+            25% {
+                stroke-dashoffset: 0;
+                opacity: 1;
+            }
+
+            90% {
+                stroke-dashoffset: 0;
+                opacity: 1;
+            }
+
+            100% {
+                stroke-dashoffset: 0;
+                opacity: 0;
+            }
         }
 
         @keyframes fillCircle {
-            0%, 30% { fill-opacity: 0; }
-            40% { fill-opacity: 1; }
-            90% { fill-opacity: 1; }
-            100% { fill-opacity: 0; }
+
+            0%,
+            30% {
+                fill-opacity: 0;
+            }
+
+            40% {
+                fill-opacity: 1;
+            }
+
+            90% {
+                fill-opacity: 1;
+            }
+
+            100% {
+                fill-opacity: 0;
+            }
         }
 
         @keyframes drawCheckmark {
-            0%, 40% { stroke-dashoffset: 30; opacity: 1; }
-            60% { stroke-dashoffset: 0; opacity: 1; }
-            90% { stroke-dashoffset: 0; opacity: 1; }
-            100% { stroke-dashoffset: 0; opacity: 0; }
+
+            0%,
+            40% {
+                stroke-dashoffset: 30;
+                opacity: 1;
+            }
+
+            60% {
+                stroke-dashoffset: 0;
+                opacity: 1;
+            }
+
+            90% {
+                stroke-dashoffset: 0;
+                opacity: 1;
+            }
+
+            100% {
+                stroke-dashoffset: 0;
+                opacity: 0;
+            }
         }
 
         .payment-amount {
@@ -568,7 +617,8 @@
 
         .order-details-content.show {
             margin-top: 20px;
-            max-height: 500px; /* Adjust this value based on your content height */
+            max-height: 500px;
+            /* Adjust this value based on your content height */
             opacity: 1;
         }
 
@@ -586,10 +636,21 @@
             opacity: 1;
         }
 
-        .order-details-content.show .detail-row:nth-child(1) { transition-delay: 0.1s; }
-        .order-details-content.show .detail-row:nth-child(3) { transition-delay: 0.15s; }
-        .order-details-content.show .detail-row:nth-child(5) { transition-delay: 0.2s; }
-        .order-details-content.show .detail-row:nth-child(7) { transition-delay: 0.25s; }
+        .order-details-content.show .detail-row:nth-child(1) {
+            transition-delay: 0.1s;
+        }
+
+        .order-details-content.show .detail-row:nth-child(3) {
+            transition-delay: 0.15s;
+        }
+
+        .order-details-content.show .detail-row:nth-child(5) {
+            transition-delay: 0.2s;
+        }
+
+        .order-details-content.show .detail-row:nth-child(7) {
+            transition-delay: 0.25s;
+        }
 
         .detail-divider {
             height: 1px;
@@ -605,9 +666,17 @@
             opacity: 1;
         }
 
-        .order-details-content.show .detail-divider:nth-child(2) { transition-delay: 0.12s; }
-        .order-details-content.show .detail-divider:nth-child(4) { transition-delay: 0.17s; }
-        .order-details-content.show .detail-divider:nth-child(6) { transition-delay: 0.22s; }
+        .order-details-content.show .detail-divider:nth-child(2) {
+            transition-delay: 0.12s;
+        }
+
+        .order-details-content.show .detail-divider:nth-child(4) {
+            transition-delay: 0.17s;
+        }
+
+        .order-details-content.show .detail-divider:nth-child(6) {
+            transition-delay: 0.22s;
+        }
 
         .dropdown-icon {
             color: #999;
@@ -658,9 +727,12 @@
 
         .main-content {
             padding: 0 16px;
-            margin-top: 370px; /* Increased margin to account for success section height */
-            margin-bottom: 80px; /* Space for footer */
-            padding-top: 12px; /* Add some padding at the top */
+            margin-top: 370px;
+            /* Increased margin to account for success section height */
+            margin-bottom: 80px;
+            /* Space for footer */
+            padding-top: 12px;
+            /* Add some padding at the top */
         }
 
         .header-container {
@@ -668,13 +740,15 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 24px; /* Explicit height for status bar */
+            height: 24px;
+            /* Explicit height for status bar */
             z-index: 101;
             background: #fff;
         }
 
         .container {
-            padding-bottom: 0; /* Remove padding as we're using margin in main-content */
+            padding-bottom: 0;
+            /* Remove padding as we're using margin in main-content */
         }
 
         .nav-bar {
@@ -723,7 +797,8 @@
             padding: 16px;
             background: #fff;
             z-index: 100;
-            box-shadow: 0 -2px 6px rgba(0,0,0,0.1); /* Add shadow to separate from content */
+            box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.1);
+            /* Add shadow to separate from content */
         }
 
         body {
@@ -779,7 +854,7 @@
         }
 
         /* Add extra margin to first detail row */
-        .order-card h2 + .detail-row {
+        .order-card h2+.detail-row {
             margin-top: 8px;
         }
 
@@ -896,6 +971,7 @@
             from {
                 transform: translateX(-100%);
             }
+
             to {
                 transform: translateX(0);
             }
@@ -932,7 +1008,8 @@
                 <span data-lang="view_qr">View QR</span>
             </button>
             <div class="redirect-text">
-                <span data-lang="redirect_text">You will be redirect back to the merchant's website in</span> <span id="countdown">5</span> <span data-lang="seconds">seconds</span>
+                <span data-lang="redirect_text">You will be redirect back to the merchant's website in</span> <span
+                    id="countdown">5</span> <span data-lang="seconds">seconds</span>
                 <a href="#" class="redirect-link" id="goNowLink" data-lang="go_now">Go Now</a>
             </div>
         </div>
@@ -940,12 +1017,14 @@
         <main class="main-content">
             <!-- Merchant Card -->
             <div class="merchant-card">
-                <h2><img src="sppImages/philip_morris_logo.png" class="merchant-icon" alt="Philip Morris Logo">PMI Wholesaler Shop</h2>
+                <h2><img src="sppImages/philip_morris_logo.png" class="merchant-icon" alt="Philip Morris Logo">PMI
+                    Wholesaler Shop</h2>
             </div>
 
             <!-- Promotion Banner -->
             <div class="promotion-banner" id="promotionBanner" style="display: none;">
-                <div class="promotion-title" data-lang="promotion_title">Enjoy <span class="highlight">0% interest</span> on all orders pay with Seller Loan</div>
+                <div class="promotion-title" data-lang="promotion_title">Enjoy <span class="highlight">0%
+                        interest</span> on all orders pay with Seller Loan</div>
                 <div class="promotion-date" data-lang="limited_offer_until">Limited offer until 31-10-2025</div>
                 <a href="landingPage.html" class="promotion-link" data-lang="more_details">More details</a>
             </div>
@@ -1001,7 +1080,8 @@
                 <div class="order-details-content" id="loanDetailsContent">
                     <div class="detail-row">
                         <span class="detail-label" data-lang="loan_id">Loan ID</span>
-                        <span class="detail-value loan-id-link" style="color: #1E88E5; cursor: pointer;">202403201083043425001</span>
+                        <span class="detail-value loan-id-link"
+                            style="color: #1E88E5; cursor: pointer;">202403201083043425001</span>
                     </div>
                     <div class="detail-divider"></div>
                     <div class="detail-row">
