@@ -97,63 +97,51 @@
     
     // 初始化页面时设置语言和时间
     document.addEventListener('DOMContentLoaded', function() {
-        // 设置语言
-        setLanguage();
-        
-        // 更新时间
-        updateTime();
-        setInterval(updateTime, 60000);
-        
-        // 监听DOM变化，为动态添加的元素应用翻译
-        const observer = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-                if (mutation.addedNodes.length) {
-                    // 当有新元素添加到DOM时，重新应用翻译
-                    setLanguage();
+        try {
+            // 设置语言
+            setLanguage();
+            
+            // 更新时间
+            updateTime();
+            setInterval(updateTime, 60000);
+            
+            // Get applied time from URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const appliedTime = urlParams.get('appliedTime');
+            const WLStatus = urlParams.get('WLStatus') || '1';
+
+            // Update Pay Now button click handler
+            document.getElementById('payButton').addEventListener('click', function() {
+                const selectedPayment = document.querySelector('input[name="payment"]:checked').value;
+                const selectedLoanTerm = document.querySelector('input[name="loan-term"]:checked')?.value;
+                const totalPayment = 300.00;
+
+                // Show PIN drawer for both ShopeePay and Seller Loan payments
+                if (selectedPayment === 'shopeepay' || selectedPayment === 'spaylate') {
+                    // Create and show PIN drawer
+                    createPinDrawer();
+                    
+                    // The navigation will be handled after PIN verification in sppScript.js
+                    return;
                 }
+
+                // For other payment methods, proceed directly
+                const params = new URLSearchParams({
+                    paymentMethod: selectedPayment,
+                    totalPayment: totalPayment,
+                    appliedTime: appliedTime,
+                    WLStatus: WLStatus
+                });
+
+                if (selectedLoanTerm) {
+                    params.append('loanTerm', selectedLoanTerm);
+                }
+
+                window.location.href = `paymentResult.html?${params.toString()}`;
             });
-        });
-        
-        // 开始观察document.body及其所有子元素的变化
-        observer.observe(document.body, {
-            childList: true,
-            subtree: true
-        });
-        
-        // Get applied time from URL parameters
-        const urlParams = new URLSearchParams(window.location.search);
-        const appliedTime = urlParams.get('appliedTime');
-        const WLStatus = urlParams.get('WLStatus') || '1';
-
-        // Update Pay Now button click handler
-        document.getElementById('payButton').addEventListener('click', function() {
-            const selectedPayment = document.querySelector('input[name="payment"]:checked').value;
-            const selectedLoanTerm = document.querySelector('input[name="loan-term"]:checked')?.value;
-            const totalPayment = 300.00;
-
-            // Show PIN drawer for both ShopeePay and Seller Loan payments
-            if (selectedPayment === 'shopeepay' || selectedPayment === 'spaylate') {
-                // Create and show PIN drawer
-                createPinDrawer();
-                
-                // The navigation will be handled after PIN verification in sppScript.js
-                return;
-            }
-
-            // For other payment methods, proceed directly
-            const params = new URLSearchParams({
-                paymentMethod: selectedPayment,
-                totalPayment: totalPayment,
-                appliedTime: appliedTime,
-                WLStatus: WLStatus
-            });
-
-            if (selectedLoanTerm) {
-                params.append('loanTerm', selectedLoanTerm);
-            }
-
-            window.location.href = `paymentResult.html?${params.toString()}`;
-        });
+        } catch (error) {
+            console.error('Error during DOMContentLoaded:', error);
+        }
     });
     </script>
 </head>
