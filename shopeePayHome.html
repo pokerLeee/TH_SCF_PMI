@@ -7,15 +7,384 @@
     <title>ShopeePay Home</title>
     <link rel="stylesheet" href="shopeePayHome.css">
     <script>
-        // Set initial language from localStorage
-        const savedLanguage = localStorage.getItem('selectedLanguage');
-        console.log("Initial language from localStorage:", savedLanguage);
-        if (savedLanguage && (savedLanguage === 'en' || savedLanguage === 'th')) {
-            document.documentElement.lang = savedLanguage;
-            console.log("Setting HTML lang attribute to:", savedLanguage);
+        // 直接内联翻译数据，不依赖外部JS
+        const translations = {
+            "en": {
+                "shopeepay": "ShopeePay",
+                "splaylater": "SPlayLater",
+                "home": "Home",
+                "notification": "Notification",
+                "me": "Me",
+                "new": "New!",
+                "topup": "Topup",
+                "scan_pay": "Scan & Pay",
+                "transfer": "Transfer",
+                "vouchers": "Vouchers",
+                "zero_interest": "0% interest on all installment plans for up to 1 month.",
+                "activate_now": "Active Now",
+                "seasypay": "SEasyPay",
+                "pay_now": "Pay Now",
+                "outstanding_amount": "Outstanding Amount:",
+                "next_due_date": "Next Due Date:",
+                "overdue": "Overdue",
+                "local_service": "Local Service",
+                "shopee": "Shopee",
+                "food": "Food",
+                "seasycash": "SEasyCash",
+                "insurance": "Insurance",
+                "more": "More",
+                "history": "History",
+                "electricity_bill": "Electricity Bill"
+            },
+            "th": {
+                "shopeepay": "ShopeePay",
+                "splaylater": "SPlayLater",
+                "home": "หน้าแรก",
+                "notification": "การแจ้งเตือน",
+                "me": "ฉัน",
+                "new": "ใหม่!",
+                "topup": "เติมเงิน",
+                "scan_pay": "สแกน & จ่าย",
+                "transfer": "โอนเงิน",
+                "vouchers": "คูปอง",
+                "zero_interest": "ดอกเบี้ย 0% สำหรับแผนผ่อนชำระทั้งหมดสูงสุด 1 เดือน",
+                "activate_now": "เปิดใช้งานเดี๋ยวนี้",
+                "seasypay": "SEasyPay",
+                "pay_now": "ชำระตอนนี้",
+                "outstanding_amount": "ยอดค้างชำระ:",
+                "next_due_date": "วันครบกำหนดถัดไป:",
+                "overdue": "เกินกำหนด",
+                "local_service": "บริการท้องถิ่น",
+                "shopee": "ช้อปปี้",
+                "food": "อาหาร",
+                "seasycash": "SEasyCash",
+                "insurance": "ประกัน",
+                "more": "เพิ่มเติม",
+                "history": "ประวัติ",
+                "electricity_bill": "ค่าไฟฟ้า"
+            }
+        };
+        
+        // 获取当前语言，默认为英语
+        function getCurrentLanguage() {
+            const savedLang = localStorage.getItem('selectedLanguage');
+            return (savedLang === 'en' || savedLang === 'th') ? savedLang : 'en';
         }
+        
+        // 简单的翻译函数
+        function translate(key) {
+            const lang = getCurrentLanguage();
+            return translations[lang] && translations[lang][key] ? translations[lang][key] : key;
+        }
+        
+        // 设置语言
+        function setLanguage() {
+            const lang = getCurrentLanguage();
+            document.documentElement.lang = lang;
+            
+            // 翻译所有带data-lang属性的元素
+            const elements = document.querySelectorAll('[data-lang]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-lang');
+                if (key) {
+                    el.textContent = translate(key);
+                }
+            });
+        }
+
+        // Update time in status bar
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', { 
+                hour: 'numeric', 
+                minute: '2-digit',
+                hour12: false 
+            });
+            document.querySelector('.status-time').textContent = timeString;
+        }
+
+        // 计算泰国时间的今天和7天后日期
+        function calculateThaiDate() {
+            // 创建一个日期对象，使用泰国时区(UTC+7)
+            const now = new Date();
+            const thaiTimeOffset = 7 * 60; // 泰国时区偏移量（分钟）
+            const localTimeOffset = now.getTimezoneOffset(); // 本地时区偏移量（分钟）
+            const totalOffsetMinutes = thaiTimeOffset + localTimeOffset;
+            
+            // 调整到泰国时间
+            const thaiNow = new Date(now.getTime() + totalOffsetMinutes * 60 * 1000);
+            
+            // 计算7天后的日期
+            const dueDate = new Date(thaiNow);
+            dueDate.setDate(thaiNow.getDate() + 7);
+            
+            // 格式化为dd-mm-yyyy格式
+            const formatDate = (date) => {
+                const day = String(date.getDate()).padStart(2, '0');
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const year = date.getFullYear();
+                return `${day}-${month}-${year}`;
+            };
+            
+            return {
+                today: formatDate(thaiNow),
+                dueDate: formatDate(dueDate)
+            };
+        }
+
+        // 显示泰国时间的状态卡片，包括当前日期和7天后的到期日
+        function updateDates() {
+            const dates = calculateThaiDate();
+            const dueDateElement = document.querySelector('.loan-due .value');
+            if (dueDateElement) {
+                dueDateElement.textContent = dates.dueDate;
+            }
+            
+            // 可以在控制台查看计算结果
+            console.log('泰国当前日期:', dates.today);
+            console.log('泰国7天后日期:', dates.dueDate);
+        }
+
+        // 初始化页面
+        function initializePage() {
+            try {
+                // 设置语言
+                setLanguage();
+                
+                // 从URL获取参数
+                const urlParams = new URLSearchParams(window.location.search);
+                // 如果没有参数，默认使用active和1
+                const sellerLoanStatus = urlParams.get('sellerLoanStatus') || 'active';
+                const WLStatus = urlParams.get('WLStatus') || '1';
+                
+                console.log("Current status:", sellerLoanStatus, WLStatus);
+                
+                // 获取广告卡片和状态卡片元素
+                const easypayAdContainer = document.getElementById('easypay-ad-container');
+                const easypayStatusContainer = document.getElementById('easypay-status-container');
+                
+                // 根据参数控制显示
+                if (sellerLoanStatus === 'inactive' && WLStatus === '1') {
+                    // 显示广告
+                    easypayAdContainer.style.display = 'block';
+                    easypayStatusContainer.style.display = 'none';
+                    
+                    // 添加点击事件 - 跳转到landingPage
+                    easypayAdContainer.style.cursor = 'pointer';
+                    easypayAdContainer.addEventListener('click', function() {
+                        window.location.href = 'landingPage.html';
+                    });
+                    
+                    // Active Now按钮点击事件 - 阻止事件冒泡，仍跳转到landingPage
+                    const activeNowBtn = easypayAdContainer.querySelector('.easypay-button');
+                    if (activeNowBtn) {
+                        activeNowBtn.addEventListener('click', function(event) {
+                            event.stopPropagation();
+                            window.location.href = 'landingPage.html';
+                        });
+                    }
+                } else if (sellerLoanStatus === 'normal' && WLStatus === '1') {
+                    // 显示状态
+                    easypayAdContainer.style.display = 'none';
+                    easypayStatusContainer.style.display = 'block';
+                    
+                    // 确保标题为黑色
+                    const titleElement = document.getElementById('easypay-status-title');
+                    if (titleElement) {
+                        titleElement.style.cssText = 'color: #333 !important; font-weight: 600; margin-right: 8px; display: inline-block;';
+                        console.log('Title color set to BLACK');
+                    }
+                    
+                    // 确保逾期标签隐藏
+                    const overdueLabel = document.getElementById('overdue-label');
+                    if (overdueLabel) {
+                        overdueLabel.style.display = 'none';
+                    }
+                    
+                    // 更新到期日期
+                    updateDates();
+                    
+                    // 添加点击事件处理器
+                    const statusContainer = document.getElementById('easypay-status-container');
+                    statusContainer.style.cursor = 'pointer'; // 改变鼠标样式，提示可点击
+                    
+                    // 卡片点击跳转到homePage
+                    statusContainer.addEventListener('click', function() {
+                        window.location.href = 'homePage.html';
+                    });
+                    
+                    // Pay Now按钮跳转到repayPage并传递参数
+                    const payNowBtn = document.querySelector('.pay-now-btn');
+                    payNowBtn.addEventListener('click', function(event) {
+                        event.stopPropagation(); // 阻止事件冒泡到卡片
+                        
+                        // 获取Outstanding Amount值（移除฿符号和空格）
+                        const amountElement = document.querySelector('.loan-amount .value');
+                        const amountValue = amountElement.textContent.replace('฿', '').trim();
+                        
+                        // 获取Due Date值
+                        const dueDateElement = document.querySelector('.loan-due .value');
+                        const dueDateValue = dueDateElement.textContent;
+                        
+                        // 获取当前泰国日期作为appliedTime
+                        const dates = calculateThaiDate();
+                        const appliedTime = dates.today;
+                        
+                        // totalPayment固定值
+                        const totalPayment = '300.00';
+                        
+                        // 构建URL并跳转到repayPage
+                        const repayPageUrl = `repayPage.html?totalPayment=${totalPayment}&dueDate=${dueDateValue}&appliedTime=${appliedTime}&repayAmount=${amountValue}`;
+                        window.location.href = repayPageUrl;
+                    });
+                } else if (sellerLoanStatus === 'overdue' && WLStatus === '1') {
+                    // 显示带有逾期警示的状态卡片
+                    easypayAdContainer.style.display = 'none';
+                    easypayStatusContainer.style.display = 'block';
+                    
+                    // 确保标题为红色
+                    const titleElement = document.getElementById('easypay-status-title');
+                    if (titleElement) {
+                        // 使用更强烈的颜色和重要标记
+                        titleElement.style.cssText = 'color: #FF0000 !important; font-weight: 700; margin-right: 8px; display: inline-block;';
+                        console.log('Title color set to RED');
+                    }
+                    
+                    // 显示逾期标签
+                    const overdueLabel = document.getElementById('overdue-label');
+                    if (overdueLabel) {
+                        overdueLabel.style.display = 'inline-block';
+                        console.log('Overdue label displayed');
+                    }
+                    
+                    console.log('Overdue status styling applied');
+                    
+                    // 更新到期日期
+                    updateDates();
+                    
+                    // 添加点击事件处理器
+                    const statusContainer = document.getElementById('easypay-status-container');
+                    statusContainer.style.cursor = 'pointer';
+                    
+                    // 卡片点击跳转到homePage
+                    statusContainer.addEventListener('click', function() {
+                        window.location.href = 'homePage.html';
+                    });
+                    
+                    // Pay Now按钮颜色更改为红色以突出紧急性
+                    const payNowBtn = document.querySelector('.pay-now-btn');
+                    if (payNowBtn) {
+                        payNowBtn.style.backgroundColor = '#ff3b30';
+                        
+                        // Pay Now按钮跳转到repayPage并传递参数
+                        payNowBtn.addEventListener('click', function(event) {
+                            event.stopPropagation(); // 阻止事件冒泡到卡片
+                            
+                            // 获取Outstanding Amount值（移除฿符号和空格）
+                            const amountElement = document.querySelector('.loan-amount .value');
+                            const amountValue = amountElement.textContent.replace('฿', '').trim();
+                            
+                            // 获取Due Date值
+                            const dueDateElement = document.querySelector('.loan-due .value');
+                            const dueDateValue = dueDateElement.textContent;
+                            
+                            // 获取当前泰国日期作为appliedTime
+                            const dates = calculateThaiDate();
+                            const appliedTime = dates.today;
+                            
+                            // totalPayment固定值
+                            const totalPayment = '300.00';
+                            
+                            // 构建URL并跳转到repayPage，添加逾期标志
+                            const repayPageUrl = `repayPage.html?totalPayment=${totalPayment}&dueDate=${dueDateValue}&appliedTime=${appliedTime}&repayAmount=${amountValue}&status=overdue`;
+                            window.location.href = repayPageUrl;
+                        });
+                    }
+                } else if (sellerLoanStatus === 'inactive' && WLStatus === '0') {
+                    // 隐藏卡片
+                    easypayAdContainer.style.display = 'none';
+                    easypayStatusContainer.style.display = 'none';
+                    
+                    // 将SEasyPay功能项替换为Electricity Bill
+                    const secondarySeasyPayItem = document.querySelector('.secondary-features .feature-item:nth-child(7)');
+                    if (secondarySeasyPayItem) {
+                        // 修改图标和文字
+                        const iconImg = secondarySeasyPayItem.querySelector('.feature-icon img');
+                        const featureText = secondarySeasyPayItem.querySelector('.feature-text');
+                        
+                        if (iconImg && featureText) {
+                            iconImg.src = 'sppImages/electricity.svg';
+                            iconImg.alt = 'Electricity Bill';
+                            featureText.textContent = translate('electricity_bill');
+                            featureText.setAttribute('data-lang', 'electricity_bill');
+                            
+                            // 设置默认鼠标样式（非指针）
+                            secondarySeasyPayItem.style.cursor = 'default';
+                            
+                            // 确保没有任何点击事件（通过克隆替换来移除事件监听器）
+                            secondarySeasyPayItem.replaceWith(secondarySeasyPayItem.cloneNode(true));
+                            console.log('Electricity Bill item replaced, with no click action');
+                        }
+                    }
+                } else {
+                    // 都不显示
+                    easypayAdContainer.style.display = 'none';
+                    easypayStatusContainer.style.display = 'none';
+                }
+                
+                // 根据不同条件为SEasyPay图标添加不同的点击事件
+                const secondarySeasyPayItem = document.querySelector('.secondary-features .feature-item:nth-child(7)');
+                if (secondarySeasyPayItem) {
+                    // 确保不是电费图标的情况下添加点击事件
+                    if (!(sellerLoanStatus === 'inactive' && WLStatus === '0')) {
+                        secondarySeasyPayItem.style.cursor = 'pointer'; // 改变鼠标样式，提示可点击
+                        
+                        // 根据条件设置不同的跳转页面
+                        if (sellerLoanStatus === 'inactive' && WLStatus === '1') {
+                            // 跳转到landingPage
+                            secondarySeasyPayItem.addEventListener('click', function() {
+                                window.location.href = 'landingPage.html';
+                                console.log('SEasyPay icon clicked, redirecting to landingPage.html');
+                            });
+                        } else {
+                            // 其他情况跳转到homePage
+                            secondarySeasyPayItem.addEventListener('click', function() {
+                                window.location.href = 'homePage.html';
+                                console.log('SEasyPay icon clicked, redirecting to homePage.html');
+                            });
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error("Error in initializePage:", error);
+            }
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 更新时间
+            updateTime();
+            setInterval(updateTime, 60000);
+
+            // 防止顶部过度滚动
+            document.addEventListener('scroll', function(e) {
+                if (window.scrollY < 0) {
+                    window.scrollTo(0, 0);
+                }
+                
+                // 确保header在滚动时保持在内容上方
+                const header = document.querySelector('.fixed-header');
+                if (window.scrollY > 0) {
+                    header.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
+                } else {
+                    header.style.boxShadow = 'none';
+                }
+            }, { passive: false });
+
+            // 初始化页面
+            initializePage();
+        });
     </script>
-    <script src="sharedLanguage.js"></script>
     <style>
         /* 确保滚动行为正确，并导航栏始终位于内容上方 */
         .fixed-header {
@@ -238,301 +607,5 @@
             </nav>
         </div>
     </div>
-    <script>
-        // Update time in status bar
-        function updateTime() {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString('en-US', { 
-                hour: 'numeric', 
-                minute: '2-digit',
-                hour12: false 
-            });
-            document.querySelector('.status-time').textContent = timeString;
-        }
-
-        // Update time every minute
-        setInterval(updateTime, 60000);
-        updateTime();
-
-        // Prevent overscrolling at the top to avoid header separation
-        document.addEventListener('scroll', function(e) {
-            if (window.scrollY < 0) {
-                window.scrollTo(0, 0);
-            }
-            
-            // Ensure header stays above content when scrolling
-            const header = document.querySelector('.fixed-header');
-            if (window.scrollY > 0) {
-                header.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
-            } else {
-                header.style.boxShadow = 'none';
-            }
-        }, { passive: false });
-
-        // 控制SEasyPay广告卡片显示逻辑
-        document.addEventListener('DOMContentLoaded', function() {
-            // 从URL获取参数
-            const urlParams = new URLSearchParams(window.location.search);
-            // 如果没有参数，默认使用active和1
-            const sellerLoanStatus = urlParams.get('sellerLoanStatus') || 'active';
-            const WLStatus = urlParams.get('WLStatus') || '1';
-            
-            console.log("Current status:", sellerLoanStatus, WLStatus);
-            
-            // 获取广告卡片和状态卡片元素
-            const easypayAdContainer = document.getElementById('easypay-ad-container');
-            const easypayStatusContainer = document.getElementById('easypay-status-container');
-            
-            // 计算泰国时间的今天和7天后日期
-            const calculateThaiDate = () => {
-                // 创建一个日期对象，使用泰国时区(UTC+7)
-                const now = new Date();
-                const thaiTimeOffset = 7 * 60; // 泰国时区偏移量（分钟）
-                const localTimeOffset = now.getTimezoneOffset(); // 本地时区偏移量（分钟）
-                const totalOffsetMinutes = thaiTimeOffset + localTimeOffset;
-                
-                // 调整到泰国时间
-                const thaiNow = new Date(now.getTime() + totalOffsetMinutes * 60 * 1000);
-                
-                // 计算7天后的日期
-                const dueDate = new Date(thaiNow);
-                dueDate.setDate(thaiNow.getDate() + 7);
-                
-                // 格式化为dd-mm-yyyy格式
-                const formatDate = (date) => {
-                    const day = String(date.getDate()).padStart(2, '0');
-                    const month = String(date.getMonth() + 1).padStart(2, '0');
-                    const year = date.getFullYear();
-                    return `${day}-${month}-${year}`;
-                };
-                
-                return {
-                    today: formatDate(thaiNow),
-                    dueDate: formatDate(dueDate)
-                };
-            };
-            
-            // 显示泰国时间的状态卡片，包括当前日期和7天后的到期日
-            const updateDates = () => {
-                const dates = calculateThaiDate();
-                const dueDateElement = document.querySelector('.loan-due .value');
-                if (dueDateElement) {
-                    dueDateElement.textContent = dates.dueDate;
-                }
-                
-                // 可以在控制台查看计算结果
-                console.log('泰国当前日期:', dates.today);
-                console.log('泰国7天后日期:', dates.dueDate);
-            };
-            
-            // 根据参数控制显示
-            if (sellerLoanStatus === 'inactive' && WLStatus === '1') {
-                // 显示广告
-                easypayAdContainer.style.display = 'block';
-                easypayStatusContainer.style.display = 'none';
-                
-                // 添加点击事件 - 跳转到landingPage
-                easypayAdContainer.style.cursor = 'pointer';
-                easypayAdContainer.addEventListener('click', function() {
-                    window.location.href = 'landingPage.html';
-                });
-                
-                // Active Now按钮点击事件 - 阻止事件冒泡，仍跳转到landingPage
-                const activeNowBtn = easypayAdContainer.querySelector('.easypay-button');
-                if (activeNowBtn) {
-                    activeNowBtn.addEventListener('click', function(event) {
-                        event.stopPropagation();
-                        window.location.href = 'landingPage.html';
-                    });
-                }
-            } else if (sellerLoanStatus === 'normal' && WLStatus === '1') {
-                // 显示状态
-                easypayAdContainer.style.display = 'none';
-                easypayStatusContainer.style.display = 'block';
-                
-                // 确保标题为黑色
-                const titleElement = document.getElementById('easypay-status-title');
-                if (titleElement) {
-                    titleElement.style.cssText = 'color: #333 !important; font-weight: 600; margin-right: 8px; display: inline-block;';
-                    console.log('Title color set to BLACK');
-                }
-                
-                // 确保逾期标签隐藏
-                const overdueLabel = document.getElementById('overdue-label');
-                if (overdueLabel) {
-                    overdueLabel.style.display = 'none';
-                }
-                
-                // 更新到期日期
-                updateDates();
-                
-                // 添加点击事件处理器
-                const statusContainer = document.getElementById('easypay-status-container');
-                statusContainer.style.cursor = 'pointer'; // 改变鼠标样式，提示可点击
-                
-                // 卡片点击跳转到homePage
-                statusContainer.addEventListener('click', function() {
-                    window.location.href = 'homePage.html';
-                });
-                
-                // Pay Now按钮跳转到repayPage并传递参数
-                const payNowBtn = document.querySelector('.pay-now-btn');
-                payNowBtn.addEventListener('click', function(event) {
-                    event.stopPropagation(); // 阻止事件冒泡到卡片
-                    
-                    // 获取Outstanding Amount值（移除฿符号和空格）
-                    const amountElement = document.querySelector('.loan-amount .value');
-                    const amountValue = amountElement.textContent.replace('฿', '').trim();
-                    
-                    // 获取Due Date值
-                    const dueDateElement = document.querySelector('.loan-due .value');
-                    const dueDateValue = dueDateElement.textContent;
-                    
-                    // 获取当前泰国日期作为appliedTime
-                    const dates = calculateThaiDate();
-                    const appliedTime = dates.today;
-                    
-                    // totalPayment固定值
-                    const totalPayment = '300.00';
-                    
-                    // 构建URL并跳转到repayPage
-                    const repayPageUrl = `repayPage.html?totalPayment=${totalPayment}&dueDate=${dueDateValue}&appliedTime=${appliedTime}&repayAmount=${amountValue}`;
-                    window.location.href = repayPageUrl;
-                });
-            } else if (sellerLoanStatus === 'overdue' && WLStatus === '1') {
-                // 显示带有逾期警示的状态卡片
-                easypayAdContainer.style.display = 'none';
-                easypayStatusContainer.style.display = 'block';
-                
-                // 确保标题为红色
-                const titleElement = document.getElementById('easypay-status-title');
-                if (titleElement) {
-                    // 使用更强烈的颜色和重要标记
-                    titleElement.style.cssText = 'color: #FF0000 !important; font-weight: 700; margin-right: 8px; display: inline-block;';
-                    console.log('Title color set to RED');
-                }
-                
-                // 显示逾期标签
-                const overdueLabel = document.getElementById('overdue-label');
-                if (overdueLabel) {
-                    overdueLabel.style.display = 'inline-block';
-                    console.log('Overdue label displayed');
-                }
-                
-                console.log('Overdue status styling applied');
-                
-                // 更新到期日期
-                updateDates();
-                
-                // 添加点击事件处理器
-                const statusContainer = document.getElementById('easypay-status-container');
-                statusContainer.style.cursor = 'pointer';
-                
-                // 卡片点击跳转到homePage
-                statusContainer.addEventListener('click', function() {
-                    window.location.href = 'homePage.html';
-                });
-                
-                // Pay Now按钮颜色更改为红色以突出紧急性
-                const payNowBtn = document.querySelector('.pay-now-btn');
-                if (payNowBtn) {
-                    payNowBtn.style.backgroundColor = '#ff3b30';
-                    
-                    // Pay Now按钮跳转到repayPage并传递参数
-                    payNowBtn.addEventListener('click', function(event) {
-                        event.stopPropagation(); // 阻止事件冒泡到卡片
-                        
-                        // 获取Outstanding Amount值（移除฿符号和空格）
-                        const amountElement = document.querySelector('.loan-amount .value');
-                        const amountValue = amountElement.textContent.replace('฿', '').trim();
-                        
-                        // 获取Due Date值
-                        const dueDateElement = document.querySelector('.loan-due .value');
-                        const dueDateValue = dueDateElement.textContent;
-                        
-                        // 获取当前泰国日期作为appliedTime
-                        const dates = calculateThaiDate();
-                        const appliedTime = dates.today;
-                        
-                        // totalPayment固定值
-                        const totalPayment = '300.00';
-                        
-                        // 构建URL并跳转到repayPage，添加逾期标志
-                        const repayPageUrl = `repayPage.html?totalPayment=${totalPayment}&dueDate=${dueDateValue}&appliedTime=${appliedTime}&repayAmount=${amountValue}&status=overdue`;
-                        window.location.href = repayPageUrl;
-                    });
-                }
-            } else if (sellerLoanStatus === 'inactive' && WLStatus === '0') {
-                // 隐藏卡片
-                easypayAdContainer.style.display = 'none';
-                easypayStatusContainer.style.display = 'none';
-                
-                // 将SEasyPay功能项替换为Electricity Bill
-                const secondarySeasyPayItem = document.querySelector('.secondary-features .feature-item:nth-child(7)');
-                if (secondarySeasyPayItem) {
-                    // 修改图标和文字
-                    const iconImg = secondarySeasyPayItem.querySelector('.feature-icon img');
-                    const featureText = secondarySeasyPayItem.querySelector('.feature-text');
-                    
-                    if (iconImg && featureText) {
-                        iconImg.src = 'sppImages/electricity.svg';
-                        iconImg.alt = 'Electricity Bill';
-                        featureText.textContent = 'Electricity Bill';
-                        featureText.setAttribute('data-lang', 'electricity_bill');
-                        
-                        // 设置默认鼠标样式（非指针）
-                        secondarySeasyPayItem.style.cursor = 'default';
-                        
-                        // 确保没有任何点击事件（通过克隆替换来移除事件监听器）
-                        secondarySeasyPayItem.replaceWith(secondarySeasyPayItem.cloneNode(true));
-                        console.log('Electricity Bill item replaced, with no click action');
-                    }
-                }
-            } else {
-                // 都不显示
-                easypayAdContainer.style.display = 'none';
-                easypayStatusContainer.style.display = 'none';
-            }
-            
-            // 根据不同条件为SEasyPay图标添加不同的点击事件
-            const secondarySeasyPayItem = document.querySelector('.secondary-features .feature-item:nth-child(7)');
-            if (secondarySeasyPayItem) {
-                // 确保不是电费图标的情况下添加点击事件
-                if (!(sellerLoanStatus === 'inactive' && WLStatus === '0')) {
-                    secondarySeasyPayItem.style.cursor = 'pointer'; // 改变鼠标样式，提示可点击
-                    
-                    // 根据条件设置不同的跳转页面
-                    if (sellerLoanStatus === 'inactive' && WLStatus === '1') {
-                        // 跳转到landingPage
-                        secondarySeasyPayItem.addEventListener('click', function() {
-                            window.location.href = 'landingPage.html';
-                            console.log('SEasyPay icon clicked, redirecting to landingPage.html');
-                        });
-                    } else {
-                        // 其他情况跳转到homePage
-                        secondarySeasyPayItem.addEventListener('click', function() {
-                            window.location.href = 'homePage.html';
-                            console.log('SEasyPay icon clicked, redirecting to homePage.html');
-                        });
-                    }
-                }
-            }
-        });
-        
-        // 确保翻译正确应用
-        window.addEventListener('load', function() {
-            console.log("Window loaded - ensuring language is correctly applied");
-            
-            // 检查语言设置
-            console.log("HTML lang:", document.documentElement.lang);
-            console.log("currentLanguage:", window.currentLanguage);
-            console.log("localStorage:", localStorage.getItem('selectedLanguage'));
-            
-            // 应用翻译
-            if (typeof window.updatePageLanguage === 'function') {
-                window.updatePageLanguage();
-            }
-        });
-    </script>
 </body>
 </html> 
