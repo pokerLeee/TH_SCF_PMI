@@ -126,6 +126,55 @@
             top: 0;
             z-index: 100;
         }
+        
+        /* Ensure the page wrapper has proper width */
+        .page_wrapper__S2D2l {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        
+        /* Ensure banner wrapper has proper width */
+        .Banner_wrapper__laxoh {
+            width: 100%;
+            padding: 0;
+            margin: 0;
+            overflow: visible;
+        }
+        
+        /* Card mask styles to make it stretch to screen edges */
+        .Banner_cardMask__4EEYJ {
+            width: 100vw !important; /* Use viewport width to ensure it stretches edge to edge */
+            max-width: none !important;
+            height: auto !important;
+            object-fit: cover;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%); /* Center the image */
+            display: block;
+            /* Maintain aspect ratio similar to original (375:186) */
+            aspect-ratio: 2/1;
+            /* Make sure it's wider than the screen */
+            min-width: 100vw;
+        }
+        
+        /* Make sure the card container is positioned relatively */
+        .Banner_card__X6oK6 {
+            position: relative;
+            width: 100%;
+            overflow: visible;
+            padding: 0;
+            margin: 0;
+            /* Set a min-height to ensure content has room */
+            min-height: 3.7rem; /* Equivalent to 186px at 50px base font size */
+        }
+        
+        /* Ensure the content box remains properly positioned */
+        .Banner_box__H0bqq {
+            position: relative;
+            z-index: 1;
+            padding: 0.5rem 0.7rem;
+        }
     </style>
     
     <!-- 内联翻译数据 -->
@@ -358,7 +407,7 @@
     
     <div class="page_wrapper__S2D2l">
         <div class="Banner_wrapper__laxoh">
-            <div class="Banner_card__X6oK6"><img alt="card_mask" fetchpriority="high" width="375" height="186"
+            <div class="Banner_card__X6oK6"><img alt="card_mask" fetchpriority="high" 
                     decoding="async" data-nimg="1" class="Banner_cardMask__4EEYJ"
                     srcset="images/card_mask_seller.3e06a5dd.svg 1x, images/card_mask_seller.3e06a5dd.svg 2x"
                     src="images/card_mask_seller.3e06a5dd.svg"
