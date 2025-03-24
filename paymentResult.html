@@ -70,12 +70,15 @@
         // 工具函数
         function getCurrentLanguage() {
             const savedLang = localStorage.getItem('selectedLanguage');
+            console.log('Current language from localStorage:', savedLang);
             return (savedLang === 'en' || savedLang === 'th') ? savedLang : 'en';
         }
 
         function translate(key) {
             const lang = getCurrentLanguage();
-            return translations[lang] && translations[lang][key] ? translations[lang][key] : key;
+            const translation = translations[lang] && translations[lang][key] ? translations[lang][key] : key;
+            console.log(`Translating key "${key}" to "${translation}" in language "${lang}"`);
+            return translation;
         }
 
         function updateTime() {
@@ -94,21 +97,24 @@
         // 2. 页面功能函数
         function setLanguage() {
             try {
+                console.log('Starting setLanguage function');
                 const lang = getCurrentLanguage();
                 document.documentElement.lang = lang;
+                console.log('Set HTML lang attribute to:', lang);
 
-                // 使用 setTimeout 确保 DOM 完全加载
-                setTimeout(() => {
-                    const elements = document.querySelectorAll('[data-lang]');
-                    elements.forEach(el => {
-                        const key = el.getAttribute('data-lang');
-                        if (key) {
-                            el.textContent = translate(key);
-                        }
-                    });
-                }, 100);
+                const elements = document.querySelectorAll('[data-lang]');
+                console.log('Found elements with data-lang:', elements.length);
+
+                elements.forEach(el => {
+                    const key = el.getAttribute('data-lang');
+                    if (key) {
+                        const translation = translate(key);
+                        el.textContent = translation;
+                        console.log(`Translated element with key "${key}" to "${translation}"`);
+                    }
+                });
             } catch (error) {
-                console.error('Error setting language:', error);
+                console.error('Error in setLanguage:', error);
             }
         }
 
@@ -327,6 +333,8 @@
         // 4. 页面加载完成后的初始化
         document.addEventListener('DOMContentLoaded', function () {
             try {
+                console.log('DOMContentLoaded event fired');
+                
                 // 设置语言
                 setLanguage();
 
@@ -339,11 +347,27 @@
 
                 // 添加一个延迟的二次翻译，以确保所有动态内容都被翻译
                 setTimeout(() => {
+                    console.log('Running delayed translation');
                     setLanguage();
-                }, 500);
+                }, 1000);
+
+                // 添加一个更长的延迟翻译，以确保所有内容都已加载
+                setTimeout(() => {
+                    console.log('Running final translation check');
+                    setLanguage();
+                }, 2000);
             } catch (error) {
                 console.error('Error during DOMContentLoaded:', error);
             }
+        });
+
+        // 添加一个额外的检查，确保页面完全加载后再次运行翻译
+        window.addEventListener('load', function() {
+            console.log('Window load event fired');
+            setTimeout(() => {
+                console.log('Running final translation after window load');
+                setLanguage();
+            }, 1000);
         });
     </script>
     <style>
