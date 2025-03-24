@@ -112,6 +112,152 @@
     function getTranslation(key) {
         return translate(key);
     }
+
+    // 页面过渡函数
+    function navigateBackWithTransition(url) {
+        // Create transition overlay
+        const overlay = document.createElement('div');
+        overlay.className = 'page-transition';
+        document.body.appendChild(overlay);
+
+        // Navigate after animation
+        setTimeout(() => {
+            window.location.href = url;
+        }, 300); // Match this with the CSS animation duration
+    }
+
+    // 处理订单详情切换
+    function handleOrderDetailsToggle() {
+        const orderDetailsContent = document.getElementById('orderDetailsContent');
+        const orderDetailsIcon = document.getElementById('orderDetailsToggle');
+        
+        if (orderDetailsContent && orderDetailsIcon) {
+            orderDetailsContent.classList.toggle('show');
+            orderDetailsIcon.classList.toggle('rotated');
+        }
+    }
+
+    // 处理贷款详情切换
+    function handleLoanDetailsToggle() {
+        const loanDetailsContent = document.getElementById('loanDetailsContent');
+        const loanDetailsIcon = document.getElementById('loanDetailsToggle');
+        
+        if (loanDetailsContent && loanDetailsIcon) {
+            loanDetailsContent.classList.toggle('show');
+            loanDetailsIcon.classList.toggle('rotated');
+        }
+    }
+
+    // 处理贷款ID点击
+    function handleLoanIdClick(loanId, totalPayment, loanTerm) {
+        const appliedTime = document.querySelector('.payment-time').textContent;
+        const [datePart] = appliedTime.split(',');
+        const [day, month, year] = datePart.trim().split('-').map(Number);
+        const appliedDate = new Date(year, month - 1, day);
+        let dueDate = new Date(appliedDate);
+        
+        switch(loanTerm) {
+            case '1':
+                dueDate.setDate(appliedDate.getDate() + 7);
+                break;
+            case '2':
+                dueDate.setDate(appliedDate.getDate() + 14);
+                break;
+            default:
+                dueDate.setMonth(appliedDate.getMonth() + 1);
+        }
+        
+        // Format due date as DD-MM-YYYY
+        const dueDateStr = dueDate.toLocaleDateString('en-GB', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        }).replace(/\//g, '-');
+        
+        // Calculate interest (0.5% per day)
+        const interestRate = 0.005;
+        const days = loanTerm === '1' ? 7 : (loanTerm === '2' ? 14 : 30);
+        const interestAmount = totalPayment * interestRate * days;
+        
+        // Create URL with query parameters
+        const queryParams = new URLSearchParams({
+            appliedTime: appliedTime,
+            loanTenure: document.getElementById('loanTenure').textContent,
+            loanId: loanId,
+            totalPayment: totalPayment,
+            instalmentFee: interestAmount.toFixed(2),
+            dueDate: dueDateStr
+        });
+        
+        // Direct navigation without transition
+        window.location.href = `loanDetailPage.html?${queryParams.toString()}`;
+    }
+
+    // 初始化页面
+    function initializePage() {
+        // Get payment method and loan details from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const paymentMethod = urlParams.get('paymentMethod');
+        const loanTerm = urlParams.get('loanTerm') || '3'; // Default to 1-month (value="3")
+        const totalPayment = parseFloat(urlParams.get('totalPayment')) || 300.00;
+        const appliedTime = urlParams.get('appliedTime');
+
+        // Update payment time display
+        if (appliedTime) {
+            document.querySelector('.payment-time').textContent = appliedTime;
+        }
+
+        // Show promotion banner only if payment method is shopeepay and WLStatus is 1
+        const promotionBanner = document.getElementById('promotionBanner');
+        const WLStatus = urlParams.get('WLStatus') || '0';
+        if (paymentMethod === 'shopeepay' && WLStatus === '1') {
+            promotionBanner.style.display = 'block';
+        }
+
+        // Handle loan card visibility and details
+        const loanCard = document.getElementById('loanCard');
+        const paymentMethodValue = document.querySelector('.payment-method-value');
+        
+        // Show loan card if payment method is spaylate or not specified
+        if (paymentMethod === 'spaylate' || !paymentMethod) {
+            loanCard.style.display = 'block';
+            
+            // Update loan details based on term
+            const loanTenure = document.getElementById('loanTenure');
+            const loanPrinciple = document.getElementById('loanPrinciple');
+            const loanInterest = document.getElementById('loanInterest');
+            
+            // Set loan tenure based on term
+            let tenureKey;
+            let days;
+            switch(loanTerm) {
+                case '1':
+                    tenureKey = '7_days';
+                    days = 7;
+                    break;
+                case '2':
+                    tenureKey = '14_days';
+                    days = 14;
+                    break;
+                default:
+                    tenureKey = '1_month';
+                    days = 30;
+            }
+            
+            loanTenure.setAttribute('data-lang', tenureKey);
+            loanTenure.textContent = getTranslation(tenureKey);
+            loanPrinciple.textContent = `฿ ${totalPayment.toFixed(2)}`;
+            
+            // Calculate interest (0.5% per day)
+            const interestRate = 0.005;
+            const interestAmount = totalPayment * interestRate * days;
+            loanInterest.textContent = `฿ ${interestAmount.toFixed(2)}`;
+        }
+
+        // Remove countdown display
+        document.getElementById('countdown').style.display = 'none';
+        document.querySelector('[data-lang="seconds"]').style.display = 'none';
+    }
     </script>
     <style>
         /* Global styles and reset */
@@ -809,105 +955,25 @@
                 childList: true,
                 subtree: true
             });
-            
-            // Get payment method and loan details from URL parameters
-            const urlParams = new URLSearchParams(window.location.search);
-            const paymentMethod = urlParams.get('paymentMethod');
-            const loanTerm = urlParams.get('loanTerm') || '3'; // Default to 1-month (value="3")
-            const totalPayment = parseFloat(urlParams.get('totalPayment')) || 300.00;
-            const appliedTime = urlParams.get('appliedTime');
 
-            // Update payment time display
-            if (appliedTime) {
-                document.querySelector('.payment-time').textContent = appliedTime;
-            }
+            // 初始化页面
+            initializePage();
 
-            // Show promotion banner only if payment method is shopeepay and WLStatus is 1
-            const promotionBanner = document.getElementById('promotionBanner');
-            const WLStatus = urlParams.get('WLStatus') || '0';
-            if (paymentMethod === 'shopeepay' && WLStatus === '1') {
-                promotionBanner.style.display = 'block';
-            }
-
-            // Handle loan card visibility and details
-            const loanCard = document.getElementById('loanCard');
-            const paymentMethodValue = document.querySelector('.payment-method-value');
-            
-            // Show loan card if payment method is spaylate or not specified
-            if (paymentMethod === 'spaylate' || !paymentMethod) {
-                loanCard.style.display = 'block';
-                
-                // Update loan details based on term
-                const loanTenure = document.getElementById('loanTenure');
-                const loanPrinciple = document.getElementById('loanPrinciple');
-                const loanInterest = document.getElementById('loanInterest');
-                
-                // Set loan tenure based on term
-                let tenureKey;
-                let days;
-                switch(loanTerm) {
-                    case '1':
-                        tenureKey = '7_days';
-                        days = 7;
-                        break;
-                    case '2':
-                        tenureKey = '14_days';
-                        days = 14;
-                        break;
-                    default:
-                        tenureKey = '1_month';
-                        days = 30;
-                }
-                
-                loanTenure.setAttribute('data-lang', tenureKey);
-                loanTenure.textContent = getTranslation(tenureKey);
-                loanPrinciple.textContent = `฿ ${totalPayment.toFixed(2)}`;
-                
-                // Calculate interest (0.5% per day)
-                const interestRate = 0.005;
-                const interestAmount = totalPayment * interestRate * days;
-                loanInterest.textContent = `฿ ${interestAmount.toFixed(2)}`;
-            }
-
-            // Function to handle page transition
-            function navigateBackWithTransition(url) {
-                // Create transition overlay
-                const overlay = document.createElement('div');
-                overlay.className = 'page-transition';
-                document.body.appendChild(overlay);
-
-                // Navigate after animation
-                setTimeout(() => {
-                    window.location.href = url;
-                }, 300); // Match this with the CSS animation duration
-            }
-
+            // 设置事件监听器
             document.getElementById('backToMerchant').addEventListener('click', function () {
                 navigateBackWithTransition('ruammitr.html');
             });
 
             // Add toggle functionality for Order Details
             const orderDetailsH2 = document.querySelector('#orderCard h2');
-            const orderDetailsContent = document.getElementById('orderDetailsContent');
-            const orderDetailsIcon = document.getElementById('orderDetailsToggle');
-            
-            if (orderDetailsH2 && orderDetailsContent && orderDetailsIcon) {
-                orderDetailsH2.addEventListener('click', function() {
-                    orderDetailsContent.classList.toggle('show');
-                    orderDetailsIcon.classList.toggle('rotated');
-                });
+            if (orderDetailsH2) {
+                orderDetailsH2.addEventListener('click', handleOrderDetailsToggle);
             }
 
             // Add toggle functionality for Loan Details
             const loanDetailsH2 = document.querySelector('#loanCard h2');
-            const loanDetailsContent = document.getElementById('loanDetailsContent');
-            const loanDetailsIcon = document.getElementById('loanDetailsToggle');
-            
-            if (loanDetailsH2 && loanDetailsContent && loanDetailsIcon) {
-                loanDetailsH2.addEventListener('click', function() {
-                    loanDetailsContent.classList.toggle('show');
-                    loanDetailsIcon.classList.toggle('rotated');
-                });
+            if (loanDetailsH2) {
+                loanDetailsH2.addEventListener('click', handleLoanDetailsToggle);
             }
 
             // Set the redirect URL
@@ -921,58 +987,15 @@
                 navigateBackWithTransition(merchantUrl);
             });
 
-            // Remove countdown display
-            document.getElementById('countdown').style.display = 'none';
-            document.querySelector('[data-lang="seconds"]').style.display = 'none';
-
             // Add click handler for loan ID
             const loanIdLink = document.querySelector('.loan-id-link');
             if (loanIdLink) {
+                const urlParams = new URLSearchParams(window.location.search);
+                const totalPayment = parseFloat(urlParams.get('totalPayment')) || 300.00;
+                const loanTerm = urlParams.get('loanTerm') || '3';
+                
                 loanIdLink.addEventListener('click', function() {
-                    const loanData = {
-                        appliedTime: document.querySelector('.payment-time').textContent,
-                        loanTenure: document.getElementById('loanTenure').textContent,
-                        loanId: this.textContent,
-                        totalPayment: totalPayment,
-                        instalmentFee: document.getElementById('loanInterest').textContent
-                    };
-                    
-                    // Calculate due date (Applied Time + Loan duration)
-                    const [datePart] = loanData.appliedTime.split(',');
-                    const [day, month, year] = datePart.trim().split('-').map(Number);
-                    const appliedDate = new Date(year, month - 1, day);
-                    let dueDate = new Date(appliedDate);
-                    
-                    switch(loanTerm) {
-                        case '1':
-                            dueDate.setDate(appliedDate.getDate() + 7);
-                            break;
-                        case '2':
-                            dueDate.setDate(appliedDate.getDate() + 14);
-                            break;
-                        default:
-                            dueDate.setMonth(appliedDate.getMonth() + 1);
-                    }
-                    
-                    // Format due date as DD-MM-YYYY
-                    const dueDateStr = dueDate.toLocaleDateString('en-GB', {
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: 'numeric'
-                    }).replace(/\//g, '-');
-                    
-                    // Create URL with query parameters
-                    const queryParams = new URLSearchParams({
-                        appliedTime: loanData.appliedTime,
-                        loanTenure: loanData.loanTenure,
-                        loanId: loanData.loanId,
-                        totalPayment: loanData.totalPayment,
-                        instalmentFee: loanData.instalmentFee,
-                        dueDate: dueDateStr
-                    });
-                    
-                    // Direct navigation without transition
-                    window.location.href = `loanDetailPage.html?${queryParams.toString()}`;
+                    handleLoanIdClick(this.textContent, totalPayment, loanTerm);
                 });
             }
         });
