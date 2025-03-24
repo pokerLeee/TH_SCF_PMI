@@ -283,6 +283,13 @@
             </div>
         </div>
 
+        <div class="flow-section">
+            <h2 class="flow-title">GitHub Pages Test</h2>
+            <div class="button-container">
+                <button class="demo-button normal" onclick="openSvgTest()" data-lang="svg_test">SVG Test Page</button>
+            </div>
+        </div>
+
         <div class="setup-section">
             <h2 class="flow-title" data-lang="demo_setup_options">Demo setup</h2>
             <div class="setup-item">
@@ -323,6 +330,10 @@
             
             // 导航到shopeePayHome.html并传递参数
             window.location.href = `shopeePayHome.html?sellerLoanStatus=${sellerLoanStatus}&WLStatus=${WLStatus}`;
+        }
+
+        function openSvgTest() {
+            window.location.href = 'svg-test.html';
         }
 
         // Load the toggle state from localStorage or default to true

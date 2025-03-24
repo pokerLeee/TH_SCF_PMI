@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG Test Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f6f6f6;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .svg-section {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            border: 1px solid #eee;
+            border-radius: 0.5rem;
+        }
+
+        .svg-container {
+            width: 100%;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #fafafa;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .back-button {
+            padding: 0.8rem 1.5rem;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            transition: background-color 0.2s;
+        }
+
+        .back-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="window.location.href='index.html'">Back to Demo Setup</button>
+    
+    <div class="container">
+        <h1>SVG Test Page</h1>
+        
+        <div class="svg-section">
+            <h2>Sample SVG 1: Animated Circle</h2>
+            <div class="svg-container">
+                <svg width="200" height="200" viewBox="0 0 200 200">
+                    <circle cx="100" cy="100" r="50" fill="#4CAF50">
+                        <animate attributeName="r" values="50;70;50" dur="2s" repeatCount="indefinite"/>
+                    </circle>
+                </svg>
+            </div>
+        </div>
+
+        <div class="svg-section">
+            <h2>Sample SVG 2: Interactive Rectangle</h2>
+            <div class="svg-container">
+                <svg width="200" height="200" viewBox="0 0 200 200">
+                    <rect x="50" y="50" width="100" height="100" fill="#2196F3">
+                        <animate attributeName="fill" values="#2196F3;#FF5722;#2196F3" dur="3s" repeatCount="indefinite"/>
+                    </rect>
+                </svg>
+            </div>
+        </div>
+
+        <div class="svg-section">
+            <h2>Sample SVG 3: Path Animation</h2>
+            <div class="svg-container">
+                <svg width="200" height="200" viewBox="0 0 200 200">
+                    <path d="M50,100 Q100,50 150,100 T250,100" stroke="#9C27B0" stroke-width="2" fill="none">
+                        <animate attributeName="d" 
+                            values="M50,100 Q100,50 150,100 T250,100;
+                                   M50,100 Q100,150 150,100 T250,100;
+                                   M50,100 Q100,50 150,100 T250,100"
+                            dur="2s" 
+                            repeatCount="indefinite"/>
+                    </path>
+                </svg>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
