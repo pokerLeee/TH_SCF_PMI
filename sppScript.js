@@ -11,6 +11,21 @@ document.addEventListener('DOMContentLoaded', function() {
     // Get sellerLoanStatus from URL parameters
     const urlParams = new URLSearchParams(window.location.search);
     const sellerLoanStatus = urlParams.get('sellerLoanStatus') || 'normal';
+    
+    // Flag to track if loan options should be permanently hidden
+    const shouldHideLoanOptions = ['inactive', 'limitNotEnough', 'overdue'].includes(sellerLoanStatus);
+    
+    // Immediately hide loan options if needed (before any other event can trigger)
+    if (shouldHideLoanOptions) {
+        const loanOptionsContainer = document.querySelector('.loan-options');
+        if (loanOptionsContainer) {
+            loanOptionsContainer.style.display = 'none';
+            // Also disable all loan term radios to prevent any interaction
+            loanTermRadios.forEach(radio => {
+                radio.disabled = true;
+            });
+        }
+    }
 
     // Create popup for insufficient limit
     function createInsufficientLimitPopup() {
@@ -86,17 +101,30 @@ document.addEventListener('DOMContentLoaded', function() {
         const sellerLoanOption = spayLateRadio.closest('.payment-option');
         const loanOptions = document.querySelector('.loan-options');
         sellerLoanOption.style.display = 'none';
-        loanOptions.style.display = 'none';
+        
+        // Force hide loan options and ensure it stays hidden
+        if (loanOptions) {
+            loanOptions.style.display = 'none';
+            // Add !important to ensure it stays hidden
+            loanOptions.style.setProperty('display', 'none', 'important');
+        }
+        
         shopeepayRadio.checked = true;
+        // Trigger change event to ensure proper UI update
+        shopeepayRadio.dispatchEvent(new Event('change'));
     } else if (sellerLoanStatus === 'limitNotEnough') {
         // Update available balance
         const paymentBalance = spayLateRadio.closest('.payment-option').querySelector('.payment-balance');
         paymentBalance.innerHTML = '(<span>฿250.00</span> <span data-lang="available">Available</span>)';
         paymentBalance.classList.add('insufficient');
         
-        // Hide loan options
+        // Force hide loan options and ensure it stays hidden
         const loanOptions = document.querySelector('.loan-options');
-        loanOptions.style.display = 'none';
+        if (loanOptions) {
+            loanOptions.style.display = 'none';
+            // Add !important to ensure it stays hidden
+            loanOptions.style.setProperty('display', 'none', 'important');
+        }
         
         // Disable Seller Loan selection
         spayLateRadio.disabled = true;
@@ -109,15 +137,21 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Ensure ShopeePay is selected
         shopeepayRadio.checked = true;
+        // Trigger change event to ensure proper UI update
+        shopeepayRadio.dispatchEvent(new Event('change'));
     } else if (sellerLoanStatus === 'overdue') {
         // Update available balance
         const paymentBalance = spayLateRadio.closest('.payment-option').querySelector('.payment-balance');
         paymentBalance.innerHTML = '(<span>฿535.50</span> <span data-lang="overdue">Overdue</span>)';
         paymentBalance.classList.add('insufficient');
         
-        // Hide loan options
+        // Force hide loan options and ensure it stays hidden
         const loanOptions = document.querySelector('.loan-options');
-        loanOptions.style.display = 'none';
+        if (loanOptions) {
+            loanOptions.style.display = 'none';
+            // Add !important to ensure it stays hidden
+            loanOptions.style.setProperty('display', 'none', 'important');
+        }
         
         // Disable Seller Loan selection
         spayLateRadio.disabled = true;
@@ -130,6 +164,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Ensure ShopeePay is selected
         shopeepayRadio.checked = true;
+        // Trigger change event to ensure proper UI update
+        shopeepayRadio.dispatchEvent(new Event('change'));
     }
     
     // Add click event to the back button
@@ -388,7 +424,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Handle payment method changes
     function handlePaymentMethodChange() {
+        const loanOptionsContainer = document.querySelector('.loan-options');
+        if (!loanOptionsContainer) return;
+        
+        // Always hide loan options if status requires it
+        if (shouldHideLoanOptions) {
+            // Use stronger CSS control to ensure it stays hidden
+            loanOptionsContainer.style.display = 'none';
+            loanOptionsContainer.style.setProperty('display', 'none', 'important');
+            return;
+        }
+        
         if (shopeepayRadio.checked) {
+            // Hide entire loan options container when ShopeePay is selected
+            loanOptionsContainer.style.display = 'none';
+            
             // Uncheck all loan terms when ShopeePay is selected
             loanTermRadios.forEach(radio => {
                 radio.checked = false;
@@ -398,7 +448,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 card.style.opacity = '0.5';
                 card.style.pointerEvents = 'none';
             });
-        } else if (spayLateRadio.checked) {
+        } else if (spayLateRadio.checked && !shouldHideLoanOptions) {
+            // Only show loan options if seller loan is selected AND it's not in a special status
+            loanOptionsContainer.style.display = 'block';
+            
             // Restore the last selected loan term or select the default one
             if (lastSelectedLoanTerm && lastSelectedLoanTerm.checked) {
                 lastSelectedLoanTerm.checked = true;
@@ -424,19 +477,41 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initial state setup
     handlePaymentMethodChange();
+    
+    // Debug check - log whether loan options are properly hidden
+    if (shouldHideLoanOptions) {
+        const loanOptionsContainer = document.querySelector('.loan-options');
+        console.log('Loan options should be hidden. Current display style:', 
+                    loanOptionsContainer ? loanOptionsContainer.style.display : 'Element not found');
+        
+        // Apply again to ensure it's hidden
+        if (loanOptionsContainer && loanOptionsContainer.style.display !== 'none') {
+            console.log('Forcing loan options to be hidden');
+            loanOptionsContainer.style.display = 'none';
+            loanOptionsContainer.style.setProperty('display', 'none', 'important');
+        }
+    }
 
+    // Set up event handlers for clicking on payment options
     document.querySelectorAll('.payment-option').forEach(option => {
         option.addEventListener('click', () => {
             const radioButton = option.querySelector('input[type="radio"]');
-            radioButton.checked = true;
-            handlePaymentMethodChange();
+            if (!radioButton.disabled) {
+                radioButton.checked = true;
+                radioButton.dispatchEvent(new Event('change'));
+            }
         });
     });
 
+    // Ensure loan term radio buttons also respect the disabled status of Seller Loan
     loanTermRadios.forEach(radio => {
-        radio.addEventListener('click', function() {
+        radio.addEventListener('click', function(e) {
+            if (shouldHideLoanOptions || spayLateRadio.disabled) {
+                e.preventDefault();
+                return;
+            }
             spayLateRadio.checked = true;
-            handlePaymentMethodChange();
+            spayLateRadio.dispatchEvent(new Event('change'));
         });
     });
 
@@ -460,5 +535,20 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         window.location.href = `paymentResult.html?${params.toString()}`;
+    }
+    
+    // Add a MutationObserver to ensure loan options stay hidden if they should be
+    if (shouldHideLoanOptions) {
+        const observer = new MutationObserver(function(mutations) {
+            const loanOptionsContainer = document.querySelector('.loan-options');
+            if (loanOptionsContainer && loanOptionsContainer.style.display !== 'none') {
+                console.log('Loan options became visible - hiding again');
+                loanOptionsContainer.style.display = 'none';
+                loanOptionsContainer.style.setProperty('display', 'none', 'important');
+            }
+        });
+        
+        // Start observing the document with the configured parameters
+        observer.observe(document.body, { childList: true, subtree: true, attributes: true });
     }
 }); 

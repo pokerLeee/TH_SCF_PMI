@@ -109,6 +109,17 @@
             const urlParams = new URLSearchParams(window.location.search);
             const appliedTime = urlParams.get('appliedTime');
             const WLStatus = urlParams.get('WLStatus') || '1';
+            const sellerLoanStatus = urlParams.get('sellerLoanStatus') || 'normal';
+            
+            // Immediately hide loan options for certain seller loan statuses
+            if (['inactive', 'limitNotEnough', 'overdue'].includes(sellerLoanStatus)) {
+                const loanOptions = document.querySelector('.loan-options');
+                if (loanOptions) {
+                    loanOptions.style.display = 'none';
+                    // Use !important to ensure it stays hidden
+                    loanOptions.style.setProperty('display', 'none', 'important');
+                }
+            }
 
             // Update Pay Now button click handler
             document.getElementById('payButton').addEventListener('click', function() {
@@ -138,6 +149,15 @@
                 }
 
                 window.location.href = `paymentResult.html?${params.toString()}`;
+            });
+            
+            // Add change event to payment method radios
+            document.querySelectorAll('input[name="payment"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    // This will trigger the handlePaymentMethodChange function in sppScript.js
+                    // when it loads
+                    console.log('Payment method changed to: ' + this.value);
+                });
             });
         } catch (error) {
             console.error('Error during DOMContentLoaded:', error);
