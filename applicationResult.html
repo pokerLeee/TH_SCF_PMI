@@ -5,6 +5,157 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Confirm Payment</title>
     <link rel="stylesheet" href="sppStyles.css">
+    
+    <!-- 内联翻译数据和功能 -->
+    <script>
+    // 直接内联翻译数据，不依赖外部JS
+    const translations = {
+        "en": {
+            "application_result": "Application Result",
+            "payment_method": "Payment Method",
+            "view_all_methods": "View all methods >",
+            "seller_loan": "Seller Loan",
+            "available": "Available",
+            "recommended": "Recommended",
+            "total_payment": "Total Payment",
+            "pay_now": "Pay Now",
+            "merchant_name": "PMI Wholesaler Shop",
+            "shopeepay": "ShopeePay",
+            "available_balance": "(฿1000.00)",
+            "7_days": "7-days",
+            "14_days": "14-days",
+            "1_month": "1-month",
+            "loan_rate": "(0.5%/day)",
+            "enter_pin": "Enter ShopeePay PIN",
+            "forgot_pin": "Forgot ShopeePay PIN?",
+            "security_keyboard": "ShopeePay Security Keyboard",
+            "overdue": "Overdue"
+        },
+        "th": {
+            "application_result": "ผลการสมัคร",
+            "payment_method": "วิธีการชำระเงิน",
+            "view_all_methods": "ดูวิธีทั้งหมด >",
+            "seller_loan": "สินเชื่อผู้ขาย",
+            "available": "ที่ใช้ได้",
+            "recommended": "แนะนำ",
+            "total_payment": "ยอดชำระทั้งหมด",
+            "pay_now": "ชำระเงินทันที",
+            "merchant_name": "ร้านค้าส่ง PMI",
+            "shopeepay": "ShopeePay",
+            "available_balance": "(฿1000.00)",
+            "7_days": "7 วัน",
+            "14_days": "14 วัน",
+            "1_month": "1 เดือน",
+            "loan_rate": "(0.5%/วัน)",
+            "enter_pin": "ใส่รหัส PIN ShopeePay",
+            "forgot_pin": "ลืมรหัส PIN ShopeePay?",
+            "security_keyboard": "แป้นพิมพ์ความปลอดภัย ShopeePay",
+            "overdue": "เกินกำหนด"
+        }
+    };
+    
+    // 获取当前语言，默认为英语
+    function getCurrentLanguage() {
+        const savedLang = localStorage.getItem('selectedLanguage');
+        return (savedLang === 'en' || savedLang === 'th') ? savedLang : 'en';
+    }
+    
+    // 简单的翻译函数
+    function translate(key) {
+        const lang = getCurrentLanguage();
+        return translations[lang] && translations[lang][key] ? translations[lang][key] : key;
+    }
+    
+    // 设置语言
+    function setLanguage() {
+        const lang = getCurrentLanguage();
+        document.documentElement.lang = lang;
+        
+        // 翻译所有带data-lang属性的元素
+        const elements = document.querySelectorAll('[data-lang]');
+        elements.forEach(el => {
+            const key = el.getAttribute('data-lang');
+            if (key) {
+                el.textContent = translate(key);
+            }
+        });
+    }
+    
+    // 更新时间显示
+    function updateTime() {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('en-US', { 
+            hour: 'numeric', 
+            minute: '2-digit',
+            hour12: false 
+        });
+        const timeElement = document.querySelector('.status-time');
+        if (timeElement) {
+            timeElement.textContent = timeString;
+        }
+    }
+    
+    // 初始化页面时设置语言和时间
+    document.addEventListener('DOMContentLoaded', function() {
+        // 设置语言
+        setLanguage();
+        
+        // 更新时间
+        updateTime();
+        setInterval(updateTime, 60000);
+        
+        // 监听DOM变化，为动态添加的元素应用翻译
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.addedNodes.length) {
+                    // 当有新元素添加到DOM时，重新应用翻译
+                    setLanguage();
+                }
+            });
+        });
+        
+        // 开始观察document.body及其所有子元素的变化
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+        
+        // Get applied time from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const appliedTime = urlParams.get('appliedTime');
+        const WLStatus = urlParams.get('WLStatus') || '1';
+
+        // Update Pay Now button click handler
+        document.getElementById('payButton').addEventListener('click', function() {
+            const selectedPayment = document.querySelector('input[name="payment"]:checked').value;
+            const selectedLoanTerm = document.querySelector('input[name="loan-term"]:checked')?.value;
+            const totalPayment = 300.00;
+
+            // Show PIN drawer for both ShopeePay and Seller Loan payments
+            if (selectedPayment === 'shopeepay' || selectedPayment === 'spaylate') {
+                // Create and show PIN drawer
+                createPinDrawer();
+                
+                // The navigation will be handled after PIN verification in sppScript.js
+                return;
+            }
+
+            // For other payment methods, proceed directly
+            const params = new URLSearchParams({
+                paymentMethod: selectedPayment,
+                totalPayment: totalPayment,
+                appliedTime: appliedTime,
+                WLStatus: WLStatus
+            });
+
+            if (selectedLoanTerm) {
+                params.append('loanTerm', selectedLoanTerm);
+            }
+
+            window.location.href = `paymentResult.html?${params.toString()}`;
+        });
+    });
+    </script>
 </head>
 <body>
     <div class="container">
@@ -13,11 +164,11 @@
             <!-- Status bar -->
             <div class="status-bar">
                 <div class="status-left">
-                    <img src="./sppImages/wifi.svg" class="wifi-icon" alt="WiFi">
+                    <img src="sppImages/wifi.svg" class="wifi-icon" alt="WiFi">
                 </div>
                 <div class="status-time">14:25</div>
                 <div class="status-right">
-                    <img src="./sppImages/battery.svg" class="battery-icon" alt="Battery">
+                    <img src="sppImages/battery.svg" class="battery-icon" alt="Battery">
                     <span class="battery-level">85%</span>
                 </div>
             </div>
@@ -50,7 +201,7 @@
                     <div class="payment-option">
                         <label for="spaylate">
                             <div class="payment-info">
-                                <img src="./sppImages/sellerLoan.svg" class="payment-icon seller-loan-icon" alt="Seller Loan">
+                                <img src="sppImages/sellerLoan.svg" class="payment-icon seller-loan-icon" alt="Seller Loan">
                                 <span class="payment-name" data-lang="seller_loan">Seller Loan</span>
                                 <span class="payment-balance">(<span>฿5,000.00</span> <span data-lang="available">Available</span>)</span>
                             </div>
@@ -96,7 +247,7 @@
                     <div class="payment-option">
                         <label for="shopeepay">
                             <div class="payment-info">
-                                <img src="./sppImages/shopeePay.svg" class="payment-icon shopeepay-icon" alt="ShopeePay">
+                                <img src="sppImages/shopeePay.svg" class="payment-icon shopeepay-icon" alt="ShopeePay">
                                 <div class="payment-details">
                                     <span class="payment-name" data-lang="shopeepay">ShopeePay</span>
                                     <span class="payment-balance" data-lang="available_balance">(฿1000.00)</span>
@@ -119,45 +270,6 @@
         </footer>
     </div>
 
-    <script src="sharedLanguage.js" defer></script>
-    <script src="sppScript.js" defer></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Get applied time from URL parameters
-            const urlParams = new URLSearchParams(window.location.search);
-            const appliedTime = urlParams.get('appliedTime');
-            const WLStatus = urlParams.get('WLStatus') || '1';
-
-            // Update Pay Now button click handler
-            document.getElementById('payButton').addEventListener('click', function() {
-                const selectedPayment = document.querySelector('input[name="payment"]:checked').value;
-                const selectedLoanTerm = document.querySelector('input[name="loan-term"]:checked')?.value;
-                const totalPayment = 300.00;
-
-                // Show PIN drawer for both ShopeePay and Seller Loan payments
-                if (selectedPayment === 'shopeepay' || selectedPayment === 'spaylate') {
-                    // Create and show PIN drawer
-                    createPinDrawer();
-                    
-                    // The navigation will be handled after PIN verification in sppScript.js
-                    return;
-                }
-
-                // For other payment methods, proceed directly
-                const params = new URLSearchParams({
-                    paymentMethod: selectedPayment,
-                    totalPayment: totalPayment,
-                    appliedTime: appliedTime,
-                    WLStatus: WLStatus
-                });
-
-                if (selectedLoanTerm) {
-                    params.append('loanTerm', selectedLoanTerm);
-                }
-
-                window.location.href = `paymentResult.html?${params.toString()}`;
-            });
-        });
-    </script>
+    <script src="customSppScript.js" defer></script>
 </body>
 </html> 

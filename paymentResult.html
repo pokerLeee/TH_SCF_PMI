@@ -6,6 +6,113 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payment Result</title>
     <link rel="stylesheet" href="sppStyles.css">
+    
+    <!-- 内联翻译数据和功能 -->
+    <script>
+    // 直接内联翻译数据，不依赖外部JS
+    const translations = {
+        "en": {
+            "payment_result": "Payment Result",
+            "view_qr": "View QR",
+            "redirect_text": "You will be redirect back to the merchant's website in",
+            "seconds": "seconds",
+            "go_now": "Go Now",
+            "you_paid": "You Paid",
+            "purchase_amount": "Purchase Amount",
+            "order_details": "Order Details",
+            "transaction_sn": "Transaction SN",
+            "order_sn": "Order SN",
+            "payment_method": "Payment Method",
+            "merchant_ref_id": "Merchant Ref ID",
+            "back_to_merchant": "Back to Merchant",
+            "seller_loan": "Seller Loan",
+            "promotion_title": "Enjoy 0% interest on all orders pay with Seller Loan",
+            "limited_offer_until": "Limited offer until 31-10-2025",
+            "more_details": "More details",
+            "loan_details": "Loan Details",
+            "loan_id": "Loan ID",
+            "loan_tenure": "Loan Tenure",
+            "loan_principle": "Loan Principle",
+            "loan_interest": "Loan Interest",
+            "7_days": "7 days",
+            "14_days": "14 days",
+            "1_month": "1 month"
+        },
+        "th": {
+            "payment_result": "ผลการชำระเงิน",
+            "view_qr": "ดู QR",
+            "redirect_text": "คุณจะถูกนำกลับไปยังเว็บไซต์ร้านค้าใน",
+            "seconds": "วินาที",
+            "go_now": "ไปตอนนี้",
+            "you_paid": "คุณชำระแล้ว",
+            "purchase_amount": "ยอดซื้อ",
+            "order_details": "รายละเอียดคำสั่งซื้อ",
+            "transaction_sn": "หมายเลขธุรกรรม",
+            "order_sn": "หมายเลขคำสั่งซื้อ",
+            "payment_method": "วิธีการชำระเงิน",
+            "merchant_ref_id": "รหัสอ้างอิงร้านค้า",
+            "back_to_merchant": "กลับไปที่ร้านค้า",
+            "seller_loan": "สินเชื่อผู้ขาย",
+            "promotion_title": "รับดอกเบี้ย 0% สำหรับทุกคำสั่งซื้อที่ชำระด้วยสินเชื่อผู้ขาย",
+            "limited_offer_until": "ข้อเสนอพิเศษถึง 31-10-2025",
+            "more_details": "รายละเอียดเพิ่มเติม",
+            "loan_details": "รายละเอียดเงินกู้",
+            "loan_id": "รหัสเงินกู้",
+            "loan_tenure": "ระยะเวลากู้",
+            "loan_principle": "เงินต้น",
+            "loan_interest": "ดอกเบี้ย",
+            "7_days": "7 วัน",
+            "14_days": "14 วัน",
+            "1_month": "1 เดือน"
+        }
+    };
+    
+    // 获取当前语言，默认为英语
+    function getCurrentLanguage() {
+        const savedLang = localStorage.getItem('selectedLanguage');
+        return (savedLang === 'en' || savedLang === 'th') ? savedLang : 'en';
+    }
+    
+    // 简单的翻译函数
+    function translate(key) {
+        const lang = getCurrentLanguage();
+        return translations[lang] && translations[lang][key] ? translations[lang][key] : key;
+    }
+    
+    // 设置语言
+    function setLanguage() {
+        const lang = getCurrentLanguage();
+        document.documentElement.lang = lang;
+        
+        // 翻译所有带data-lang属性的元素
+        const elements = document.querySelectorAll('[data-lang]');
+        elements.forEach(el => {
+            const key = el.getAttribute('data-lang');
+            if (key) {
+                el.textContent = translate(key);
+            }
+        });
+    }
+    
+    // 更新时间显示
+    function updateTime() {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('en-US', { 
+            hour: 'numeric', 
+            minute: '2-digit',
+            hour12: false 
+        });
+        const timeElement = document.querySelector('.status-time');
+        if (timeElement) {
+            timeElement.textContent = timeString;
+        }
+    }
+    
+    // 兼容旧代码的 getTranslation 函数
+    function getTranslation(key) {
+        return translate(key);
+    }
+    </script>
     <style>
         /* Global styles and reset */
         * {
@@ -560,11 +667,11 @@
             <!-- Status bar -->
             <div class="status-bar">
                 <div class="status-left">
-                    <img src="./sppImages/wifi.svg" class="wifi-icon" alt="WiFi">
+                    <img src="sppImages/wifi.svg" class="wifi-icon" alt="WiFi">
                 </div>
                 <div class="status-time">14:25</div>
                 <div class="status-right">
-                    <img src="./sppImages/battery.svg" class="battery-icon" alt="Battery">
+                    <img src="sppImages/battery.svg" class="battery-icon" alt="Battery">
                     <span class="battery-level">85%</span>
                 </div>
             </div>
@@ -573,12 +680,12 @@
         <!-- Success Section -->
         <div class="success-section">
             <div class="success-icon">
-                <object type="image/svg+xml" data="./sppImages/success-icon.svg" class="success-svg"></object>
+                <object type="image/svg+xml" data="sppImages/success-icon.svg" class="success-svg"></object>
             </div>
             <div class="payment-amount">฿ 300.00</div>
             <div class="payment-time">20-03-2024, 14:25</div>
             <button class="qr-button">
-                <img src="./sppImages/qrCode.svg" class="qr-icon" alt="QR Code">
+                <img src="sppImages/qrCode.svg" class="qr-icon" alt="QR Code">
                 <span data-lang="view_qr">View QR</span>
             </button>
             <div class="redirect-text">
@@ -590,7 +697,7 @@
         <main class="main-content">
             <!-- Merchant Card -->
             <div class="merchant-card">
-                <h2><img src="./sppImages/philip_morris_logo.png" class="merchant-icon" alt="Philip Morris Logo">PMI Wholesaler Shop</h2>
+                <h2><img src="sppImages/philip_morris_logo.png" class="merchant-icon" alt="Philip Morris Logo">PMI Wholesaler Shop</h2>
             </div>
 
             <!-- Promotion Banner -->
@@ -678,9 +785,31 @@
         </footer>
     </div>
 
-    <script src="sharedLanguage.js" defer></script>
     <script defer>
         document.addEventListener('DOMContentLoaded', function() {
+            // 设置语言
+            setLanguage();
+            
+            // 更新时间
+            updateTime();
+            setInterval(updateTime, 60000);
+            
+            // 监听DOM变化，为动态添加的元素应用翻译
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.addedNodes.length) {
+                        // 当有新元素添加到DOM时，重新应用翻译
+                        setLanguage();
+                    }
+                });
+            });
+            
+            // 开始观察document.body及其所有子元素的变化
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true
+            });
+            
             // Get payment method and loan details from URL parameters
             const urlParams = new URLSearchParams(window.location.search);
             const paymentMethod = urlParams.get('paymentMethod');

@@ -6,6 +6,180 @@
     <title>Order Details</title>
     <link rel="stylesheet" href="ruammitrStyles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- 内联翻译数据和功能 -->
+    <script>
+    // 直接内联翻译数据，不依赖外部JS
+    const translations = {
+        "en": {
+            "page_title": "Order Details",
+            "order_number": "Order Number:",
+            "return_status": "Return requested due to defective product",
+            "waiting_confirmation_status": "Waiting wholesaler to confirm order",
+            "waiting_acception_status": "Waiting you to confirm receipt",
+            "preparing_order_status": "Preparing your order",
+            "shipping_status": "Shipping in progress",
+            "order_successful_status": "Order Successful",
+            "order_date": "Order Date:",
+            "store_info": "Store Information",
+            "store_name": "Store Name:",
+            "store_name_value": "Change Store Order",
+            "address": "Address:",
+            "address_value": "Bang Phli Yai, Ratsadorn, Bangkok",
+            "phone": "Phone:",
+            "total_items": "Total 10 items",
+            "product1_name": "Nescafe Latte (1 can)",
+            "product2_name": "Nescafe Kopiko Black White Instant Coffee 180ml (Pack of 30)",
+            "barcode": "Barcode:",
+            "price": "Price:",
+            "quantity": "Quantity:",
+            "total_price": "Total Price:",
+            "shipping_method": "Shipping Method:",
+            "shipping_method_value": "Wait for store pickup",
+            "shipping_date": "Shipping Dates:",
+            "shipping_date_value": "Monday, Wednesday, Friday",
+            "subtotal": "Subtotal before discount",
+            "product_discount": "Product discount",
+            "total": "Total",
+            "confirm_receipt": "Confirm Receipt and Pay",
+            "reject_receipt": "Reject Receipt",
+            "cancel_order": "Cancel Order",
+            "reorder_product": "Order More Products",
+            "back_alert": "Going back to previous page",
+            "confirm_receipt_alert": "You have confirmed receipt of the order.",
+            "reject_receipt_alert": "You have rejected receipt of the order.",
+            "cancel_order_alert": "Your order has been cancelled.",
+            "reorder_product_alert": "Redirecting to new order page..."
+        },
+        "th": {
+            "page_title": "รายละเอียดคำสั่งซื้อ",
+            "order_number": "คำสั่งซื้อที่:",
+            "return_status": "ขอคืนสินค้าเนื่องจากสินค้าไม่ดี",
+            "waiting_confirmation_status": "รอร้านค้าส่งยืนยันคำสั่งซื้อ",
+            "waiting_acception_status": "รอคุณยืนยันการรับสินค้า",
+            "preparing_order_status": "กำลังจัดเตรียมสินค้า",
+            "shipping_status": "กำลังจัดส่ง",
+            "order_successful_status": "คำสั่งซื้อสำเร็จ",
+            "order_date": "วันที่สั่งซื้อ:",
+            "store_info": "ข้อมูลร้านค้าสั่งซื้อ",
+            "store_name": "ชื่อร้านค้า:",
+            "store_name_value": "เปลี่ยนร้านค้าสั่ง",
+            "address": "ที่อยู่:",
+            "address_value": "แขวงบางพลีใหญ่, ราษฎร์, กรุงเทพฯ",
+            "phone": "เบอร์โทรศัพท์:",
+            "total_items": "ทั้งหมด 10 ชิ้น",
+            "product1_name": "เนสกาแฟ ลาเต้ (กระป๋อง 1)",
+            "product2_name": "เนสกาแฟ โกปี้ดำ แม็ค ไวต์ กาแฟกระป๋องสำเร็จรูป 180 มล. (แพ็ค 30)",
+            "barcode": "บาร์โค้ด:",
+            "price": "ราคา:",
+            "quantity": "จำนวน:",
+            "total_price": "ราคารวม:",
+            "shipping_method": "วิธีในของ:",
+            "shipping_method_value": "รอรับจากร้านส่ง",
+            "shipping_date": "วันที่จะส่งสินค้า:",
+            "shipping_date_value": "จันทร์, พุธ, ศุกร์",
+            "subtotal": "ยอดรวมก่อนใช้ส่วนลด",
+            "product_discount": "ส่วนลดสินค้า",
+            "total": "ราคาสุทธิ",
+            "confirm_receipt": "ยืนยันการรับสินค้าและชำระเงิน",
+            "reject_receipt": "ปฏิเสธการรับสินค้า",
+            "cancel_order": "ยกเลิกคำสั่งซื้อ",
+            "reorder_product": "สั่งซื้อสินค้าจ้า",
+            "back_alert": "กลับไปยังหน้าก่อนหน้า",
+            "confirm_receipt_alert": "คุณได้ยืนยันการรับสินค้าแล้ว",
+            "reject_receipt_alert": "คุณได้ปฏิเสธการรับสินค้าแล้ว",
+            "cancel_order_alert": "คำสั่งซื้อของคุณถูกยกเลิกแล้ว",
+            "reorder_product_alert": "กำลังไปที่หน้าสั่งซื้อสินค้าใหม่..."
+        }
+    };
+    
+    // 获取当前语言，默认为英语
+    function getCurrentLanguage() {
+        const savedLang = localStorage.getItem('selectedLanguage');
+        return (savedLang === 'en' || savedLang === 'th') ? savedLang : 'en';
+    }
+    
+    // 简单的翻译函数
+    function translate(key) {
+        const lang = getCurrentLanguage();
+        return translations[lang] && translations[lang][key] ? translations[lang][key] : key;
+    }
+    
+    // 设置语言
+    function setLanguage() {
+        const lang = getCurrentLanguage();
+        document.documentElement.lang = lang;
+        
+        // 翻译所有带data-lang属性的元素
+        const elements = document.querySelectorAll('[data-lang]');
+        elements.forEach(el => {
+            const key = el.getAttribute('data-lang');
+            if (key) {
+                el.textContent = translate(key);
+            }
+        });
+    }
+    
+    // 切换语言功能
+    function toggleLanguage() {
+        const currentLang = getCurrentLanguage();
+        const newLang = currentLang === 'en' ? 'th' : 'en';
+        localStorage.setItem('selectedLanguage', newLang);
+        setLanguage();
+        
+        // 更新语言切换按钮显示
+        const currentLangSpan = document.querySelector('.current-lang');
+        if (currentLangSpan) {
+            currentLangSpan.textContent = newLang.toUpperCase();
+        }
+    }
+    
+    // 更新时间显示
+    function updateTime() {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('en-US', { 
+            hour: 'numeric', 
+            minute: '2-digit',
+            hour12: false 
+        });
+        const timeElement = document.querySelector('.status-time');
+        if (timeElement) {
+            timeElement.textContent = timeString;
+        }
+    }
+    
+    // 初始化页面时设置语言和时间
+    document.addEventListener('DOMContentLoaded', function() {
+        // 设置语言
+        setLanguage();
+        
+        // 更新时间
+        updateTime();
+        setInterval(updateTime, 60000);
+        
+        // 监听DOM变化，为动态添加的元素应用翻译
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.addedNodes.length) {
+                    // 当有新元素添加到DOM时，重新应用翻译
+                    setLanguage();
+                }
+            });
+        });
+        
+        // 开始观察document.body及其所有子元素的变化
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+        
+        // 初始化语言切换按钮显示
+        const currentLangSpan = document.querySelector('.current-lang');
+        if (currentLangSpan) {
+            currentLangSpan.textContent = getCurrentLanguage().toUpperCase();
+        }
+    });
+    </script>
 </head>
 <body>
     <div class="container">
@@ -141,7 +315,6 @@
             </div>
         </footer>
     </div>
-    <script src="ruammitrlanguage.js"></script>
     <script src="ruammitrScript.js"></script>
     <script>
         // Set current Thai time

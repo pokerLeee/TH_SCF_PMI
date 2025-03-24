@@ -12,23 +12,20 @@ function navigateWithTransition(url) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize the language based on default setting
-    updatePageLanguage();
-    
     // Set up language toggle button
     const languageToggle = document.getElementById('language-toggle');
     const currentLangSpan = document.querySelector('.current-lang');
     
     if (languageToggle) {
+        // 初始化设置当前语言显示
+        currentLangSpan.textContent = getCurrentLanguage() === 'en' ? 'EN' : 'TH';
+        
         languageToggle.addEventListener('click', () => {
-            // Toggle between English and Thai
-            const newLang = getCurrentLanguage() === LANGUAGE.ENGLISH ? LANGUAGE.THAI : LANGUAGE.ENGLISH;
-            setLanguage(newLang);
+            // 使用内联的toggleLanguage函数切换语言
+            toggleLanguage();
             
-            // Update the language display in the button
-            if (currentLangSpan) {
-                currentLangSpan.textContent = newLang === LANGUAGE.ENGLISH ? 'EN' : 'TH';
-            }
+            // 更新按钮上的语言显示
+            currentLangSpan.textContent = getCurrentLanguage() === 'en' ? 'EN' : 'TH';
         });
     }
 
@@ -73,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Update the status text
         orderStatus.setAttribute('data-lang', currentStatus);
-        orderStatus.textContent = getTranslation(currentStatus);
+        orderStatus.textContent = translate(currentStatus);
 
         // Add click handler for status cycling
         orderStatus.addEventListener('click', () => {
@@ -100,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
             orderStatus.classList.remove('return-status', 'waiting-status', 'preparing-status', 'shipping-status', 'successful-status');
             orderStatus.classList.add(currentStatusClass);
             orderStatus.setAttribute('data-lang', currentStatus);
-            orderStatus.textContent = getTranslation(currentStatus);
+            orderStatus.textContent = translate(currentStatus);
 
             // Update action buttons visibility
             ['waiting-actions', 'preparing-actions', 'shipping-actions', 'return-actions', 'successful-actions'].forEach(id => {
@@ -155,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             // In a real app, this would navigate back
             // For demo purposes, we'll just show an alert
-            alert(getTranslation('back_alert'));
+            alert(translate('back_alert'));
         });
     }
 
@@ -163,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const couponButton = document.querySelector('.discount-badge .button-light');
     if (couponButton) {
         couponButton.addEventListener('click', () => {
-            alert(getTranslation('coupon_applied'));
+            alert(translate('coupon_applied'));
         });
     }
 
@@ -171,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const couponDetailsButtons = document.querySelectorAll('.coupon-info .button-light');
     couponDetailsButtons.forEach(button => {
         button.addEventListener('click', () => {
-            alert(getTranslation('coupon_details'));
+            alert(translate('coupon_details'));
         });
     });
 
@@ -179,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const checkoutButton = document.querySelector('.checkout-button');
     if (checkoutButton) {
         checkoutButton.addEventListener('click', () => {
-            alert(getTranslation('order_placed'));
+            alert(translate('order_placed'));
         });
     }
 
@@ -196,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 // Update UI
                 orderStatus.setAttribute('data-lang', 'order_successful_status');
-                orderStatus.textContent = getTranslation('order_successful_status');
+                orderStatus.textContent = translate('order_successful_status');
                 orderStatus.classList.remove('return-status');
                 orderStatus.classList.add('successful-status');
             }
@@ -211,7 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const rejectButton = document.querySelector('.reject-button');
     if (rejectButton) {
         rejectButton.addEventListener('click', () => {
-            alert(getTranslation('reject_receipt_alert'));
+            alert(translate('reject_receipt_alert'));
             
             // In a real app, this would update the order status
             // For now, we'll just show the normal checkout button
@@ -224,7 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const cancelButton = document.querySelector('.cancel-button');
     if (cancelButton) {
         cancelButton.addEventListener('click', () => {
-            alert(getTranslation('cancel_order_alert'));
+            alert(translate('cancel_order_alert'));
             
             // In a real app, this would update the order status
             // For now, we'll just show the normal checkout button
