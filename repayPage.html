@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en" style="font-size: 50px; --vc-root-font-size: 4vw;">
 
 <head>
@@ -16,6 +17,7 @@
     <link rel="stylesheet" href="css/e90826e2f4f45792.css" data-precedence="next">
     <link rel="stylesheet" href="css/d03a5407f04b9e1e.css" data-precedence="next">
     <link rel="stylesheet" href="css/54f999f7fc79f52e.css" data-precedence="next">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <style>
         /* Combined container for status bar and nav bar */
@@ -109,6 +111,28 @@
             right: 0;
             text-align: center;
         }
+
+        /* 语言切换按钮样式 */
+        .language-toggle {
+            position: absolute;
+            right: 0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #333;
+            font-size: 0.28rem;
+            display: flex;
+            align-items: center;
+            gap: 0.2rem;
+            padding: 0.2rem;
+            z-index: 2;
+            cursor: pointer;
+        }
+
+        .current-lang {
+            font-weight: bold;
+        }
     </style>
 
     <!-- 内联翻译数据 -->
@@ -162,6 +186,20 @@
                 el.textContent = translate(key);
             }
         });
+
+        // 更新语言切换按钮显示
+        const currentLangSpan = document.querySelector('.current-lang');
+        if (currentLangSpan) {
+            currentLangSpan.textContent = lang.toUpperCase();
+        }
+    }
+    
+    // 切换语言功能
+    function toggleLanguage() {
+        const currentLang = getCurrentLanguage();
+        const newLang = currentLang === 'en' ? 'th' : 'en';
+        localStorage.setItem('selectedLanguage', newLang);
+        setLanguage();
     }
     
     // 更新时间显示
@@ -237,6 +275,12 @@
         updateTime();
         setInterval(updateTime, 60000);
         
+        // 设置语言切换按钮事件
+        const languageToggle = document.getElementById('language-toggle');
+        if (languageToggle) {
+            languageToggle.addEventListener('click', toggleLanguage);
+        }
+        
         // 支付按钮点击事件
         const payButton = document.querySelector('.PayButton_payBtn__l747t');
         if (payButton) {
@@ -287,6 +331,10 @@
             <div class="nav-left">
                 <button class="back-button" type="button">←</button>
                 <div class="page-title" data-lang="repayment">Repayment</div>
+                <button id="language-toggle" class="language-toggle">
+                    <span class="current-lang">EN</span>
+                    <i class="fas fa-globe"></i>
+                </button>
             </div>
         </div>
     </div>
