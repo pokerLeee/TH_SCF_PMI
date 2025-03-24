@@ -6,6 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ShopeePay Home Mockup</title>
     <link rel="stylesheet" href="css/shopeePayHomeMockup.css">
+    <script>
+        // Set initial language from localStorage
+        const savedLanguage = localStorage.getItem('selectedLanguage');
+        if (savedLanguage && (savedLanguage === 'en' || savedLanguage === 'th')) {
+            document.documentElement.lang = savedLanguage;
+        }
+    </script>
 </head>
 <body>
     <div class="status-bar">
@@ -22,33 +29,33 @@
         <div class="header">
             <div class="header-top">
                 <button class="back-button" onclick="window.location.href='index.html'">←</button>
-                <span class="header-title">ShopeePay</span>
+                <span class="header-title" data-lang="shopeepay">ShopeePay</span>
                 <div class="header-icons">
                     <img src="images/scan.a093f61a.svg" alt="Scan">
                     <img src="images/settings.svg" alt="Settings">
                 </div>
             </div>
             <div class="balance-section">
-                <div class="balance-title">ShopeePay Balance</div>
+                <div class="balance-title" data-lang="shopeepay_balance">ShopeePay Balance</div>
                 <div class="balance-amount">฿5,000.00</div>
                 <div class="balance-buttons">
                     <a href="#" class="balance-button">
                         <div class="balance-button-icon">
                             <img src="images/right_arrow.382cd159.svg" alt="Top Up" class="top-up-icon">
                         </div>
-                        <span class="balance-button-text">Top Up</span>
+                        <span class="balance-button-text" data-lang="top_up">Top Up</span>
                     </a>
                     <a href="#" class="balance-button">
                         <div class="balance-button-icon">
                             <img src="images/right_arrow.382cd159.svg" alt="Transfer">
                         </div>
-                        <span class="balance-button-text">Transfer</span>
+                        <span class="balance-button-text" data-lang="transfer">Transfer</span>
                     </a>
                     <a href="#" class="balance-button">
                         <div class="balance-button-icon">
                             <img src="images/clock.svg" alt="History">
                         </div>
-                        <span class="balance-button-text">History</span>
+                        <span class="balance-button-text" data-lang="history">History</span>
                     </a>
                 </div>
             </div>
@@ -59,73 +66,76 @@
                 <div class="menu-icon">
                     <img src="images/scan.a093f61a.svg" alt="Scan">
                 </div>
-                <span class="menu-text">Scan</span>
+                <span class="menu-text" data-lang="scan">Scan</span>
             </a>
             <a href="#" class="menu-item">
                 <div class="menu-icon">
                     <img src="images/id_check.010d6309.svg" alt="Bill">
                 </div>
-                <span class="menu-text">Bill</span>
+                <span class="menu-text" data-lang="bill">Bill</span>
             </a>
             <a href="#" class="menu-item">
                 <div class="menu-icon">
                     <img src="images/computer_icon.4edf6fcf.svg" alt="Internet">
                 </div>
-                <span class="menu-text">Internet</span>
+                <span class="menu-text" data-lang="internet">Internet</span>
             </a>
             <a href="#" class="menu-item">
                 <div class="menu-icon">
                     <img src="images/upcoming.svg" alt="Insurance">
                 </div>
-                <span class="menu-text">Insurance</span>
+                <span class="menu-text" data-lang="insurance">Insurance</span>
             </a>
             <a href="#" class="menu-item">
                 <div class="menu-icon">
                     <img src="images/fast.24256a71.svg" alt="Travel">
                 </div>
-                <span class="menu-text">Travel</span>
+                <span class="menu-text" data-lang="travel">Travel</span>
             </a>
             <a href="#" class="menu-item">
                 <div class="menu-icon">
                     <img src="images/flexible.ccb0b3d6.svg" alt="Food">
                 </div>
-                <span class="menu-text">Food</span>
+                <span class="menu-text" data-lang="food">Food</span>
             </a>
             <a href="#" class="menu-item">
                 <div class="menu-icon">
                     <img src="images/rate.daa75632.svg" alt="Deals">
                 </div>
-                <span class="menu-text">Deals</span>
+                <span class="menu-text" data-lang="deals">Deals</span>
             </a>
             <a href="#" class="menu-item">
                 <div class="menu-icon">
                     <img src="images/edit.788d4490.svg" alt="More">
                 </div>
-                <span class="menu-text">More</span>
+                <span class="menu-text" data-lang="more">More</span>
             </a>
         </div>
 
         <div class="banner-section">
-            <div class="banner">Promotion Banner</div>
+            <div class="banner" data-lang="promotion_banner">Promotion Banner</div>
         </div>
 
         <div class="credit-section">
             <div class="credit-header">
-                <div class="credit-title">Seller Loan Credit</div>
-                <a href="#" class="credit-more">View History ></a>
+                <div class="credit-title" data-lang="seller_loan_credit">Seller Loan Credit</div>
+                <a href="#" class="credit-more" data-lang="view_history">View History ></a>
             </div>
             <div class="credit-card">
                 <div class="credit-card-header">
-                    <div class="credit-card-logo">Seller Loan</div>
+                    <div class="credit-card-logo" data-lang="seller_loan">Seller Loan</div>
                     <img src="images/card_mask_seller.svg" alt="Card">
                 </div>
                 <div class="credit-card-limit">฿10,000.00</div>
-                <div class="credit-card-status">Available Credit</div>
-                <button class="credit-card-button">Apply for Loan</button>
+                <div class="credit-card-status" data-lang="available_credit">Available Credit</div>
+                <button class="credit-card-button" data-lang="apply_for_loan">Apply for Loan</button>
             </div>
         </div>
     </div>
 
+    <!-- Load scripts -->
+    <script src="sharedLanguage.js"></script>
+    <script src="js/shopeePayLanguage.js"></script>
     <script src="js/shopeePayHomeMockup.js"></script>
 </body>
 </html> 
