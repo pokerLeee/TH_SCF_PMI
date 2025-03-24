@@ -315,6 +315,8 @@ body {
     padding: 0 1.6rem;
     padding-bottom: 0.8rem;
     border-bottom: 0.1rem solid #eee;
+    display: block !important; /* Force display on mobile */
+    visibility: visible !important; /* Ensure visibility on mobile */
 }
 
 .loan-grid {
@@ -595,14 +597,18 @@ body {
     border-radius: 0.4rem;
     font-size: 2.4rem;
     font-weight: 500;
-    padding: 1rem 0; /* Reduced height */
+    padding: 1rem 0;
     cursor: pointer;
     transition: background-color 0.2s;
     box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
+    color: #333 !important; /* Force text color on mobile */
+    -webkit-appearance: none; /* Prevent iOS styling */
+    appearance: none; /* Prevent default styling */
 }
 
 .keypad-button:hover, .keypad-button:active {
     background-color: #F8F8F8;
+    color: #333 !important; /* Maintain text color on hover/active */
 }
 
 .empty-key {

@@ -250,9 +250,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Disable body scroll when drawer is open
         document.body.style.overflow = 'hidden';
-
-        // Update translations for the newly added elements
-        updatePageLanguage();
     }
     
     // Handle PIN keypress
