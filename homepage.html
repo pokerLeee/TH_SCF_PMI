@@ -2,13 +2,23 @@
 <html lang="en" style="font-size: 50px; --vc-root-font-size: 4vw;">
 
 <head>
-
     <title>SCF Loan Home Page</title>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="viewport"
         content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no">
+    
+    <script>
+        // 设置初始语言 - 放在头部优先加载
+        const savedLanguage = localStorage.getItem('selectedLanguage');
+        console.log("Initial language from localStorage:", savedLanguage);
+        if (savedLanguage && (savedLanguage === 'en' || savedLanguage === 'th')) {
+            document.documentElement.lang = savedLanguage;
+            console.log("Setting HTML lang attribute to:", savedLanguage);
+        }
+    </script>
+    <script src="creditLanguage.js"></script>
+    
     <link rel="stylesheet" href="css/4fa41296f441b9ff.css" data-precedence="next">
     <link rel="stylesheet" href="css/57009e3cabd11cec.css" data-precedence="next">
     <link rel="stylesheet" href="css/515e7d1e6af67b7d.css" data-precedence="next">
@@ -21,7 +31,7 @@
     <link rel="preload" href="css/d03a5407f04b9e1e.css" as="style">
     <link rel="preload" href="css/e90826e2f4f45792.css" as="style">
     <link rel="preload" href="images/card_mask_seller.3e06a5dd.svg" as="image" fetchpriority="high">
-    <script src="creditLanguage.js"></script>
+    
     <style type="text/css" id="react-draggable-style-el">
         .react-draggable-transparent-selection *::-moz-selection {
             all: inherit;
@@ -126,6 +136,162 @@
             z-index: 100;
         }
     </style>
+    
+    <script>
+        // 更新时间显示 - 放在头部预定义函数
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', { 
+                hour: 'numeric', 
+                minute: '2-digit',
+                hour12: false 
+            });
+            const timeElement = document.querySelector('.status-time');
+            if (timeElement) {
+                timeElement.textContent = timeString;
+            }
+        }
+        
+        // DOM加载完成后执行的函数
+        document.addEventListener('DOMContentLoaded', function() {
+            // 更新时间
+            updateTime();
+            // 每分钟更新一次时间
+            setInterval(updateTime, 60000);
+            
+            // 检查通知设置并控制通知栏的显示
+            const notificationBar = document.getElementById('notificationBar');
+            if (notificationBar) {
+                const notificationEnabled = localStorage.getItem('id_scl_v1_notificationEnabled');
+                
+                // 如果设置为不显示通知，则隐藏通知栏
+                if (notificationEnabled === 'false') {
+                    notificationBar.style.display = 'none';
+                }
+            }
+
+            // 确保翻译正确应用
+            if (typeof updatePageLanguage === 'function') {
+                updatePageLanguage();
+            } else {
+                console.warn('updatePageLanguage function not found');
+            }
+
+            // Add back button handler
+            const backButton = document.querySelector('.back-button');
+            if (backButton) {
+                backButton.addEventListener('click', function() {
+                    window.history.back();
+                });
+            }
+            
+            // 加载余额和贷款信息
+            initializePage();
+        });
+        
+        // 初始化页面数据的函数
+        function initializePage() {
+            // Get URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            // Set default values
+            const defaultDate = new Date();
+            const defaultTime = document.querySelector('.status-time')?.textContent || '14:25';
+            const defaultFormattedDate = defaultDate.toLocaleDateString('en-GB', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            }).replace(/\//g, '-');
+            const defaultAppliedTime = `${defaultFormattedDate}, ${defaultTime}`;
+            
+            // Calculate default due date (1 month from now)
+            const defaultDueDate = (() => {
+                const date = new Date(defaultDate);
+                date.setMonth(date.getMonth() + 1);
+                return date.toLocaleDateString('en-GB', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                }).replace(/\//g, '-');
+            })();
+            
+            // Format number with thousand separators and 2 decimal places
+            const formatCurrency = (number) => {
+                return number.toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+            };
+            
+            // Constants
+            const TOTAL_CREDIT_LIMIT = 5000.00;
+            const DEFAULT_LOAN_AMOUNT = 300.00;
+            const INSTALMENT_FEE = 45.00;
+            
+            // Use URL parameters or default values
+            const totalPayment = parseFloat(urlParams.get('totalPayment')) || DEFAULT_LOAN_AMOUNT;
+            const dueDate = urlParams.get('dueDate') || defaultDueDate;
+            const appliedTime = urlParams.get('appliedTime') || defaultAppliedTime;
+            const repayAmount = parseFloat(urlParams.get('repayAmount')) || (totalPayment + INSTALMENT_FEE);
+            
+            // Update loan amount and due date in the current loans section
+            const loanAmountTitle = document.querySelector('.adm-list-item-title');
+            if (loanAmountTitle) {
+                const loanAmountSpan = loanAmountTitle.querySelector('[data-credit-lang="loan_amount"]');
+                if (loanAmountSpan && typeof getCreditTranslation === 'function') {
+                    const loanAmountText = getCreditTranslation('loan_amount');
+                    loanAmountTitle.innerHTML = `<span data-credit-lang="loan_amount">${loanAmountText}</span> ฿ ${formatCurrency(totalPayment)}`;
+                }
+            }
+            
+            const loanDueDate = document.querySelector('.adm-list-item-description');
+            if (loanDueDate) {
+                const dueOnSpan = loanDueDate.querySelector('[data-credit-lang="due_on"]');
+                if (dueOnSpan && typeof getCreditTranslation === 'function') {
+                    const dueOnText = getCreditTranslation('due_on');
+                    loanDueDate.innerHTML = `฿ ${formatCurrency(repayAmount)} <span data-credit-lang="due_on">${dueOnText}</span> ${dueDate}`;
+                }
+            }
+
+            // Add click handler for loan item
+            const loanItem = document.querySelector('.adm-list-item.adm-plain-anchor');
+            if (loanItem) {
+                loanItem.style.cursor = 'pointer';
+                loanItem.addEventListener('click', function() {
+                    const params = new URLSearchParams({
+                        repayAmount: (totalPayment + INSTALMENT_FEE).toFixed(2),
+                        dueDate: dueDate
+                    });
+                    window.location.href = `repayPage.html?${params.toString()}`;
+                });
+            }
+
+            // Calculate and update Available Credit Limit
+            const availableCreditLimit = TOTAL_CREDIT_LIMIT - totalPayment;
+            
+            // Update Available Credit Limit display
+            const availableAmountElement = document.querySelector('.Banner_availableAmount__X6GaB');
+            if (availableAmountElement) {
+                availableAmountElement.innerHTML = `<span class="Banner_symbol__hW40M">฿</span> ${formatCurrency(availableCreditLimit)}`;
+            }
+
+            // Update Total Credit Limit display
+            const totalLimitElement = document.querySelector('.Banner_left__yEoOH');
+            if (totalLimitElement && typeof getCreditTranslation === 'function') {
+                const totalCreditLimitText = getCreditTranslation('total_credit_limit');
+                totalLimitElement.innerHTML = `<span data-credit-lang="total_credit_limit">${totalCreditLimitText}</span> ฿ ${formatCurrency(TOTAL_CREDIT_LIMIT)}`;
+            }
+
+            console.log("Homepage initialized successfully");
+        }
+        
+        // 防止顶部过度滚动
+        document.addEventListener('scroll', function(e) {
+            if (window.scrollY < 0) {
+                window.scrollTo(0, 0);
+            }
+        }, { passive: false });
+    </script>
 </head>
 
 <body>
@@ -236,164 +402,5 @@
     <link rel="preload" as="image"
         imagesrcset="images/card_mask_seller.3e06a5dd.svg 1x, images/card_mask_seller.3e06a5dd.svg 2x"
         fetchpriority="high">
-    
-    <script>
-        // 设置初始语言
-        const savedLanguage = localStorage.getItem('selectedLanguage');
-        console.log("Initial language from localStorage:", savedLanguage);
-        if (savedLanguage && (savedLanguage === 'en' || savedLanguage === 'th')) {
-            document.documentElement.lang = savedLanguage;
-            console.log("Setting HTML lang attribute to:", savedLanguage);
-        }
-
-        // 更新时间显示
-        function updateTime() {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString('en-US', { 
-                hour: 'numeric', 
-                minute: '2-digit',
-                hour12: false 
-            });
-            document.querySelector('.status-time').textContent = timeString;
-        }
-
-        // 每分钟更新一次时间
-        setInterval(updateTime, 60000);
-        updateTime();
-
-        // 防止顶部过度滚动，避免头部分离
-        document.addEventListener('scroll', function(e) {
-            if (window.scrollY < 0) {
-                window.scrollTo(0, 0);
-            }
-            
-            // 确保header在滚动时保持在内容上方
-            const header = document.querySelector('.header-container');
-            if (window.scrollY > 0) {
-                header.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
-            } else {
-                header.style.boxShadow = 'none';
-            }
-        }, { passive: false });
-
-        // 检查通知设置并控制通知栏的显示
-        document.addEventListener('DOMContentLoaded', function() {
-            const notificationBar = document.getElementById('notificationBar');
-            if (notificationBar) {
-                const notificationEnabled = localStorage.getItem('id_scl_v1_notificationEnabled');
-                
-                // 如果设置为不显示通知，则隐藏通知栏
-                if (notificationEnabled === 'false') {
-                    notificationBar.style.display = 'none';
-                }
-            }
-
-            // 确保翻译正确应用
-            if (typeof updatePageLanguage === 'function') {
-                updatePageLanguage();
-            }
-
-            // Get URL parameters
-            const urlParams = new URLSearchParams(window.location.search);
-            
-            // Set default values
-            const defaultDate = new Date();
-            const defaultTime = document.querySelector('.status-time').textContent || '14:25';
-            const defaultFormattedDate = defaultDate.toLocaleDateString('en-GB', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric'
-            }).replace(/\//g, '-');
-            const defaultAppliedTime = `${defaultFormattedDate}, ${defaultTime}`;
-            
-            // Calculate default due date (1 month from now)
-            const defaultDueDate = (() => {
-                const date = new Date(defaultDate);
-                date.setMonth(date.getMonth() + 1);
-                return date.toLocaleDateString('en-GB', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric'
-                }).replace(/\//g, '-');
-            })();
-            
-            // Format number with thousand separators and 2 decimal places
-            const formatCurrency = (number) => {
-                return number.toLocaleString('en-US', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                });
-            };
-            
-            // Constants
-            const TOTAL_CREDIT_LIMIT = 5000.00;
-            const DEFAULT_LOAN_AMOUNT = 300.00;
-            const INSTALMENT_FEE = 45.00;
-            
-            // Use URL parameters or default values
-            const totalPayment = parseFloat(urlParams.get('totalPayment')) || DEFAULT_LOAN_AMOUNT;
-            const dueDate = urlParams.get('dueDate') || defaultDueDate;
-            const appliedTime = urlParams.get('appliedTime') || defaultAppliedTime;
-            const repayAmount = parseFloat(urlParams.get('repayAmount')) || (totalPayment + INSTALMENT_FEE);
-            
-            // Update loan amount and due date in the current loans section
-            const loanAmountTitle = document.querySelector('.adm-list-item-title');
-            if (loanAmountTitle) {
-                const loanAmountSpan = loanAmountTitle.querySelector('[data-credit-lang="loan_amount"]');
-                if (loanAmountSpan && typeof getCreditTranslation === 'function') {
-                    const loanAmountText = getCreditTranslation('loan_amount');
-                    loanAmountTitle.innerHTML = `<span data-credit-lang="loan_amount">${loanAmountText}</span> ฿ ${formatCurrency(totalPayment)}`;
-                }
-            }
-            
-            const loanDueDate = document.querySelector('.adm-list-item-description');
-            if (loanDueDate) {
-                const dueOnSpan = loanDueDate.querySelector('[data-credit-lang="due_on"]');
-                if (dueOnSpan && typeof getCreditTranslation === 'function') {
-                    const dueOnText = getCreditTranslation('due_on');
-                    loanDueDate.innerHTML = `฿ ${formatCurrency(repayAmount)} <span data-credit-lang="due_on">${dueOnText}</span> ${dueDate}`;
-                }
-            }
-
-            // Add click handler for loan item
-            const loanItem = document.querySelector('.adm-list-item.adm-plain-anchor');
-            if (loanItem) {
-                loanItem.style.cursor = 'pointer';
-                loanItem.addEventListener('click', function() {
-                    const params = new URLSearchParams({
-                        repayAmount: (totalPayment + INSTALMENT_FEE).toFixed(2),
-                        dueDate: dueDate
-                    });
-                    window.location.href = `repayPage.html?${params.toString()}`;
-                });
-            }
-
-            // Add back button handler
-            const backButton = document.querySelector('.back-button');
-            if (backButton) {
-                backButton.addEventListener('click', function() {
-                    window.history.back();
-                });
-            }
-
-            // Calculate and update Available Credit Limit
-            const availableCreditLimit = TOTAL_CREDIT_LIMIT - totalPayment;
-            
-            // Update Available Credit Limit display
-            const availableAmountElement = document.querySelector('.Banner_availableAmount__X6GaB');
-            if (availableAmountElement) {
-                availableAmountElement.innerHTML = `<span class="Banner_symbol__hW40M">฿</span> ${formatCurrency(availableCreditLimit)}`;
-            }
-
-            // Update Total Credit Limit display
-            const totalLimitElement = document.querySelector('.Banner_left__yEoOH');
-            if (totalLimitElement && typeof getCreditTranslation === 'function') {
-                const totalCreditLimitText = getCreditTranslation('total_credit_limit');
-                totalLimitElement.innerHTML = `<span data-credit-lang="total_credit_limit">${totalCreditLimitText}</span> ฿ ${formatCurrency(TOTAL_CREDIT_LIMIT)}`;
-            }
-
-            console.log("Homepage initialized successfully");
-        });
-    </script>
 </body>
 </html>
