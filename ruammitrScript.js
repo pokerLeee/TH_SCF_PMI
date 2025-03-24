@@ -5,10 +5,16 @@ function navigateWithTransition(url) {
     overlay.className = 'page-transition';
     document.body.appendChild(overlay);
 
-    // Navigate after animation
-    setTimeout(() => {
-        window.location.href = url;
-    }, 300); // Match this with the CSS animation duration
+    // Wait for the next frame to ensure the overlay is rendered
+    requestAnimationFrame(() => {
+        // Force a reflow
+        overlay.offsetHeight;
+        
+        // Navigate after animation
+        setTimeout(() => {
+            window.location.href = url;
+        }, 300);
+    });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -184,7 +190,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const confirmButton = document.querySelector('.confirm-button');
     if (confirmButton) {
         confirmButton.addEventListener('click', () => {
-            
             // In a real app, this would update the order status
             if (orderStatus) {
                 // Update localStorage with new status
@@ -201,6 +206,34 @@ document.addEventListener('DOMContentLoaded', () => {
             // Hide return actions and show successful actions
             if (returnActions) returnActions.style.display = 'none';
             if (successfulActions) successfulActions.style.display = 'block';
+
+            // Get current date and time for the URL parameters
+            const now = new Date();
+            const formattedDate = now.toLocaleDateString('en-GB', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            }).replace(/\//g, '-');
+            const formattedTime = now.toLocaleTimeString('en-US', {
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: false
+            });
+
+            // Get URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const sellerLoanStatus = urlParams.get('sellerLoanStatus') || 'normal';
+            const WLStatus = urlParams.get('WLStatus') || '1';
+
+            // Build the URL with parameters
+            const params = new URLSearchParams({
+                appliedTime: `${formattedDate}, ${formattedTime}`,
+                sellerLoanStatus: sellerLoanStatus,
+                WLStatus: WLStatus
+            });
+
+            // Use the transition function to navigate
+            navigateWithTransition(`applicationResult.html?${params.toString()}`);
         });
     }
 

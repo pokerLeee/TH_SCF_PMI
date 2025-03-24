@@ -199,7 +199,7 @@
             <a href="#" class="back-button"><i class="fas fa-chevron-left"></i></a>
             <h1 data-lang="page_title">Order Details</h1>
             <div class="header-buttons">
-                <button onclick="window.location.href='demoSetupPage.html'" class="demo-button">Demo</button>
+                <button onclick="window.location.href='index.html'" class="demo-button">Demo</button>
                 <button id="language-toggle" class="language-toggle">
                     <span class="current-lang">EN</span>
                     <i class="fas fa-globe"></i>
@@ -297,7 +297,7 @@
 
         <footer>
             <div id="return-actions" class="receipt-actions">
-                <button class="confirm-button" onclick="navigateWithTransition('applicationResult.html')" data-lang="confirm_receipt">Confirm Receipt and Pay</button>
+                <button class="confirm-button" data-lang="confirm_receipt">Confirm Receipt and Pay</button>
                 <button class="reject-button" data-lang="reject_receipt">Reject Receipt</button>
             </div>
             <div id="waiting-actions" class="receipt-actions">
@@ -330,18 +330,15 @@
 
         // Update navigation to include the current date
         function navigateWithTransition(url) {
-            const currentDate = document.getElementById('currentDate').textContent;
-            const urlParams = new URLSearchParams(window.location.search);
-            const sellerLoanStatus = urlParams.get('sellerLoanStatus') || 'normal';
-            const WLStatus = urlParams.get('WLStatus') || '1';
-            
-            const params = new URLSearchParams({
-                appliedTime: `${currentDate}, 14:25`,
-                sellerLoanStatus: sellerLoanStatus,
-                WLStatus: WLStatus
-            });
-            
-            window.location.href = `${url}?${params.toString()}`;
+            // Create transition overlay
+            const overlay = document.createElement('div');
+            overlay.className = 'page-transition';
+            document.body.appendChild(overlay);
+
+            // Navigate after animation
+            setTimeout(() => {
+                window.location.href = url;
+            }, 300); // Match this with the CSS animation duration
         }
     </script>
 </body>

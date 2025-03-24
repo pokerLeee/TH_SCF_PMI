@@ -245,6 +245,112 @@
             }
         }
     </style>
+    
+    <!-- 内联翻译数据和功能 -->
+    <script>
+    // 直接内联翻译数据，不依赖外部JS
+    const translations = {
+        "en": {
+            "demo_setup_title": "Select Demo Mode",
+            "happy_flow_title": "Happy Flow",
+            "activated_user": "Activated user",
+            "new_whitelisted_user": "New whitelisted user",
+            "exception_flow_title": "Exception Flow",
+            "not_whitelisted_user": "Not whitelisted user",
+            "limit_not_enough": "Limit Not Enough",
+            "overdue": "Overdue",
+            "spp_homepage_title": "SPP Homepage",
+            "activated_user_spp": "Activated user",
+            "new_whitelisted_user_spp": "New whitelisted user",
+            "not_whitelisted_user_spp": "Not whitelisted user",
+            "svg_test": "SVG Test Page",
+            "shopeepay_mockup": "ShopeePay Home Mockup",
+            "demo_setup_options": "Demo setup",
+            "order_ready_option": "Ruammitr Order Ready to Pay"
+        },
+        "th": {
+            "demo_setup_title": "เลือกโหมดสาธิต",
+            "happy_flow_title": "Happy Flow",
+            "activated_user": "ผู้ใช้ที่เปิดใช้งานแล้ว",
+            "new_whitelisted_user": "ผู้ใช้รายใหม่ที่อยู่ในรายชื่อ",
+            "exception_flow_title": "Exception Flow",
+            "not_whitelisted_user": "ผู้ใช้ไม่อยู่ในรายชื่อ",
+            "limit_not_enough": "วงเงินไม่เพียงพอ",
+            "overdue": "ค้างชำระ",
+            "spp_homepage_title": "หน้าแรก SPP",
+            "activated_user_spp": "ผู้ใช้ที่เปิดใช้งานแล้ว",
+            "new_whitelisted_user_spp": "ผู้ใช้รายใหม่ที่อยู่ในรายชื่อ",
+            "not_whitelisted_user_spp": "ผู้ใช้ไม่อยู่ในรายชื่อ",
+            "svg_test": "หน้าทดสอบ SVG",
+            "shopeepay_mockup": "หน้าตัวอย่าง ShopeePay",
+            "demo_setup_options": "ตั้งค่าการสาธิต",
+            "order_ready_option": "คำสั่งซื้อ Ruammitr พร้อมชำระเงิน"
+        }
+    };
+    
+    // 获取当前语言，默认为英语
+    function getCurrentLanguage() {
+        const savedLang = localStorage.getItem('selectedLanguage');
+        return (savedLang === 'en' || savedLang === 'th') ? savedLang : 'en';
+    }
+    
+    // 简单的翻译函数
+    function translate(key) {
+        const lang = getCurrentLanguage();
+        return translations[lang] && translations[lang][key] ? translations[lang][key] : key;
+    }
+    
+    // 设置语言
+    function setLanguage() {
+        const lang = getCurrentLanguage();
+        document.documentElement.lang = lang;
+        
+        // 翻译所有带data-lang属性的元素
+        const elements = document.querySelectorAll('[data-lang]');
+        elements.forEach(el => {
+            const key = el.getAttribute('data-lang');
+            if (key) {
+                el.textContent = translate(key);
+            }
+        });
+        
+        // 更新语言切换按钮显示
+        const currentLangSpan = document.querySelector('.current-lang');
+        if (currentLangSpan) {
+            currentLangSpan.textContent = lang.toUpperCase();
+        }
+    }
+    
+    // 切换语言功能
+    function toggleLanguage() {
+        const currentLang = getCurrentLanguage();
+        const newLang = currentLang === 'en' ? 'th' : 'en';
+        localStorage.setItem('selectedLanguage', newLang);
+        setLanguage();
+    }
+    
+    // 初始化页面时设置语言
+    document.addEventListener('DOMContentLoaded', function() {
+        // 设置语言
+        setLanguage();
+        
+        // 设置语言切换按钮事件
+        const languageToggle = document.getElementById('language-toggle');
+        if (languageToggle) {
+            languageToggle.addEventListener('click', toggleLanguage);
+        }
+        
+        // 加载保存的开关状态
+        const toggle = document.getElementById('orderReadyToggle');
+        const savedState = localStorage.getItem('orderReadyState');
+        toggle.checked = savedState === null ? true : savedState === 'true';
+        
+        // 保存开关状态变化
+        toggle.addEventListener('change', function() {
+            localStorage.setItem('orderReadyState', this.checked);
+        });
+    });
+    </script>
 </head>
 <body>
     <div class="container">
@@ -304,7 +410,6 @@
     </div>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="ruammitrlanguage.js"></script>
     <script>
         function startDemo(status) {
             const isOrderReady = document.getElementById('orderReadyToggle').checked;
@@ -340,43 +445,6 @@
         function openShopeePayHomeMockup() {
             window.location.href = 'shopeePayHomeMockup.html';
         }
-
-        // Load the toggle state from localStorage or default to true
-        document.addEventListener('DOMContentLoaded', function() {
-            const toggle = document.getElementById('orderReadyToggle');
-            const savedState = localStorage.getItem('orderReadyState');
-            toggle.checked = savedState === null ? true : savedState === 'true';
-
-            // Save toggle state changes
-            toggle.addEventListener('change', function() {
-                localStorage.setItem('orderReadyState', this.checked);
-            });
-            
-            // Initialize the language
-            updatePageLanguage();
-
-            // Set up language toggle button
-            const languageToggle = document.getElementById('language-toggle');
-            const currentLangSpan = document.querySelector('.current-lang');
-
-            if (languageToggle) {
-                languageToggle.addEventListener('click', () => {
-                    // Toggle between English and Thai
-                    const newLang = getCurrentLanguage() === LANGUAGE.ENGLISH ? LANGUAGE.THAI : LANGUAGE.ENGLISH;
-                    setLanguage(newLang);
-
-                    // Update the language display in the button
-                    if (currentLangSpan) {
-                        currentLangSpan.textContent = newLang === LANGUAGE.ENGLISH ? 'EN' : 'TH';
-                    }
-                });
-            }
-            
-            // Set the initial language display in the button
-            if (currentLangSpan) {
-                currentLangSpan.textContent = getCurrentLanguage() === LANGUAGE.ENGLISH ? 'EN' : 'TH';
-            }
-        });
     </script>
 </body>
 </html> 
