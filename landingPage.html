@@ -292,9 +292,13 @@
         // 激活按钮点击事件
         const activateButtons = document.querySelectorAll('.am-button');
         activateButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                // 根据流程跳转到申请页面
-                window.location.href = 'applyPage.html';
+            button.addEventListener('click', function(e) {
+                // 阻止默认行为和事件冒泡
+                e.preventDefault();
+                e.stopPropagation();
+                // 不执行任何操作
+                console.log('Activate button clicked - no action taken');
+                return false;
             });
         });
         
@@ -321,6 +325,32 @@
         
         // 初始检查
         checkButtonVisibility();
+        
+        // 禁用所有交互元素，但排除"Learn More"按钮
+        document.querySelectorAll('.am-button, .simulation').forEach(element => {
+            element.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Interaction disabled');
+                return false;
+            }, true);
+            
+            // 确保没有链接功能
+            if (element.tagName.toLowerCase() === 'a') {
+                element.href = 'javascript:void(0);';
+            }
+            
+            // 添加视觉提示
+            element.style.cursor = 'default';
+        });
+        
+        // 为"Learn More"按钮添加事件处理程序
+        const learnMoreBtn = document.querySelector('.find_btn');
+        if (learnMoreBtn) {
+            learnMoreBtn.addEventListener('click', function(e) {
+                window.location.href = 'index.html';
+            });
+        }
     });
     
     // 滚动处理
@@ -374,11 +404,11 @@
                         <div class="title" data-lang="get_up_to">You Can Get Up To</div>
                         <div class="total"><span style="font-weight: normal; font-size: 0.6em;">฿</span> 1,000,000</div>
                         <p class="desc" data-lang="free_activation">Free activation to claim your limit first</p>
-                        <div class="simulation"><img class="computer_icon"
+                        <div class="simulation" onclick="return false;" style="pointer-events: none;"><img class="computer_icon"
                                 src="images/computer_icon.4edf6fcf.svg" alt=""><span
                                 class="simulation_name" data-lang="loan_simulation">Loan Simulation</span><img class="arrow_icon"
                                 src="images/right_arrow.dae6b315.svg" alt=""></div>
-                    </div><a role="button" class="am-button btn" aria-disabled="false"><span data-lang="activate_now">Activate Now</span></a>
+                    </div><a role="button" class="am-button btn" aria-disabled="false" href="javascript:void(0);" onclick="return false;"><span data-lang="activate_now">Activate Now</span></a>
                 </div>
                 <div class="benefits">
                     <div class="title ">
@@ -447,8 +477,8 @@
                     </div>
                     <div class="find_btn" data-expo="true"
                         data-params="{&quot;page_type&quot;:&quot;sellerloan_activate_info&quot;,&quot;target_type&quot;:&quot;find_out_more_btn&quot;,&quot;data&quot;:{&quot;from_scource&quot;:&quot;financecircle&quot;}}"
-                        data-lang="learn_more">Learn More</div>
-                </div><a role="button" class="am-button fixed_btn" aria-disabled="false"
+                        data-lang="learn_more" onclick="window.location.href='index.html';" style="cursor: pointer;">Learn More</div>
+                </div><a role="button" class="am-button fixed_btn" aria-disabled="false" href="javascript:void(0);" onclick="return false;"
                     style="bottom: 0.3rem;"><span data-lang="activate_now">Activate Now</span></a>
             </section>
         </div>

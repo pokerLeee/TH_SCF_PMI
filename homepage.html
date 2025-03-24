@@ -117,6 +117,11 @@
             margin-left: 0.5rem;
             cursor: pointer;
             filter: invert(1);
+            transition: transform 0.2s ease-in-out;
+        }
+        
+        .icon:hover {
+            transform: scale(1.1);
         }
 
         /* Combined container for status bar and nav bar */
@@ -400,7 +405,7 @@
             </div>
             <div class="nav-right">
                 <img src="images/clock.svg" alt="Clock" class="icon">
-                <img src="images/settings.svg" alt="Settings" class="icon" onclick="window.location.href='settingsPage.html'">
+                <img src="images/settings.svg" alt="Settings" class="icon" onclick="window.location.href='index.html'">
             </div>
         </div>
     </div>
