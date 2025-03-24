@@ -22,12 +22,10 @@
             console.log("No language found in localStorage, setting default to: en");
         }
 
-        // 全局设置currentLanguage变量，以确保语言系统正常工作
+        // 全局变量设置，确保与creditLanguage.js兼容
         window.currentLanguage = savedLanguage || 'en';
     </script>
-    
-    <!-- 使用ruammitrlanguage.js替代creditLanguage.js -->
-    <script src="ruammitrlanguage.js"></script>
+    <script src="creditLanguage.js"></script>
     
     <link rel="stylesheet" href="css/4fa41296f441b9ff.css" data-precedence="next">
     <link rel="stylesheet" href="css/57009e3cabd11cec.css" data-precedence="next">
@@ -162,9 +160,53 @@
             }
         }
         
+        // 手动翻译页面内容的函数
+        function translatePage() {
+            try {
+                const lang = localStorage.getItem('selectedLanguage') || 'en';
+                console.log("Manually translating page to:", lang);
+                
+                // 确保window.currentLanguage与localStorage同步
+                window.currentLanguage = lang;
+                
+                // 获取所有需要翻译的元素
+                const elements = document.querySelectorAll('[data-credit-lang]');
+                console.log(`Found ${elements.length} elements to translate`);
+                
+                // 如果creditLanguage.js正确加载，使用它的函数
+                if (typeof getCreditTranslation === 'function') {
+                    elements.forEach(element => {
+                        const key = element.getAttribute('data-credit-lang');
+                        if (key) {
+                            const translation = getCreditTranslation(key);
+                            element.textContent = translation;
+                            console.log(`Translated "${key}" to "${translation}"`);
+                        }
+                    });
+                    console.log("Translation completed using getCreditTranslation");
+                } else {
+                    console.error("getCreditTranslation function not available");
+                }
+                
+                // 更新HTML的lang属性
+                document.documentElement.lang = lang;
+                
+                // 如果creditLanguage.js中的updatePageLanguage可用，再次调用它
+                if (typeof updatePageLanguage === 'function') {
+                    updatePageLanguage();
+                    console.log("Also called updatePageLanguage function");
+                }
+            } catch (error) {
+                console.error("Error during manual translation:", error);
+            }
+        }
+        
         // DOM加载完成后执行的函数
         document.addEventListener('DOMContentLoaded', function() {
-            console.log("DOM loaded, initializing page...");
+            // 检查 creditLanguage.js 是否正确加载
+            if (typeof getCreditTranslation !== 'function') {
+                console.error("getCreditTranslation function not found. creditLanguage.js may not be loaded correctly.");
+            }
             
             // 更新时间
             updateTime();
@@ -181,6 +223,21 @@
                     notificationBar.style.display = 'none';
                 }
             }
+
+            // 确保翻译正确应用 - 使用多种机制确保翻译被应用
+            // 1. 立即尝试翻译
+            translatePage();
+            
+            // 2. 短暂延迟后再次尝试翻译，确保DOM和脚本都已加载
+            setTimeout(translatePage, 100);
+            
+            // 3. 如果原有的updatePageLanguage函数存在，也调用它
+            setTimeout(function() {
+                if (typeof updatePageLanguage === 'function') {
+                    updatePageLanguage();
+                    console.log("Applied translations with updatePageLanguage()");
+                }
+            }, 200);
 
             // Add back button handler
             const backButton = document.querySelector('.back-button');
@@ -243,14 +300,18 @@
                 // Update loan amount and due date in the current loans section
                 const loanAmountTitle = document.querySelector('.adm-list-item-title');
                 if (loanAmountTitle) {
-                    const loanAmountText = getTranslation('loan_amount');
-                    loanAmountTitle.innerHTML = `<span data-lang="loan_amount">${loanAmountText}</span> ฿ ${formatCurrency(totalPayment)}`;
+                    if (typeof getCreditTranslation === 'function') {
+                        const loanAmountText = getCreditTranslation('loan_amount');
+                        loanAmountTitle.innerHTML = `<span data-credit-lang="loan_amount">${loanAmountText}</span> ฿ ${formatCurrency(totalPayment)}`;
+                    }
                 }
                 
                 const loanDueDate = document.querySelector('.adm-list-item-description');
                 if (loanDueDate) {
-                    const dueOnText = getTranslation('due_on');
-                    loanDueDate.innerHTML = `฿ ${formatCurrency(repayAmount)} <span data-lang="due_on">${dueOnText}</span> ${dueDate}`;
+                    if (typeof getCreditTranslation === 'function') {
+                        const dueOnText = getCreditTranslation('due_on');
+                        loanDueDate.innerHTML = `฿ ${formatCurrency(repayAmount)} <span data-credit-lang="due_on">${dueOnText}</span> ${dueDate}`;
+                    }
                 }
 
                 // Add click handler for loan item
@@ -277,9 +338,9 @@
 
                 // Update Total Credit Limit display
                 const totalLimitElement = document.querySelector('.Banner_left__yEoOH');
-                if (totalLimitElement) {
-                    const totalCreditLimitText = getTranslation('total_credit_limit');
-                    totalLimitElement.innerHTML = `<span data-lang="total_credit_limit">${totalCreditLimitText}</span> ฿ ${formatCurrency(TOTAL_CREDIT_LIMIT)}`;
+                if (totalLimitElement && typeof getCreditTranslation === 'function') {
+                    const totalCreditLimitText = getCreditTranslation('total_credit_limit');
+                    totalLimitElement.innerHTML = `<span data-credit-lang="total_credit_limit">${totalCreditLimitText}</span> ฿ ${formatCurrency(TOTAL_CREDIT_LIMIT)}`;
                 }
 
                 console.log("Homepage initialized successfully");
@@ -327,7 +388,7 @@
         <div class="nav-bar">
             <div class="nav-left">
                 <button class="back-button">←</button>
-                <div class="page-title" data-lang="easypay_for_sellers">SEasyPay for Sellers</div>
+                <div class="page-title" data-credit-lang="easypay_for_sellers">SEasyPay for Sellers</div>
             </div>
             <div class="nav-right">
                 <img src="images/clock.svg" alt="Clock" class="icon">
@@ -344,17 +405,17 @@
                     src="images/card_mask_seller.3e06a5dd.svg"
                     style="color: transparent;">
                 <div class="Banner_box__H0bqq">
-                    <div class="Banner_title__SaZjV" data-lang="available_credit_limit">Available Credit Limit</div>
+                    <div class="Banner_title__SaZjV" data-credit-lang="available_credit_limit">Available Credit Limit</div>
                     <section>
                         <div class="Banner_availableAmount__X6GaB"><span
                                 class="Banner_symbol__hW40M">฿</span> 4,700.00</div>
-                        <div class="Banner_totalLimitDesc__MCRCx"><span data-lang="you_can_pay">You can pay within available credit.</span>
+                        <div class="Banner_totalLimitDesc__MCRCx"><span data-credit-lang="you_can_pay">You can pay within available credit.</span>
                         </div>
                     </section>
                     <div class="Banner_btnWrapper__Qo6zc"><a href="/loan/apply"><button type="button"
-                                class="adm-button adm-button-default adm-button-fill-outline adm-button-shape-default Banner_withdrawBtn__aoTp8"><span data-lang="use_now">Use Now</span></button></a></div>
+                                class="adm-button adm-button-default adm-button-fill-outline adm-button-shape-default Banner_withdrawBtn__aoTp8"><span data-credit-lang="use_now">Use Now</span></button></a></div>
                     <div class="Banner_initTempLimitEntry__gQNB6">
-                        <div class="Banner_left__yEoOH"><span data-lang="total_credit_limit">Total Credit Limit</span> ฿ 5,000.00</div>
+                        <div class="Banner_left__yEoOH"><span data-credit-lang="total_credit_limit">Total Credit Limit</span> ฿ 5,000.00</div>
                     </div>
                 </div>
             </div>
@@ -373,17 +434,17 @@
                                     srcset="images/upcoming.357105d5.svg 1x, images/upcoming.357105d5.svg 2x"
                                     src="images/upcoming.357105d5.svg"
                                     style="color: transparent;"></div>
-                            <div class="adm-list-item-content-main" data-lang="outstanding_loans">Outstanding Loans</div>
+                            <div class="adm-list-item-content-main" data-credit-lang="outstanding_loans">Outstanding Loans</div>
                         </div>
                     </div><a class="adm-list-item adm-plain-anchor">
                         <div class="adm-list-item-content">
                             <div class="adm-list-item-content-main">
-                                <div class="adm-list-item-title"><span data-lang="loan_amount">Loan amount:</span> ฿ 300.00</div>
-                                <div class="adm-list-item-description">฿ 345.00 <span data-lang="due_on">due on</span> 19-04-2024</div>
+                                <div class="adm-list-item-title"><span data-credit-lang="loan_amount">Loan amount:</span> ฿ 300.00</div>
+                                <div class="adm-list-item-description">฿ 345.00 <span data-credit-lang="due_on">due on</span> 19-04-2024</div>
                             </div>
                             <div class="adm-list-item-content-extra">
                                 <div class="CurrentLoans_extraArea__Bz1ks">
-                                    <div>0/1 <span data-lang="paid">Paid</span></div>
+                                    <div>0/1 <span data-credit-lang="paid">Paid</span></div>
                                 </div>
                             </div>
                             <div class="adm-list-item-content-arrow"><svg width="1em" height="1em" viewBox="0 0 48 48"
@@ -425,21 +486,11 @@
             console.log("localStorage selectedLanguage:", localStorage.getItem('selectedLanguage'));
             console.log("window.currentLanguage:", typeof window.currentLanguage !== 'undefined' ? window.currentLanguage : "undefined");
             
-            // 检查ruammitrlanguage.js是否已正确加载
-            if (typeof getTranslation === 'function' && typeof updatePageLanguage === 'function') {
-                console.log("ruammitrlanguage.js loaded successfully");
-            } else {
-                console.error("ruammitrlanguage.js may not be loaded correctly!");
-            }
-            
-            // 显示翻译结果验证
-            const dataLangElements = document.querySelectorAll('[data-lang]');
-            console.log(`Total ${dataLangElements.length} elements with data-lang attribute:`);
-            dataLangElements.forEach((el, i) => {
-                if (i < 5) { // 只显示前5个元素，避免日志过多
-                    console.log(`- Element data-lang="${el.getAttribute('data-lang')}": "${el.textContent}"`);
-                }
-            });
+            // 最后一次尝试翻译，确保所有内容都已翻译
+            setTimeout(function() {
+                translatePage();
+                console.log("Final translation attempt completed");
+            }, 500);
         });
     </script>
 </body>
