@@ -148,35 +148,35 @@
         }
     }
     
-    // 初始化页面时设置语言和时间
-    document.addEventListener('DOMContentLoaded', function() {
+    // 初始化页面
+    function initializePage() {
         // 设置语言
         setLanguage();
-        
+
         // 更新时间
         updateTime();
         setInterval(updateTime, 60000);
-        
-        // 监听DOM变化，为动态添加的元素应用翻译
-        const observer = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-                if (mutation.addedNodes.length) {
-                    // 当有新元素添加到DOM时，重新应用翻译
-                    setLanguage();
-                }
-            });
-        });
-        
-        // 开始观察document.body及其所有子元素的变化
-        observer.observe(document.body, {
-            childList: true,
-            subtree: true
-        });
-        
+
         // 初始化语言切换按钮显示
         const currentLangSpan = document.querySelector('.current-lang');
         if (currentLangSpan) {
             currentLangSpan.textContent = getCurrentLanguage().toUpperCase();
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        try {
+            // 设置语言
+            setLanguage();
+
+            // 更新时间
+            updateTime();
+            setInterval(updateTime, 60000);
+
+            // 初始化页面
+            initializePage();
+        } catch (error) {
+            console.error('Error during DOMContentLoaded:', error);
         }
     });
     </script>
