@@ -303,7 +303,8 @@ const translations = {
         [LANGUAGE.THAI]: 'เลือกสถานะแล้ว กลับไปที่หน้าหลักเพื่อดูการเปลี่ยนแปลง'
     },
     
-    // Credit/Loan related translations - copied from creditLanguage.js
+    // *** MERGED FROM CREDITLANGUAGE.JS (Homepage, loan details, repay page) ***
+    // Homepage translations
     'available_credit_limit': {
         [LANGUAGE.ENGLISH]: 'Available Credit Limit',
         [LANGUAGE.THAI]: 'วงเงินสินเชื่อที่ใช้ได้'
@@ -340,6 +341,8 @@ const translations = {
         [LANGUAGE.ENGLISH]: 'SEasyPay for Sellers',
         [LANGUAGE.THAI]: 'SEasyPay สำหรับผู้ขาย'
     },
+
+    // Loan Detail Page translations
     'loan_details': {
         [LANGUAGE.ENGLISH]: 'Loan Details',
         [LANGUAGE.THAI]: 'รายละเอียดเงินกู้'
@@ -384,6 +387,8 @@ const translations = {
         [LANGUAGE.ENGLISH]: 'Pay Loan',
         [LANGUAGE.THAI]: 'ชำระเงินกู้'
     },
+
+    // Repay Page translations
     'repayment': {
         [LANGUAGE.ENGLISH]: 'Repayment',
         [LANGUAGE.THAI]: 'การชำระคืน'
@@ -418,7 +423,7 @@ const translations = {
 function setLanguage(lang) {
     if (lang === LANGUAGE.ENGLISH || lang === LANGUAGE.THAI) {
         currentLanguage = lang;
-        localStorage.setItem('selectedLanguage', lang);  // 使用 'language' 作为键名
+        localStorage.setItem('selectedLanguage', lang);
         updatePageLanguage();
         return true;
     }
@@ -427,7 +432,7 @@ function setLanguage(lang) {
 
 // Function to get current language
 function getCurrentLanguage() {
-    // 从 localStorage 获取当前语言设置
+    // Get current language setting from localStorage
     const savedLanguage = localStorage.getItem('selectedLanguage');
     if (savedLanguage && (savedLanguage === LANGUAGE.ENGLISH || savedLanguage === LANGUAGE.THAI)) {
         currentLanguage = savedLanguage;
@@ -464,7 +469,7 @@ function updatePageLanguage() {
         }
     });
     
-    // Also update elements with data-credit-lang attribute (for homepage.html)
+    // Also update elements with data-credit-lang attribute (for compatibility with existing code)
     const creditElements = document.querySelectorAll('[data-credit-lang]');
     creditElements.forEach(element => {
         const key = element.getAttribute('data-credit-lang');
@@ -486,18 +491,10 @@ function toggleLanguage() {
     setLanguage(newLang);
 }
 
-// Function to handle page transition (moved from ruammitrScript.js)
-function navigateWithTransition(url) {
-    // Create transition overlay
-    const overlay = document.createElement('div');
-    overlay.className = 'page-transition';
-    document.body.appendChild(overlay);
-
-    // Navigate after animation
-    setTimeout(() => {
-        window.location.href = url;
-    }, 300); // Match this with the CSS animation duration
-}
+// Initialize language immediately when script loads
+document.addEventListener('DOMContentLoaded', () => {
+    updatePageLanguage();
+});
 
 // Add MutationObserver to handle dynamically added elements
 const observer = new MutationObserver((mutations) => {
@@ -509,12 +506,7 @@ const observer = new MutationObserver((mutations) => {
 });
 
 // Start observing the document with the configured parameters
-document.addEventListener('DOMContentLoaded', () => {
-    updatePageLanguage();
-    
-    // Start observing after DOM is loaded
-    observer.observe(document.documentElement, {
-        childList: true,
-        subtree: true
-    });
+observer.observe(document.documentElement, {
+    childList: true,
+    subtree: true
 }); 

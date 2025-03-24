@@ -7,7 +7,26 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="viewport"
         content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no">
-    <!-- 使用ruammitrlanguage.js替换creditLanguage.js -->
+    
+    <script>
+        // 设置初始语言 - 放在头部优先加载
+        const savedLanguage = localStorage.getItem('selectedLanguage');
+        console.log("Initial language from localStorage:", savedLanguage);
+        if (savedLanguage && (savedLanguage === 'en' || savedLanguage === 'th')) {
+            document.documentElement.lang = savedLanguage;
+            console.log("Setting HTML lang attribute to:", savedLanguage);
+        } else {
+            // 如果没有保存的语言，默认设置为英语
+            localStorage.setItem('selectedLanguage', 'en');
+            document.documentElement.lang = 'en';
+            console.log("No language found in localStorage, setting default to: en");
+        }
+
+        // 全局设置currentLanguage变量，以确保语言系统正常工作
+        window.currentLanguage = savedLanguage || 'en';
+    </script>
+    
+    <!-- 使用ruammitrlanguage.js替代creditLanguage.js -->
     <script src="ruammitrlanguage.js"></script>
     
     <link rel="stylesheet" href="css/4fa41296f441b9ff.css" data-precedence="next">
@@ -126,23 +145,6 @@
             top: 0;
             z-index: 100;
         }
-        
-        /* 页面过渡动画 */
-        .page-transition {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(238, 77, 45, 0.5);
-            z-index: 9999;
-            animation: fadeIn 0.3s forwards;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
     </style>
     
     <script>
@@ -242,13 +244,13 @@
                 const loanAmountTitle = document.querySelector('.adm-list-item-title');
                 if (loanAmountTitle) {
                     const loanAmountText = getTranslation('loan_amount');
-                    loanAmountTitle.innerHTML = `<span data-credit-lang="loan_amount">${loanAmountText}</span> ฿ ${formatCurrency(totalPayment)}`;
+                    loanAmountTitle.innerHTML = `<span data-lang="loan_amount">${loanAmountText}</span> ฿ ${formatCurrency(totalPayment)}`;
                 }
                 
                 const loanDueDate = document.querySelector('.adm-list-item-description');
                 if (loanDueDate) {
                     const dueOnText = getTranslation('due_on');
-                    loanDueDate.innerHTML = `฿ ${formatCurrency(repayAmount)} <span data-credit-lang="due_on">${dueOnText}</span> ${dueDate}`;
+                    loanDueDate.innerHTML = `฿ ${formatCurrency(repayAmount)} <span data-lang="due_on">${dueOnText}</span> ${dueDate}`;
                 }
 
                 // Add click handler for loan item
@@ -260,7 +262,7 @@
                             repayAmount: (totalPayment + INSTALMENT_FEE).toFixed(2),
                             dueDate: dueDate
                         });
-                        navigateWithTransition(`repayPage.html?${params.toString()}`);
+                        window.location.href = `repayPage.html?${params.toString()}`;
                     });
                 }
 
@@ -277,7 +279,7 @@
                 const totalLimitElement = document.querySelector('.Banner_left__yEoOH');
                 if (totalLimitElement) {
                     const totalCreditLimitText = getTranslation('total_credit_limit');
-                    totalLimitElement.innerHTML = `<span data-credit-lang="total_credit_limit">${totalCreditLimitText}</span> ฿ ${formatCurrency(TOTAL_CREDIT_LIMIT)}`;
+                    totalLimitElement.innerHTML = `<span data-lang="total_credit_limit">${totalCreditLimitText}</span> ฿ ${formatCurrency(TOTAL_CREDIT_LIMIT)}`;
                 }
 
                 console.log("Homepage initialized successfully");
@@ -325,7 +327,7 @@
         <div class="nav-bar">
             <div class="nav-left">
                 <button class="back-button">←</button>
-                <div class="page-title" data-credit-lang="easypay_for_sellers">SEasyPay for Sellers</div>
+                <div class="page-title" data-lang="easypay_for_sellers">SEasyPay for Sellers</div>
             </div>
             <div class="nav-right">
                 <img src="images/clock.svg" alt="Clock" class="icon">
@@ -342,17 +344,17 @@
                     src="images/card_mask_seller.3e06a5dd.svg"
                     style="color: transparent;">
                 <div class="Banner_box__H0bqq">
-                    <div class="Banner_title__SaZjV" data-credit-lang="available_credit_limit">Available Credit Limit</div>
+                    <div class="Banner_title__SaZjV" data-lang="available_credit_limit">Available Credit Limit</div>
                     <section>
                         <div class="Banner_availableAmount__X6GaB"><span
                                 class="Banner_symbol__hW40M">฿</span> 4,700.00</div>
-                        <div class="Banner_totalLimitDesc__MCRCx"><span data-credit-lang="you_can_pay">You can pay within available credit.</span>
+                        <div class="Banner_totalLimitDesc__MCRCx"><span data-lang="you_can_pay">You can pay within available credit.</span>
                         </div>
                     </section>
                     <div class="Banner_btnWrapper__Qo6zc"><a href="/loan/apply"><button type="button"
-                                class="adm-button adm-button-default adm-button-fill-outline adm-button-shape-default Banner_withdrawBtn__aoTp8"><span data-credit-lang="use_now">Use Now</span></button></a></div>
+                                class="adm-button adm-button-default adm-button-fill-outline adm-button-shape-default Banner_withdrawBtn__aoTp8"><span data-lang="use_now">Use Now</span></button></a></div>
                     <div class="Banner_initTempLimitEntry__gQNB6">
-                        <div class="Banner_left__yEoOH"><span data-credit-lang="total_credit_limit">Total Credit Limit</span> ฿ 5,000.00</div>
+                        <div class="Banner_left__yEoOH"><span data-lang="total_credit_limit">Total Credit Limit</span> ฿ 5,000.00</div>
                     </div>
                 </div>
             </div>
@@ -371,17 +373,17 @@
                                     srcset="images/upcoming.357105d5.svg 1x, images/upcoming.357105d5.svg 2x"
                                     src="images/upcoming.357105d5.svg"
                                     style="color: transparent;"></div>
-                            <div class="adm-list-item-content-main" data-credit-lang="outstanding_loans">Outstanding Loans</div>
+                            <div class="adm-list-item-content-main" data-lang="outstanding_loans">Outstanding Loans</div>
                         </div>
                     </div><a class="adm-list-item adm-plain-anchor">
                         <div class="adm-list-item-content">
                             <div class="adm-list-item-content-main">
-                                <div class="adm-list-item-title"><span data-credit-lang="loan_amount">Loan amount:</span> ฿ 300.00</div>
-                                <div class="adm-list-item-description">฿ 345.00 <span data-credit-lang="due_on">due on</span> 19-04-2024</div>
+                                <div class="adm-list-item-title"><span data-lang="loan_amount">Loan amount:</span> ฿ 300.00</div>
+                                <div class="adm-list-item-description">฿ 345.00 <span data-lang="due_on">due on</span> 19-04-2024</div>
                             </div>
                             <div class="adm-list-item-content-extra">
                                 <div class="CurrentLoans_extraArea__Bz1ks">
-                                    <div>0/1 <span data-credit-lang="paid">Paid</span></div>
+                                    <div>0/1 <span data-lang="paid">Paid</span></div>
                                 </div>
                             </div>
                             <div class="adm-list-item-content-arrow"><svg width="1em" height="1em" viewBox="0 0 48 48"
@@ -413,5 +415,32 @@
     <link rel="preload" as="image"
         imagesrcset="images/card_mask_seller.3e06a5dd.svg 1x, images/card_mask_seller.3e06a5dd.svg 2x"
         fetchpriority="high">
+        
+    <!-- 调试信息和日志，方便排查问题 -->
+    <script>
+        // 页面完全加载后的最终检查
+        window.addEventListener('load', function() {
+            console.log("=== LANGUAGE DEBUG INFO ===");
+            console.log("HTML lang attribute:", document.documentElement.lang);
+            console.log("localStorage selectedLanguage:", localStorage.getItem('selectedLanguage'));
+            console.log("window.currentLanguage:", typeof window.currentLanguage !== 'undefined' ? window.currentLanguage : "undefined");
+            
+            // 检查ruammitrlanguage.js是否已正确加载
+            if (typeof getTranslation === 'function' && typeof updatePageLanguage === 'function') {
+                console.log("ruammitrlanguage.js loaded successfully");
+            } else {
+                console.error("ruammitrlanguage.js may not be loaded correctly!");
+            }
+            
+            // 显示翻译结果验证
+            const dataLangElements = document.querySelectorAll('[data-lang]');
+            console.log(`Total ${dataLangElements.length} elements with data-lang attribute:`);
+            dataLangElements.forEach((el, i) => {
+                if (i < 5) { // 只显示前5个元素，避免日志过多
+                    console.log(`- Element data-lang="${el.getAttribute('data-lang')}": "${el.textContent}"`);
+                }
+            });
+        });
+    </script>
 </body>
 </html>
