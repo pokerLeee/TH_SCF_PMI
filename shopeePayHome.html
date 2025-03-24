@@ -2,9 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ShopeePay Home</title>
     <link rel="stylesheet" href="shopeePayHome.css">
+    <script>
+        // Set initial language from localStorage
+        const savedLanguage = localStorage.getItem('selectedLanguage');
+        console.log("Initial language from localStorage:", savedLanguage);
+        if (savedLanguage && (savedLanguage === 'en' || savedLanguage === 'th')) {
+            document.documentElement.lang = savedLanguage;
+            console.log("Setting HTML lang attribute to:", savedLanguage);
+        }
+    </script>
     <script src="sharedLanguage.js"></script>
     <style>
         /* 确保滚动行为正确，并导航栏始终位于内容上方 */
@@ -28,11 +38,11 @@
                 <!-- Status Bar -->
                 <div class="status-bar">
                     <div class="status-left">
-                        <img src="./sppImages/wifi.svg" class="wifi-icon" alt="WiFi">
+                        <img src="sppImages/wifi.svg" class="wifi-icon" alt="WiFi">
                     </div>
                     <div class="status-time">14:25</div>
                     <div class="status-right">
-                        <img src="./sppImages/battery.svg" class="battery-icon" alt="Battery">
+                        <img src="sppImages/battery.svg" class="battery-icon" alt="Battery">
                         <span class="battery-level">85%</span>
                     </div>
                 </div>
@@ -40,11 +50,11 @@
                 <!-- Nav Bar -->
                 <nav class="nav-bar">
                     <div class="nav-logo">
-                        <img src="./sppImages/shopeePay.svg" class="shopeepay-icon" alt="ShopeePay">
+                        <img src="sppImages/shopeePay.svg" class="shopeepay-icon" alt="ShopeePay">
                         <span class="shopeepay-text" data-lang="shopeepay">ShopeePay</span>
                     </div>
                     <div class="coin-balance">
-                        <img src="./sppImages/coin.svg" class="coin-icon" alt="Coin">
+                        <img src="sppImages/coin.svg" class="coin-icon" alt="Coin">
                         <span class="coin-amount">0</span>
                         <span class="coin-arrow">></span>
                     </div>
@@ -59,7 +69,7 @@
                     <span class="balance-title">
                         <span class="title-wrapper">
                             <span data-lang="shopeepay">ShopeePay</span>
-                            <img src="./sppImages/eye.svg" class="eye-icon" alt="View">
+                            <img src="sppImages/eye.svg" class="eye-icon" alt="View">
                         </span>
                     </span>
                     <span class="balance-amount">1,000.00</span>
@@ -75,25 +85,25 @@
             <div class="primary-features">
                 <div class="feature-item">
                     <div class="feature-icon">
-                        <img src="./sppImages/topup.svg" alt="Topup">
+                        <img src="sppImages/topup.svg" alt="Topup">
                     </div>
                     <span class="feature-text" data-lang="topup">Topup</span>
                 </div>
                 <div class="feature-item">
                     <div class="feature-icon">
-                        <img src="./sppImages/scan.svg" alt="Scan and Pay">
+                        <img src="sppImages/scan.svg" alt="Scan and Pay">
                     </div>
                     <span class="feature-text" data-lang="scan_pay">Scan & Pay</span>
                 </div>
                 <div class="feature-item">
                     <div class="feature-icon">
-                        <img src="./sppImages/transfer.svg" alt="Transfer">
+                        <img src="sppImages/transfer.svg" alt="Transfer">
                     </div>
                     <span class="feature-text" data-lang="transfer">Transfer</span>
                 </div>
                 <div class="feature-item">
                     <div class="feature-icon">
-                        <img src="./sppImages/vouchers.svg" alt="Vouchers">
+                        <img src="sppImages/vouchers.svg" alt="Vouchers">
                     </div>
                     <span class="feature-text" data-lang="vouchers">Vouchers</span>
                 </div>
@@ -104,49 +114,49 @@
                 <div class="secondary-features">
                     <div class="feature-item">
                         <div class="feature-icon">
-                            <img src="./sppImages/local-service.svg" alt="Local Service">
+                            <img src="sppImages/local-service.svg" alt="Local Service">
                         </div>
                         <span class="feature-text" data-lang="local_service">Local Service</span>
                     </div>
                     <div class="feature-item">
                         <div class="feature-icon">
-                            <img src="./sppImages/shopee.svg" alt="Shopee">
+                            <img src="sppImages/shopee.svg" alt="Shopee">
                         </div>
                         <span class="feature-text" data-lang="shopee">Shopee</span>
                     </div>
                     <div class="feature-item">
                         <div class="feature-icon">
-                            <img src="./sppImages/food.svg" alt="Food">
+                            <img src="sppImages/food.svg" alt="Food">
                         </div>
                         <span class="feature-text" data-lang="food">Food</span>
                     </div>
                     <div class="feature-item">
                         <div class="feature-icon">
-                            <img src="./sppImages/spaylater.svg" alt="SPlayLater">
+                            <img src="sppImages/spaylater.svg" alt="SPlayLater">
                         </div>
                         <span class="feature-text" data-lang="splaylater">SPlayLater</span>
                     </div>
                     <div class="feature-item">
                         <div class="feature-icon">
-                            <img src="./sppImages/seasycash.svg" alt="SEasyCash">
+                            <img src="sppImages/seasycash.svg" alt="SEasyCash">
                         </div>
                         <span class="feature-text" data-lang="seasycash">SEasyCash</span>
                     </div>
                     <div class="feature-item">
                         <div class="feature-icon">
-                            <img src="./sppImages/insurance.svg" alt="Insurance">
+                            <img src="sppImages/insurance.svg" alt="Insurance">
                         </div>
                         <span class="feature-text" data-lang="insurance">Insurance</span>
                     </div>
                     <div class="feature-item">
                         <div class="feature-icon">
-                            <img src="./sppImages/seasypay.svg" alt="SEasyPay">
+                            <img src="sppImages/seasypay.svg" alt="SEasyPay">
                         </div>
                         <span class="feature-text" data-lang="seasypay">SEasyPay</span>
                     </div>
                     <div class="feature-item">
                         <div class="feature-icon">
-                            <img src="./sppImages/more.svg" alt="More">
+                            <img src="sppImages/more.svg" alt="More">
                         </div>
                         <span class="feature-text" data-lang="more">More</span>
                     </div>
@@ -161,7 +171,7 @@
                             <div class="easypay-description" data-lang="zero_interest">0% interest on all installment plans for up to 1 month.</div>
                             <div class="easypay-button" data-lang="activate_now">Active Now</div>
                         </div>
-                        <img src="./sppImages/seasypay-promo.svg" class="easypay-image" alt="SEasyPay Promo">
+                        <img src="sppImages/seasypay-promo.svg" class="easypay-image" alt="SEasyPay Promo">
                     </div>
                 </div>
 
@@ -197,31 +207,31 @@
             <nav class="bottom-nav">
                 <div class="nav-item active">
                     <div class="nav-icon">
-                        <img src="./sppImages/home-active.svg" alt="Home">
+                        <img src="sppImages/home-active.svg" alt="Home">
                     </div>
                     <span class="nav-text" data-lang="home">Home</span>
                 </div>
                 <div class="nav-item">
                     <div class="nav-icon">
-                        <img src="./sppImages/history.svg" alt="History">
+                        <img src="sppImages/history.svg" alt="History">
                     </div>
                     <span class="nav-text" data-lang="history">History</span>
                 </div>
                 <div class="nav-item scan-item">
                     <div class="nav-icon">
-                        <img src="./sppImages/scan-special.svg" alt="Scan & Pay">
+                        <img src="sppImages/scan-special.svg" alt="Scan & Pay">
                     </div>
                     <span class="nav-text" data-lang="scan_pay">Scan & Pay</span>
                 </div>
                 <div class="nav-item">
                     <div class="nav-icon">
-                        <img src="./sppImages/notification.svg" alt="Notification">
+                        <img src="sppImages/notification.svg" alt="Notification">
                     </div>
                     <span class="nav-text" data-lang="notification">Notification</span>
                 </div>
                 <div class="nav-item">
                     <div class="nav-icon">
-                        <img src="./sppImages/me.svg" alt="Me">
+                        <img src="sppImages/me.svg" alt="Me">
                     </div>
                     <span class="nav-text" data-lang="me">Me</span>
                 </div>
@@ -229,6 +239,21 @@
         </div>
     </div>
     <script>
+        // Update time in status bar
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', { 
+                hour: 'numeric', 
+                minute: '2-digit',
+                hour12: false 
+            });
+            document.querySelector('.status-time').textContent = timeString;
+        }
+
+        // Update time every minute
+        setInterval(updateTime, 60000);
+        updateTime();
+
         // Prevent overscrolling at the top to avoid header separation
         document.addEventListener('scroll', function(e) {
             if (window.scrollY < 0) {
@@ -247,7 +272,31 @@
         // 初始化语言设置
         document.addEventListener('DOMContentLoaded', function() {
             // 确保所有翻译都已应用
-            updatePageLanguage();
+            if (typeof updatePageLanguage === 'function') {
+                updatePageLanguage();
+            }
+            
+            // 添加语言切换器
+            try {
+                // 检查是否已导入shopeePayLanguage.js
+                if (typeof addLanguageSwitcher === 'function') {
+                    addLanguageSwitcher();
+                } else {
+                    console.log('语言切换器函数未定义，尝试动态加载shopeePayLanguage.js');
+                    // 动态加载语言文件
+                    const script = document.createElement('script');
+                    script.src = 'js/shopeePayLanguage.js';
+                    script.onload = function() {
+                        console.log('shopeePayLanguage.js 已加载');
+                        if (typeof addLanguageSwitcher === 'function') {
+                            addLanguageSwitcher();
+                        }
+                    };
+                    document.head.appendChild(script);
+                }
+            } catch (e) {
+                console.error('添加语言切换器时出错:', e);
+            }
         });
 
         // 控制SEasyPay广告卡片显示逻辑
@@ -456,7 +505,7 @@
                     const featureText = secondarySeasyPayItem.querySelector('.feature-text');
                     
                     if (iconImg && featureText) {
-                        iconImg.src = './sppImages/electricity.svg';
+                        iconImg.src = 'sppImages/electricity.svg';
                         iconImg.alt = 'Electricity Bill';
                         featureText.textContent = 'Electricity Bill';
                         featureText.setAttribute('data-lang', 'electricity_bill');
@@ -498,6 +547,45 @@
                     }
                 }
             }
+        });
+        
+        // Force language update after all scripts are loaded
+        window.addEventListener('load', function() {
+            console.log("Window loaded - ensuring language is correctly applied");
+            
+            // 强制显示调试信息，方便排查问题
+            console.log("HTML lang:", document.documentElement.lang);
+            console.log("currentLanguage:", window.currentLanguage);
+            console.log("localStorage:", localStorage.getItem('selectedLanguage'));
+            
+            // 显示所有可翻译元素
+            setTimeout(function() {
+                console.log("=== DEBUG: TRANSLATABLE ELEMENTS ===");
+                const elements = document.querySelectorAll('[data-lang]');
+                console.log("Total elements with data-lang:", elements.length);
+                
+                // 检查每个元素的翻译状态
+                elements.forEach(el => {
+                    const key = el.getAttribute('data-lang');
+                    let translation = null;
+                    
+                    if (window.translations && window.translations[key] && window.currentLanguage) {
+                        translation = window.translations[key][window.currentLanguage];
+                    }
+                    
+                    console.log(`Element: ${el.tagName}, key: ${key}, current text: "${el.textContent}", should be: "${translation || 'MISSING'}"`);
+                });
+                
+                // 检查翻译对象
+                console.log("=== DEBUG: TRANSLATIONS OBJECT ===");
+                console.log("window.translations:", window.translations);
+                
+                // 如果发现问题，尝试手动修复
+                if (typeof window.updatePageLanguage === 'function') {
+                    console.log("Forcing final updatePageLanguage call");
+                    window.updatePageLanguage();
+                }
+            }, 500);
         });
     </script>
 </body>
