@@ -108,10 +108,6 @@
         }
     }
     
-    // 兼容旧代码的 getTranslation 函数
-    function getTranslation(key) {
-        return translate(key);
-    }
 
     // 页面过渡函数
     function navigateBackWithTransition(url) {
@@ -195,39 +191,38 @@
 
     // 初始化页面
     function initializePage() {
-        // Get payment method and loan details from URL parameters
+        // 1. 初始化页面数据和显示
         const urlParams = new URLSearchParams(window.location.search);
         const paymentMethod = urlParams.get('paymentMethod');
         const loanTerm = urlParams.get('loanTerm') || '3'; // Default to 1-month (value="3")
         const totalPayment = parseFloat(urlParams.get('totalPayment')) || 300.00;
         const appliedTime = urlParams.get('appliedTime');
 
-        // Update payment time display
+        // 更新支付时间显示
         if (appliedTime) {
             document.querySelector('.payment-time').textContent = appliedTime;
         }
 
-        // Show promotion banner only if payment method is shopeepay and WLStatus is 1
+        // 处理促销banner显示
         const promotionBanner = document.getElementById('promotionBanner');
         const WLStatus = urlParams.get('WLStatus') || '0';
         if (paymentMethod === 'shopeepay' && WLStatus === '1') {
             promotionBanner.style.display = 'block';
         }
 
-        // Handle loan card visibility and details
+        // 处理贷款卡片显示和详情
         const loanCard = document.getElementById('loanCard');
         const paymentMethodValue = document.querySelector('.payment-method-value');
         
-        // Show loan card if payment method is spaylate or not specified
         if (paymentMethod === 'spaylate' || !paymentMethod) {
             loanCard.style.display = 'block';
             
-            // Update loan details based on term
+            // 更新贷款详情
             const loanTenure = document.getElementById('loanTenure');
             const loanPrinciple = document.getElementById('loanPrinciple');
             const loanInterest = document.getElementById('loanInterest');
             
-            // Set loan tenure based on term
+            // 设置贷款期限
             let tenureKey;
             let days;
             switch(loanTerm) {
@@ -248,16 +243,81 @@
             loanTenure.textContent = getTranslation(tenureKey);
             loanPrinciple.textContent = `฿ ${totalPayment.toFixed(2)}`;
             
-            // Calculate interest (0.5% per day)
+            // 计算利息
             const interestRate = 0.005;
             const interestAmount = totalPayment * interestRate * days;
             loanInterest.textContent = `฿ ${interestAmount.toFixed(2)}`;
         }
 
-        // Remove countdown display
+        // 隐藏倒计时显示
         document.getElementById('countdown').style.display = 'none';
         document.querySelector('[data-lang="seconds"]').style.display = 'none';
+
+        // 2. 初始化事件监听器
+        // 设置后退按钮事件
+        document.getElementById('backToMerchant').addEventListener('click', function () {
+            navigateBackWithTransition('ruammitr.html');
+        });
+
+        // 设置订单详情切换事件
+        const orderDetailsH2 = document.querySelector('#orderCard h2');
+        if (orderDetailsH2) {
+            orderDetailsH2.addEventListener('click', handleOrderDetailsToggle);
+        }
+
+        // 设置贷款详情切换事件
+        const loanDetailsH2 = document.querySelector('#loanCard h2');
+        if (loanDetailsH2) {
+            loanDetailsH2.addEventListener('click', handleLoanDetailsToggle);
+        }
+
+        // 设置立即跳转链接事件
+        const merchantUrl = 'ruammitr.html';
+        const goNowLink = document.getElementById('goNowLink');
+        goNowLink.href = '#'; // 阻止默认链接行为
+        
+        goNowLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            navigateBackWithTransition(merchantUrl);
+        });
+
+        // 设置贷款ID点击事件
+        const loanIdLink = document.querySelector('.loan-id-link');
+        if (loanIdLink) {
+            loanIdLink.addEventListener('click', function() {
+                handleLoanIdClick(this.textContent, totalPayment, loanTerm);
+            });
+        }
     }
+
+    // 页面加载完成后初始化
+    document.addEventListener('DOMContentLoaded', function() {
+        // 设置语言
+        setLanguage();
+        
+        // 更新时间
+        updateTime();
+        setInterval(updateTime, 60000);
+        
+        // 监听DOM变化，为动态添加的元素应用翻译
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.addedNodes.length) {
+                    // 当有新元素添加到DOM时，重新应用翻译
+                    setLanguage();
+                }
+            });
+        });
+        
+        // 开始观察document.body及其所有子元素的变化
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+
+        // 初始化页面
+        initializePage();
+    });
     </script>
     <style>
         /* Global styles and reset */
@@ -930,76 +990,6 @@
             <button class="back-to-merchant" id="backToMerchant" data-lang="back_to_merchant">Back to Merchant</button>
         </footer>
     </div>
-
-    <script defer>
-        document.addEventListener('DOMContentLoaded', function() {
-            // 设置语言
-            setLanguage();
-            
-            // 更新时间
-            updateTime();
-            setInterval(updateTime, 60000);
-            
-            // 监听DOM变化，为动态添加的元素应用翻译
-            const observer = new MutationObserver((mutations) => {
-                mutations.forEach((mutation) => {
-                    if (mutation.addedNodes.length) {
-                        // 当有新元素添加到DOM时，重新应用翻译
-                        setLanguage();
-                    }
-                });
-            });
-            
-            // 开始观察document.body及其所有子元素的变化
-            observer.observe(document.body, {
-                childList: true,
-                subtree: true
-            });
-
-            // 初始化页面
-            initializePage();
-
-            // 设置事件监听器
-            document.getElementById('backToMerchant').addEventListener('click', function () {
-                navigateBackWithTransition('ruammitr.html');
-            });
-
-            // Add toggle functionality for Order Details
-            const orderDetailsH2 = document.querySelector('#orderCard h2');
-            if (orderDetailsH2) {
-                orderDetailsH2.addEventListener('click', handleOrderDetailsToggle);
-            }
-
-            // Add toggle functionality for Loan Details
-            const loanDetailsH2 = document.querySelector('#loanCard h2');
-            if (loanDetailsH2) {
-                loanDetailsH2.addEventListener('click', handleLoanDetailsToggle);
-            }
-
-            // Set the redirect URL
-            const merchantUrl = 'ruammitr.html';
-            const goNowLink = document.getElementById('goNowLink');
-            goNowLink.href = '#'; // Prevent default link behavior
-            
-            // Add click event to "Go Now" link
-            goNowLink.addEventListener('click', function(e) {
-                e.preventDefault();
-                navigateBackWithTransition(merchantUrl);
-            });
-
-            // Add click handler for loan ID
-            const loanIdLink = document.querySelector('.loan-id-link');
-            if (loanIdLink) {
-                const urlParams = new URLSearchParams(window.location.search);
-                const totalPayment = parseFloat(urlParams.get('totalPayment')) || 300.00;
-                const loanTerm = urlParams.get('loanTerm') || '3';
-                
-                loanIdLink.addEventListener('click', function() {
-                    handleLoanIdClick(this.textContent, totalPayment, loanTerm);
-                });
-            }
-        });
-    </script>
 </body>
 
 </html>
