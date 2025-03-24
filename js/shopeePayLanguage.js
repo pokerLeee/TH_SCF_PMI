@@ -122,7 +122,7 @@ window.shopeePayTranslations = {
         'th': 'ดอกเบี้ย 0% สำหรับแผนผ่อนชำระทั้งหมดสูงสุด 1 เดือน'
     },
     'activate_now': {
-        'en': 'Activate Now',
+        'en': 'Active Now',
         'th': 'เปิดใช้งานเดี๋ยวนี้'
     },
     'seasypay': {
@@ -140,6 +140,26 @@ window.shopeePayTranslations = {
     'next_due_date': {
         'en': 'Next Due Date:',
         'th': 'วันครบกำหนดถัดไป:'
+    },
+    'overdue': {
+        'en': 'Overdue',
+        'th': 'เกินกำหนด'
+    },
+    'local_service': {
+        'en': 'Local Service',
+        'th': 'บริการท้องถิ่น'
+    },
+    'shopee': {
+        'en': 'Shopee',
+        'th': 'ช้อปปี้'
+    },
+    'seasycash': {
+        'en': 'SEasyCash',
+        'th': 'SEasyCash'
+    },
+    'electricity_bill': {
+        'en': 'Electricity Bill',
+        'th': 'ค่าไฟฟ้า'
     }
 };
 
