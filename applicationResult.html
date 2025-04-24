@@ -11,9 +11,9 @@
     // 直接内联翻译数据，不依赖外部JS
     const translations = {
         "en": {
-            "application_result": "Application Result",
+            "confirm_payment": "Confirm Payment",
             "payment_method": "Payment Method",
-            "view_all_methods": "View all methods >",
+            "view_all_methods": "View all methods (2) ▼",
             "seller_loan": "Seller Loan",
             "available": "Available",
             "recommended": "Recommended",
@@ -21,20 +21,21 @@
             "pay_now": "Pay Now",
             "merchant_name": "PMI Wholesaler Shop",
             "shopeepay": "ShopeePay",
+            "walletBalance": "Wallet Balance",
             "available_balance": "(฿1000.00)",
             "7_days": "7-days",
             "14_days": "14-days",
             "1_month": "1-month",
-            "loan_rate": "(0.5%/day)",
+            "loan_rate": "(0.5%/d)",
             "enter_pin": "Enter ShopeePay PIN",
             "forgot_pin": "Forgot ShopeePay PIN?",
             "security_keyboard": "ShopeePay Security Keyboard",
             "overdue": "Overdue"
         },
         "th": {
-            "application_result": "ผลการสมัคร",
+            "confirm_payment": "ยืนยันการชำระเงิน",
             "payment_method": "วิธีการชำระเงิน",
-            "view_all_methods": "ดูวิธีทั้งหมด >",
+            "view_all_methods": "ดูวิธีทั้งหมด (2) ▼",
             "seller_loan": "สินเชื่อผู้ขาย",
             "available": "ที่ใช้ได้",
             "recommended": "แนะนำ",
@@ -42,6 +43,7 @@
             "pay_now": "ชำระเงินทันที",
             "merchant_name": "ร้านค้าส่ง PMI",
             "shopeepay": "ShopeePay",
+            "walletBalance": "Wallet Balance",
             "available_balance": "(฿1000.00)",
             "7_days": "7 วัน",
             "14_days": "14 วัน",
@@ -185,7 +187,7 @@
             <div class="nav-bar">
                 <div class="nav-left">
                     <button class="back-button" id="backButton">←</button>
-                    <div class="page-title" data-lang="application_result">Application Result</div>
+                    <div class="page-title" data-lang="confirm_payment">Confirm Payment</div>
                 </div>
             </div>
         </div>
@@ -201,10 +203,10 @@
 
             <!-- Payment Method Card -->
             <div class="card payment-method-card">
-                <h2 class="section-title">
-                    <span data-lang="payment_method">Payment Method</span>
-                    <a href="#" class="view-all" data-lang="view_all_methods">View all methods ></a>
-                </h2>
+                <div class="card-header">
+                    <img src="sppImages/shopeePay.svg" class="card-logo shopeepay-logo" alt="ShopeePay">
+                    <span class="card-title" data-lang="shopeepay">ShopeePay</span>
+                </div>
                 <div class="payment-options">
                     <div class="payment-option">
                         <label for="spaylate">
@@ -221,20 +223,26 @@
                             <label class="loan-card">
                                 <input type="radio" name="loan-term" value="1">
                                 <div class="loan-card-content">
-                                    <div class="loan-amount">฿310.50</div>
-                                    <div class="loan-terms">
+                                    <div class="loan-top-row">
+                                        <div class="loan-amount">฿310.50</div>
                                         <div class="loan-duration" data-lang="7_days">7-days</div>
-                                        <div class="loan-rate" data-lang="loan_rate">(0.5%/day)</div>
+                                    </div>
+                                    <div class="loan-bottom-row">
+                                        <div class="loan-rate" data-lang="loan_rate">(0.5%/d)</div>
+                                        <div class="loan-free">7 days free</div>
                                     </div>
                                 </div>
                             </label>
                             <label class="loan-card">
                                 <input type="radio" name="loan-term" value="2">
                                 <div class="loan-card-content">
-                                    <div class="loan-amount">฿321.00</div>
-                                    <div class="loan-terms">
+                                    <div class="loan-top-row">
+                                        <div class="loan-amount">฿321.00</div>
                                         <div class="loan-duration" data-lang="14_days">14-days</div>
-                                        <div class="loan-rate" data-lang="loan_rate">(0.5%/day)</div>
+                                    </div>
+                                    <div class="loan-bottom-row">
+                                        <div class="loan-rate" data-lang="loan_rate">(0.5%/d)</div>
+                                        <div class="loan-free">7 days free</div>
                                     </div>
                                 </div>
                             </label>
@@ -242,10 +250,13 @@
                                 <input type="radio" name="loan-term" value="3" checked>
                                 <div class="loan-card-content">
                                     <div class="recommended-badge" data-lang="recommended">Recommended</div>
-                                    <div class="loan-amount">฿345.00</div>
-                                    <div class="loan-terms">
+                                    <div class="loan-top-row">
+                                        <div class="loan-amount">฿345.00</div>
                                         <div class="loan-duration" data-lang="1_month">1-month</div>
-                                        <div class="loan-rate" data-lang="loan_rate">(0.5%/day)</div>
+                                    </div>
+                                    <div class="loan-bottom-row">
+                                        <div class="loan-rate" data-lang="loan_rate">(0.5%/d)</div>
+                                        <div class="loan-free">7days free</div>
                                     </div>
                                 </div>
                             </label>
@@ -257,13 +268,14 @@
                             <div class="payment-info">
                                 <img src="sppImages/shopeePay.svg" class="payment-icon shopeepay-icon" alt="ShopeePay">
                                 <div class="payment-details">
-                                    <span class="payment-name" data-lang="shopeepay">ShopeePay</span>
+                                    <span class="payment-name" data-lang="walletBalance">Wallet Balance</span>
                                     <span class="payment-balance" data-lang="available_balance">(฿1000.00)</span>
                                 </div>
                             </div>
                         </label>
                         <input type="radio" id="shopeepay" name="payment" value="shopeepay">
                     </div>
+                    <a href="#" class="view-all" data-lang="view_all_methods">View all methods(2) ▼</a>
                 </div>
             </div>
         </main>
